@@ -1,0 +1,12 @@
+<div class="center-block footer" role="footer">
+		<div class="text-center">
+           <!--
+		    <a href="#">关于</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="tencent://message/?uin=276654272&amp;Site=xinshike.com&amp;Menu=yes">联系客服</a>	
+		   -->
+		    <a href="#">关于成前科技</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#">联系客服: 0571-88192051</a>	
+		</div>
+		<div class="text-center">
+           <!--  Powered by <a href="http://wjf.zataoa.com"><b>微露</b></a> v0.7 © 2014-2015 <a href="http://wjf.zataoa.com">wjf.zataoa.com</a> -->
+		    Powered by <a href="#"><b>CQClound云平台</b></a> v0.7 © 2011-2017 <a href="#"></a>
+		</div>
+	</div>

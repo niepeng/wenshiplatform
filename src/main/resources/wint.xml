@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<object>
+
+
+	<object class="wint.mvc.tools.service.DefaultPullToolsService">
+		<object name="tools">
+			<object name="securityUtil" class="wint.lang.utils.SecurityUtil"/>
+			<object name="systemUtil" class="wint.lang.utils.SystemUtil"/>
+			<object name="priceUtil" class="com.hsmonkey.weijifen.util.PriceUtil"/>
+			<object name="changeUtil" class="com.hsmonkey.weijifen.util.ChangeUtil"/>
+			<object name="applicationUtil" class="com.hsmonkey.weijifen.util.ApplicationUtil"/>
+			<object name="arithUtil" class="com.hsmonkey.weijifen.util.ArithUtil"/>
+			<object name="dateUtil" class="com.hsmonkey.weijifen.util.DateUtil"/>
+			<object name="jsonUtil" class="com.hsmonkey.weijifen.util.JsonUtil"/>
+			<!--
+			
+			<object name="weightUtil" class="com.baibutao.apps.linkshop.uxiang.server.util.WeightUtil"/>
+			<object name="stringsUtil" class="com.baibutao.apps.linkshop.uxiang.server.util.StringsUtil"/>
+			<object name="mathUtil" class="com.baibutao.apps.linkshop.uxiang.server.biz.util.MathUtil"/>
+			<object name="randomUtil" class="com.baibutao.apps.linkshop.uxiang.server.biz.util.RandomUtil"/>
+			 -->
+		</object>
+	</object>
+
+	<!--  这段内容编写后，覆盖了当前wint框架中的default-wint.xml中的该部分内容   -->
+	<object class="wint.mvc.pipeline.DefaultPipelineService">
+		<object name="pipelines">
+			<object name="default" class="wint.mvc.pipeline.Pipeline">
+				<list name="valves">
+					<object class="wint.mvc.pipeline.valves.SetLoggingValve"></object>
+					<object class="wint.mvc.pipeline.valves.FileResourceValve"></object>
+					<object class="wint.mvc.pipeline.valves.AnalyzeUrlValve"></object>
+					<object class="wint.mvc.pipeline.valves.SetIndexValve">
+						<value name="indexTarget">index</value>
+					</object>
+					<object class="wint.mvc.pipeline.valves.CreateContextValve"></object>
+					<object class="wint.mvc.pipeline.valves.LoadModuleValve">
+						<value name="label">loadModule</value>
+					</object>
+                    <!--
+                      如果doaction的时候没有写token,那么需要把该配置去掉，不然form提交出现：miss x_token value for doAction
+                    <object class="wint.mvc.pipeline.valves.CheckCsrfTokenValve"></object>  -->
+					<object class="wint.mvc.pipeline.valves.PerformActionValve"></object>
+				</list>
+			</object>
+		</object>
+	</object>
+
+
+</object>

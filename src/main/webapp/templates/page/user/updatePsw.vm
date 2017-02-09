@@ -1,0 +1,108 @@
+	
+<script type="text/javascript" src="$staticServer/js/weijifen/datepicker/WdatePicker.js"></script>
+
+
+	$widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('checkIndex','3').addToContext('message',$message)
+	<div class="container-fluid">
+		<div class="row">
+			
+			<div class="" style="margin-left:50px;">
+				
+				<div id="ul_score">
+					<ul class="nav nav-tabs">
+						<li  class="active"><a href="#">修改密码</a></li>
+					</ul>
+				</div>
+				
+				
+				<div id="main_score">
+					<!--
+					<div>
+						<a href="$promotionModule.setTarget('goodEvaluateExport').param('shopId',$shopDO.id).param('status','1')" onclick="return confirm('确认要导出已通过的数据？'); return false;">导出已通过的数据</a>  &nbsp;&nbsp; &nbsp;&nbsp;
+						<a href="$promotionModule.setTarget('goodEvaluatePayAll').param('shopId',$shopDO.id).param('status','1')" onclick="return confirm('此操作不可恢复，确认把已经通过的用户标记已支付？'); return false;" >把已通过的用户标记已支付</a> 
+					</div>	
+					-->
+					
+					<form id="reply-form" class="form-horizontal form ng-pristine ng-valid" action="$userModule.setTarget('doUpdatePsw')" method="post">
+
+						<div class="form-group">
+							<div class="col-sm-12">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										 &nbsp;&nbsp;
+										<!-- <a href="$promotionModule.setTarget('viewAddArticle').param('shopId',$shopDO.id)">添加文章</a>  &nbsp;&nbsp;&nbsp;&nbsp;   -->
+										 <tt style="color:red;">$!msg</tt>
+									</div>
+									
+									<ul class="list-group">
+										<li class="list-group-item">
+											<div class="form-group">
+												<div class="col-sm-6 col-md-8 col-xs-12">
+													
+													<!--
+													配置红包金额和概率<br>
+														登录有赞，<a href="https://login.youzan.com/sso/index?service=kdt" target="_blank">点击登录</a>， 登录后进入店铺，点击左边的 "营销" -> "有赞API", 开启，并复制应用ID 和 应用密钥,  还不明白?<a href="$staticServer/images/weijifen/youzan_config.jpg" target="_blank">点击这里</a>
+													-->
+													<span class="help-block"></span>
+												</div>
+											</div>
+											
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+            											原&nbsp;密码:<input type="password" style="width:250px;display:inline;height:30px;"  name="password"  class="form-control">
+														<br>
+            										</tt>
+            									</div>
+            								</div>
+											
+											
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+            											新&nbsp;密码:<input type="password" style="width:250px;display:inline;height:30px;" id="newPsw" name="newPsw" class="form-control">
+														<br>
+            										</tt>
+            									</div>
+            								</div>
+											
+											
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+            											确认密码:<input type="password" style="width:250px;display:inline;height:30px;" id="newPsw2" name="newPsw2" class="form-control">
+														<br>
+            										</tt>
+            									</div>
+            								</div>
+											
+											
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-sm-12">
+								<input name="submit" type="submit" value="确认修改密码" class="btn btn-primary col-lg-1"> 
+							</div>
+						</div>
+					</form>
+                          
+				</div>
+
+				
+
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		
+	</script>
+	<div class="container-fluid footer" role="footer">
+		$widget.setTemplate('foot')
+	</div>
+
+

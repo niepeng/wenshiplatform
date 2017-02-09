@@ -1,0 +1,106 @@
+	
+<script type="text/javascript" src="$staticServer/js/weijifen/datepicker/WdatePicker.js"></script>
+
+
+	$widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('checkIndex','2').addToContext('message',$message)
+	<div class="container-fluid">
+		<div class="row">
+			
+			<div class="" style="margin-left:50px;">
+				
+				<div id="ul_score">
+					<ul class="nav nav-tabs">
+						<li  class="active"><a href="#">设备管理</a></li>
+					</ul>
+				</div>
+				
+				
+				<div id="main_score">
+					<!--
+					<div>
+						<a href="$promotionModule.setTarget('goodEvaluateExport').param('shopId',$shopDO.id).param('status','1')" onclick="return confirm('确认要导出已通过的数据？'); return false;">导出已通过的数据</a>  &nbsp;&nbsp; &nbsp;&nbsp;
+						<a href="$promotionModule.setTarget('goodEvaluatePayAll').param('shopId',$shopDO.id).param('status','1')" onclick="return confirm('此操作不可恢复，确认把已经通过的用户标记已支付？'); return false;" >把已通过的用户标记已支付</a> 
+					</div>	
+					-->
+					
+					<form method="post" action="$userModule.setTarget('deviceList')">
+                        	<div class="panel panel-default">
+                                <div class="panel-heading">
+                                  <h3 class="panel-title">搜索 （选择区域和设备名称查询） <tt style="margin-left:50px;color:red;">$!msg</tt></h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-lg-10 col-sm-10 col-xs-12">
+											<select name="area" style="width:100px;float:left;height:35px;margin-right:20px;">
+                                                <option value="">全部</option>
+												#foreach($area in $areaList)
+												 <option value="$!area" #if($deviceQuery.area == $area) selected #end>$!area</option>
+												#end
+											</select>	
+        									<input style="width:160px;float:left;margin-right:20px;" class="form-control" placeholder="设备名称" id="deviceName" name="deviceName" value="$!deviceQuery.deviceName" type="text">        
+											<input style="float:left;" class="btn btn-primary" id="submit" name="submit" value="搜索" type="submit">       
+										</div>
+                                        <!--
+										<div class="col-lg-2 col-sm-2 col-xs-12">
+        									<input class="btn btn-primary form-control" id="submit" name="submit" value="搜索" type="submit">        
+        								</div>
+										-->
+    								</div>
+    							</div>
+                            </div>
+                    	
+                      </form>
+                          
+					<div class="main scoreChange" id = "scoreChange_manager"  >
+						<div style="padding:15px;">
+							<table class="table table-hover">
+								<thead class="navbar-inner">
+									<tr>
+										<th style="width:140px;">区域</th>
+										<th style="width:200px;">设备名</th>
+										<th style="width:80px;">上传间隔</th>
+										<th style="width:80px;">温度上限</th>
+										<th style="width:80px;">温度下限</th>
+										<th style="width:80px;">温度校正值</th>
+										<th style="width:80px;">湿度上限</th>
+										<th style="width:80px;">湿度下限</th>
+										<th style="width:80px;">湿度校正值</th>
+										<th style="width:100px;">操作</th>
+									</tr>
+								</thead>
+								<tbody>
+									#foreach($deviceBean in $beanList)
+    									<tr>
+    										<td>#if("$!deviceBean.area" != "") $!deviceBean.area #else -- #end</td>	
+    										<td>$!deviceBean.devName</td>	
+    										<td>$!{deviceBean.devGap}秒</td>	
+    										<td>${deviceBean.deviceExtendBean.maxTemp}℃</td>	
+    										<td>${deviceBean.deviceExtendBean.minTemp}℃</td>	
+    										<td>${deviceBean.deviceExtendBean.tempHC}℃</td>	
+    										<td>${deviceBean.deviceExtendBean.maxHumi}%RH</td>	
+    										<td>${deviceBean.deviceExtendBean.minHumi}%RH</td>	
+    										<td>${deviceBean.deviceExtendBean.humiHC}%RH</td>	
+    										<td><a href="$userModule.setTarget('editDevice').param('snaddr',$deviceBean.snaddr)">编辑</a>&nbsp;<a href="" onclick="javascript:return confirm('确定要删除操作？');">删除</a></td>	
+    									</tr>
+									#end
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+				</div>
+
+				
+
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		
+	</script>
+	<div class="container-fluid footer" role="footer">
+		$widget.setTemplate('foot')
+	</div>
+
+

@@ -1,0 +1,17 @@
+CREATE DATABASE `weijifen`;
+use `weijifen`;
+
+
+CREATE TABLE `weijifen_key_value` (
+`id` bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
+`gmt_modified` datetime  not null ,
+`key_name` varchar(128),
+`type` int  not null default 0 ,
+`gmt_create` datetime  not null ,
+`value` varchar(1024) ,
+`deleted` tinyint  not null  default 0 
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+ALTER TABLE weijifen_key_value ADD INDEX keyName (key_name);
+
+

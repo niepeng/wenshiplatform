@@ -1,0 +1,40 @@
+
+<div class="navbar navbar-inverse navbar-static-top" role="navigation" style="position:static;">
+		<div class="container-fluid">
+			<ul class="nav navbar-nav">
+				<li><a href="$userModule.setTarget('index')" style="color:white;font-size:25px;">成前云平台</a></li>
+				<li #if("$!checkIndex" == "") class="active" #end><a href="$userModule.setTarget('index')">实时数据</a></li>
+				<li #if($checkIndex == 1) class="active" #end><a href="$userModule.setTarget('alarmList')">报警数据</a></li>
+					<ul>    
+                        <li><a href="$userModule.setTarget('alarmList')">报警数据</a></li>    
+                        <li><a href="$userModule.setTarget('alarmHistoryList')">历史报警</a></li>    
+                    </ul>  
+				<li #if($checkIndex == 2) class="active" #end><a href="$userModule.setTarget('deviceList')">设备管理</a></li>
+				<li #if($checkIndex == 3) class="active" #end><a href="$systemInfoModule.setTarget('payConfig').param('shopId', ${shopDO.id})">账户管理</a></li>
+					<ul>    
+                        <li><a href="$userModule.setTarget('bindMail')">绑定邮箱</a></li>    
+                        <li><a href="$userModule.setTarget('updatePsw')">修改密码</a></li>    
+                        <li><a href="$userModule.setTarget('loginOut')" onclick="javascript:return confirm('确定要退出吗？');">退出</a></li>    
+                    </ul>  
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<a href="javascript:void" class="dropdown-toggle" data-toggle="dropdown" style="display:block; max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; ">${userBean.user}<!-- <b class="caret"></b>  --></a>
+				</li>
+				<li class="dropdown">
+					<a href="$userModule.setTarget('loginOut')" onclick="return confirm('确定要退出？');" class="dropdown-toggle">退出</a>
+				</li>
+			</ul>
+		</div>
+</div>
+
+	
+#if($!message)
+<div class="panel panel-default" style = "text-align:center">
+    	<div class="panel-heading clearfix">
+    			<label class="checkbox-inline" style="padding-top:0">$!message</label> 
+    				<span class="pull-right"></span>
+    		   </div>
+</div>
+#else 
+#end	

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<url-config>
+
+	<url name="baseModule" >
+		<server-url>${weijifen.base.url}</server-url>
+	</url>
+   
+	<url name="adminModule" extends="baseModule">
+		<path>admin</path>
+	</url>
+	
+	<url name="userModule" extends="baseModule">
+		<path>user</path>
+	</url>
+	
+	<url name="staticServer">
+		<server-url>${weijifen.static.url}</server-url>
+	</url>
+
+	<url name="jsServer" extends="staticServer">
+		<path>js</path>
+	</url>
+
+	<url name="cssServer" extends="staticServer">
+		<path>css</path>
+	</url>
+
+</url-config>

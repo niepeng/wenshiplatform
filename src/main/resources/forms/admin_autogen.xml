@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<forms>
+
+	<form name="admin.login">
+		<field name="userName" label="用户名">
+			<validator type="required" message="${field.label}不能为空。"></validator>
+		</field>
+		<field name="psw" label="密码">
+			<validator type="required" message="${field.label}不能为空。"></validator>
+		</field>
+	</form>
+	
+	<form name="admin.change">
+			<field name="id" label="id">
+			</field>
+			<field name="psw" label="现密码">
+				<validator type="required" message="${field.label}不能为空。"></validator>
+			</field>
+			<field name="pswNew" label="新密码">
+				<validator type="required" message="${field.label}不能为空。"></validator>
+			</field>
+			<field name="pswNew1" label="确认新密码">
+				<validator type="required" message="${field.label}不能为空。"></validator>
+			</field>
+	</form>
+	
+	
+	 <form name="account.add">
+	  <field name="userName"  label="用户名">
+	  		<validator type="required" message="${field.label}不能为空。"></validator>
+	  		<validator type="string" message="${field.label}长度必6-20位">
+                <param name="min" value="5" />
+                 <param name="max" value="21" />
+            </validator>
+	  </field>
+	  
+	  <field name="psw" label="密码">
+		<validator type="required" message="${field.label}不能为空。"></validator>
+		<validator type="string" message="${field.label}长度必6-20位">
+                <param name="min" value="5" />
+                 <param name="max" value="21" />
+            </validator>
+		</field>
+		
+		<field name="psw2" label="确认密码">
+			<validator type="required" message="${field.label}不能为空。"></validator>
+			<validator type="string" message="${field.label}长度必6-20位">
+	                <param name="min" value="5" />
+	                 <param name="max" value="21" />
+	            </validator>
+		</field>
+	  
+	   <field name="type"  label="类型">
+        </field> 
+	  
+	   <field name="shopNick"  label="店铺名称">
+        </field>
+	   <field name="cellPhone"  label="手机号码">
+        </field>
+	   <field name="shopurl"  label="店铺url">
+        </field>
+        
+	    <field name="endTime"  label="到期时间">
+            <validator type="required" message="到期时间不能为空"></validator>
+        </field>
+	   <field name="permissionType"  label="权限类型">
+        </field>
+	    <field name="qiangCatId"  label="类目">
+        </field>
+        <field name="remark"  label="备注">
+        </field>
+        
+	</form>
+	
+	
+	 <form name="account.edit">
+	  <field name="id"  label="id">
+	  </field> 
+	    <field name="endTime"  label="到期时间">
+            <validator type="required" message="到期时间不能为空"></validator>
+        </field>
+        <field name="type"  label="类型">
+        </field>  
+	    <field name="shopNick"  label="店铺名">
+        </field>
+	    <field name="permissionType"  label="权限类型">
+        </field>
+	    <field name="qiangCatId"  label="类目">
+        </field>
+        <field name="remark"  label="备注">
+        </field>
+	</form>
+	
+	 
+	 
+<form name="cat.opt">
+	<field name="id" label="id">
+	</field>
+	<field name="name" label="名称">
+		<validator type="required" message="${field.label}不能为空。"></validator>
+	</field>
+	<field name="code" label="编号">
+	</field>
+	<field name="level" label="级别">
+	    <validator type="int" message="${field.label}必须大于0小于3">
+            <param name="min" value="1" />
+             <param name="max" value="3" />
+        </validator>
+	</field>
+	<field name="fatherId" label="父类目id">
+	</field>
+	<field name="sortValue" label="排序值">
+      <validator type="int" message="${field.label}必须大于等于0">
+           <param name="min" value="0" />
+       </validator>
+	</field>
+</form>
+
+	
+	
+	
+	
+</forms>

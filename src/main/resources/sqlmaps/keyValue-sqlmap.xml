@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="KeyValueDAO">
+
+	<typeAlias type="com.hsmonkey.weijifen.biz.dal.dataobject.KeyValueDO" alias="keyValue" />
+
+	<resultMap id="keyValueMapping" class="keyValue">
+		<result property="gmtModified" column="gmt_modified"/>
+		<result property="keyName" column="key_name"/>
+		<result property="id" column="id"/>
+		<result property="type" column="type"/>
+		<result property="gmtCreate" column="gmt_create"/>
+		<result property="value" column="value"/>
+		
+	</resultMap>
+	
+	<sql id="keyValue-full-columns">
+		t.gmt_modified, t.key_name, t.id, t.type, t.gmt_create, t.value
+	</sql>
+	
+	<insert id="create" parameterClass="keyValue">
+		<![CDATA[
+			insert into weijifen_key_value(gmt_modified, key_name, type, gmt_create, value) 
+				values (now(), #keyName#, #type#, now(), #value#)
+		]]>
+		<selectKey resultClass="long" keyProperty="id">
+			SELECT LAST_INSERT_ID();
+	   	</selectKey>
+	</insert>
+	
+	<select id="queryById" resultMap="keyValueMapping" parameterClass="long">
+		select
+			<include refid="keyValue-full-columns" />
+		from weijifen_key_value t where t.id = #value#  and t.deleted = 0 
+	</select>
+
+	<select id="queryByKey" resultMap="keyValueMapping" parameterClass="string">
+		select
+			<include refid="keyValue-full-columns" />
+		from weijifen_key_value t where t.key_name = #value#  and t.deleted = 0  limit 1
+	</select>
+	<select id="queryByKeyDesc" resultMap="keyValueMapping" parameterClass="string">
+		select
+			<include refid="keyValue-full-columns" />
+		from weijifen_key_value t where t.key_name = #value#  and t.deleted = 0  order by id desc limit 1
+	</select>
+	
+	<update id="delete" parameterClass="long">
+			update weijifen_key_value t set t.deleted = 1  , t.gmt_modified = now()  where t.id = #value#
+	
+	</update>
+	
+	<update id="update" parameterClass="keyValue">
+		<![CDATA[
+			update 
+				weijifen_key_value 
+			set 
+				gmt_modified= now(),
+				key_name= #keyName#,
+				type= #type#,
+				value= #value#
+			where 
+				id=#id#
+		]]>
+	</update>
+
+    <select id="queryForPageCount" resultClass="int">
+        select count(0) from weijifen_key_value t  where t.deleted = 0 
+    </select>
+
+    <select id="queryForPage" resultMap="keyValueMapping">
+        select
+        <include refid="keyValue-full-columns" />
+        from weijifen_key_value t  where t.deleted = 0 
+        limit #startRow#, #pageSize#
+    </select>
+
+</sqlMap>
+

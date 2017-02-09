@@ -1,0 +1,16 @@
+mvn install:install-file -DgroupId=jdopen-api-sdk -DartifactId=open-api-sdk -Dversion=2.0 -Dpackaging=jar -Dfile=/data/admin/weijifen2/work/libs/open-api-sdk-2.0.jar
+
+
+
+
+mvn install:install-file -DgroupId=faceppsdk -DartifactId=faceppsdk_min -Dversion=min -Dpackaging=jar -Dfile=/Users/lsb/data/code/yubao/weilu/weijifen/libs/faceppsdk_min.jar
+
+
+
+mvn install:install-file -DgroupId=it.sauronsoftware.jave -DartifactId=jave  -Dversion=1.0.2 -Dpackaging=jar -Dfile=/Users/lsb/data/code/yubao/weilu/weijifen/libs/jave-1.0.2.jar
+
+
+
+
+mvn install:install-file -DgroupId=Zxing -DartifactId=Zxing  -Dversion=1.0.0 -Dpackaging=jar -Dfile=/home/admin/weijifenche/work/libs/core.jar
+

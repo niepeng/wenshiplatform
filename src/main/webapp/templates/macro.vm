@@ -1,0 +1,15 @@
+
+#macro(errorMessage, $str)
+	#if( "$!str" != "")
+		 ${str}
+	#end
+#end
+
+
+#macro(errorMessage2, $str  $width)
+	#if( "$!str" != "")
+		 <div class="error-tip" style="color:red; width: ${width} ;">
+            ${str}
+        </div>
+	#end
+#end

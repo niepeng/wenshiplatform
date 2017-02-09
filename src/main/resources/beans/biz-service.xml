@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC
+    "-//SPRING//DTD BEAN//EN"
+     "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+
+	<bean id="cacheService" class="com.hsmonkey.weijifen.biz.cache.SimpleRamCacheServiceImpl">
+		<property name="namespaces" value="1"></property>
+		<property name="enable" value="true"></property>
+	 </bean>
+	 
+	 
+</beans>

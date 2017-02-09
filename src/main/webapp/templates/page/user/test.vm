@@ -1,0 +1,76 @@
+<style type="text/css" >    
+    body{    
+    margin:0px;    
+    padding:0px;    
+    }    
+             
+    li{    
+    list-style:url(1.jpg);    
+    }    
+    a{    
+    display:block;    
+    }    
+    a:link,a:visited  {    
+    text-decoration: none;    
+    color:#000000;    
+}    
+.menu{    
+        margin:0px auto;    
+        width:404px;    
+        height:21px;    
+        }    
+        .menu ul{    
+        margin:0px;    
+        padding:0px;    
+        }    
+        .menu ul li{    
+        position:relative;    
+        float:left;    
+    list-style:none;    
+    padding:2px;    
+    border:1px dotted;    
+    font-size:14px;    
+    width:95px;    
+    text-align: center;    
+    margin:0px;
+     
+    background:#999999;    
+    }    
+    .menu ul li ul{    
+    display:none;    
+    }    
+    .menu ul li:hover ul{    
+    display:block;    
+    position: absolute; left: 0px; top: 21px;    
+    }    
+    .menu a:link{    
+    background:url(2.png) -137px -10px;    
+    }    
+    .menu a:hover{    
+    background:url(2.png) -26px -10px;    
+    }    
+         
+         
+    </style>    
+<body>       
+<p>下面是一个导航条</p>    
+<div class="menu">    
+     <ul>    
+       <li><a href="#">首页</a></li>    
+       <li><a href="#">新闻中心</a>    
+        <ul>    
+            <li><a href="1#">新手入门1</a></li>    
+            <li><a href="2#">视频教程1</a></li>    
+            <li><a href="3#">常见问题1</a></li>    
+        </ul>    
+    </li>    
+       <li><a href="#">学习课程</a>    
+        <ul>    
+    <li><a href="1#">新手入门2</a></li>    
+    <li><a href="2#">视频教程2</a></li>    
+    <li><a href="3#">常见问题2</a></li>    
+    </ul>    
+        </li>    
+       <li><a href="#">联系我们</a></li>    
+     </ul>    
+</div>    

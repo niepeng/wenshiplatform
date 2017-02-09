@@ -1,0 +1,85 @@
+<div class="col-xs-12 col-sm-3 col-lg-2 big-menu">
+				<!--
+				<div id="search-menu">
+					<input class="form-control input-lg"
+						style="border-radius:0; font-size:14px; height:43px;" type="text"
+						placeholder="输入菜单名称可快速查找">
+				</div>
+				-->
+				<div class="panel panel-default">
+					<input type="hidden" id="shopId" value="$shopDO.id" />
+					
+					<div class="panel panel-default">
+    					<div class="panel-heading">
+    						<h4 class="panel-title">数据展示</h4>
+    						<a class="panel-collapse collapsed" data-toggle="collapse" href="javascript:void">
+    							<i class="fa fa-chevron-circle-down"></i>
+    						</a>
+    					</div>
+    					<ul class="list-group collapse in" id="frame-1">
+    					    <a class="list-group-item" href="$userManagerModule.setTarget('accountFanceDetail').param('shopId',$shopDO.id)" style="$!accountFanceDetail">用户关注详情</a>
+    					</ul>
+					</div>
+					
+					#if($shopDO.hasJifenbao() || $isAdmin)
+        				<div class="panel-heading">
+        					<h4 class="panel-title">基本功能</h4>
+        					<a class="panel-collapse collapsed" data-toggle="collapse" href="javascript:void">
+        						<i class="fa fa-chevron-circle-down"></i>
+        					</a>
+        				</div>
+        				<ul class="list-group collapse in" id="frame-0">
+        						<a  class="list-group-item" href="$userManagerModule.setTarget('textReplay').param('shopId',$shopDO.id)"  style="$!textReplay">文字回复</a>
+        						<a  class="list-group-item" href="$userManagerModule.setTarget('imgReplay').param('shopId',$shopDO.id)"  style="$!imgReplay">图片回复</a>
+        						<a class="list-group-item" href="$userManagerModule.setTarget('pictrueReplay').param('shopId',$shopDO.id)"  style="$!pictrueReplay">图文回复</a>
+        					    <a class="list-group-item" href="$userManagerModule.setTarget('systemReply').param('shopId',$shopDO.id)"  style="$!systemReply">系统回复</a>
+        					<!--	
+        					<li class="list-group-item" style="cursor:pointer; overflow:hidden;$!textReplay" kw="文字回复">
+        					</li>
+        					<li class="list-group-item" style="cursor:pointer; overflow:hidden;$!pictrueReplay" kw="图文回复">
+        					</li>
+        					<li class="list-group-item"
+        						onclick="window.location.href = &#39;./index.php?c=platform&amp;a=reply&amp;m=images&#39;;"
+        						style="cursor:pointer; overflow:hidden;" kw="图片回复"><a
+        						class="pull-right"
+        						href="http://wx.alashu.com/web/index.php?c=platform&amp;a=reply&amp;do=post&amp;m=images"><i
+        							class="fa fa-plus"></i></a> 图片回复</li>
+        					<li class="list-group-item"
+        						onclick="window.location.href = &#39;./index.php?c=platform&amp;a=reply&amp;m=userapi&#39;;"
+        						style="cursor:pointer; overflow:hidden;" kw="自定义接口回复"><a
+        						class="pull-right"
+        						href="http://wx.alashu.com/web/index.php?c=platform&amp;a=reply&amp;do=post&amp;m=userapi"><i
+        							class="fa fa-plus"></i></a> 自定义接口回复</li>
+        					<a class="list-group-item" href="requestChange.html" >积分兑换请求</a>-->
+        				</ul>
+					#end
+    			</div>
+			
+			#if($shopDO.hasJifenbao() || $isAdmin)
+    			<div class="panel panel-default">
+    				<div class="panel-heading">
+    					<h4 class="panel-title">高级功能</h4>
+    					<a class="panel-collapse collapsed" data-toggle="collapse" href="javascript:void">
+    						<i class="fa fa-chevron-circle-down"></i>
+    					</a>
+    				</div>
+    				<ul class="list-group collapse in" id="frame-1">
+    					<a class="list-group-item" href="$userManagerModule.setTarget('defaultMenu').param('shopId',$shopDO.id)" style="$!defaultMenu" kw="自定义菜单">自定义菜单</a>
+    					<a class="list-group-item" href="$userManagerModule.setTarget('upFance').param('shopId',$shopDO.id)" style="$!upFance">马上涨粉</a>
+    					<a class="list-group-item" href="$userManagerModule.setTarget('scoreChange').param('shopId',$shopDO.id)" style="$!scoreChange" >积分兑换管理</a>
+    					<a class="list-group-item" href="$userManagerModule.setTarget('requestChange').param('shopId',$shopDO.id)" style="$!requestChange">积分兑换请求</a>
+    				   <!--  -->
+    				   <a class="list-group-item" href="$userManagerModule.setTarget('scoreRank').param('shopId',$shopDO.id)" style="$!scoreRank">积分排行榜</a>
+    				</ul>
+    			</div>
+			#end
+		</div>
+	<script>
+	
+	    function changeTab(calzz,id) {
+		   $('.'+calzz).hide();
+		   $('#'+id).show();
+		}
+	
+	</script>			
+			

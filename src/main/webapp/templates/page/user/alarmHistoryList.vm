@@ -1,0 +1,93 @@
+	
+<script type="text/javascript" src="$staticServer/js/weijifen/datepicker/WdatePicker.js"></script>
+
+
+	$widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('checkIndex','1').addToContext('message',$message)
+	<div class="container-fluid">
+		<div class="row">
+			
+			<div class="" style="margin-left:50px;">
+				
+				<div id="ul_score">
+					<ul class="nav nav-tabs">
+						<li  class="active"><a href="#">历史报警数据</a></li>
+					</ul>
+				</div>
+				
+				
+				<div id="main_score">
+					<!--
+					<div>
+						<a href="$promotionModule.setTarget('goodEvaluateExport').param('shopId',$shopDO.id).param('status','1')" onclick="return confirm('确认要导出已通过的数据？'); return false;">导出已通过的数据</a>  &nbsp;&nbsp; &nbsp;&nbsp;
+						<a href="$promotionModule.setTarget('goodEvaluatePayAll').param('shopId',$shopDO.id).param('status','1')" onclick="return confirm('此操作不可恢复，确认把已经通过的用户标记已支付？'); return false;" >把已通过的用户标记已支付</a> 
+					</div>	
+					-->
+					<form method="post" action="$userModule.setTarget('alarmHistoryList')">
+                        	<div class="panel panel-default">
+                                <div class="panel-heading">
+                                  <h3 class="panel-title">搜索 （选择设备和查询的日期段）</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-lg-10 col-sm-10 col-xs-12">
+											<select name="snaddr" style="width:250px;float:left;height:35px;margin-right:20px;">
+												#foreach($bean in $beanList)
+												 <option value="$!bean.snaddr" #if($alarmQuery.snaddr == $bean.snaddr) selected #end>$!bean.devName</option>
+												#end
+											</select>	
+        									<input style="width:160px;float:left;margin-right:20px;" class="form-control" placeholder="报警开始时间" id="startTime" name="startTime" value="$!alarmQuery.startTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'2017-01-01 00:00:00',maxDate:''})" type="text">        
+        									<input style="width:160px;float:left;margin-right:20px;" class="form-control" placeholder="报警结束时间" id="endTime" name="endTime" value="$!alarmQuery.endTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'2017-01-01 00:00:00',maxDate:''})" type="text">        
+											<input style="float:left;" class="btn btn-primary" id="submit" name="submit" value="搜索" type="submit">       
+										</div>
+                                        <!--
+										<div class="col-lg-2 col-sm-2 col-xs-12">
+        									<input class="btn btn-primary form-control" id="submit" name="submit" value="搜索" type="submit">        
+        								</div>
+										-->
+    								</div>
+    							</div>
+                            </div>
+                    	
+                      </form>
+                          
+					<div class="main scoreChange" id = "scoreChange_manager"  >
+						<div style="padding:15px;">
+							<table class="table table-hover">
+								<thead class="navbar-inner">
+									<tr>
+										<th style="width:140px;">区域</th>
+										<th style="width:140px;">设备名</th>
+										<th style="width:120px;">报警原因</th>
+										<th style="width:70px;">时间</th>
+									</tr>
+								</thead>
+								<tbody>
+									#foreach($alarmData in $devcieBean.alarmBeanList)
+    									<tr>
+    										<td>#if("$!devcieBean.area" != "") $!devcieBean.area #else -- #end</td>	
+    										<td>$!devcieBean.devName</td>	
+    										<td>$!alarmData.msg</td>	
+											<td>$!alarmData.alarmTime</td>	
+    									</tr>
+									#end
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+				</div>
+
+				
+
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		
+	</script>
+	<div class="container-fluid footer" role="footer">
+		$widget.setTemplate('foot')
+	</div>
+
+

@@ -1,0 +1,176 @@
+	
+<script type="text/javascript" src="$staticServer/js/weijifen/datepicker/WdatePicker.js"></script>
+
+
+	$widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('checkIndex','2').addToContext('message',$message)
+	<div class="container-fluid">
+		<div class="row">
+			
+			<div class="" style="margin-left:50px;">
+				
+				<div id="ul_score">
+					<ul class="nav nav-tabs">
+						<li  class="active"><a href="#">编辑设备信息</a></li>
+					</ul>
+				</div>
+				
+				
+				<div id="main_score">
+					<!--
+					<div>
+						<a href="$promotionModule.setTarget('goodEvaluateExport').param('shopId',$shopDO.id).param('status','1')" onclick="return confirm('确认要导出已通过的数据？'); return false;">导出已通过的数据</a>  &nbsp;&nbsp; &nbsp;&nbsp;
+						<a href="$promotionModule.setTarget('goodEvaluatePayAll').param('shopId',$shopDO.id).param('status','1')" onclick="return confirm('此操作不可恢复，确认把已经通过的用户标记已支付？'); return false;" >把已通过的用户标记已支付</a> 
+					</div>	
+					-->
+					
+					<form id="reply-form" class="form-horizontal form ng-pristine ng-valid" action="$userModule.setTarget('doEditDevice')" method="post">
+						<input type="hidden" name="snaddr" value="$deviceBean.snaddr" />
+
+						<div class="form-group">
+							<div class="col-sm-12">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<a href="$userModule.setTarget('deviceList')">返回设备列表</a>  &nbsp;&nbsp;
+										<!-- <a href="$promotionModule.setTarget('viewAddArticle').param('shopId',$shopDO.id)">添加文章</a>  &nbsp;&nbsp;&nbsp;&nbsp;   -->
+										 <tt style="color:red;">$!msg</tt>
+									</div>
+									
+									<ul class="list-group">
+										<li class="list-group-item">
+											<div class="form-group">
+												<div class="col-sm-6 col-md-8 col-xs-12">
+													
+													<!--
+													配置红包金额和概率<br>
+														登录有赞，<a href="https://login.youzan.com/sso/index?service=kdt" target="_blank">点击登录</a>， 登录后进入店铺，点击左边的 "营销" -> "有赞API", 开启，并复制应用ID 和 应用密钥,  还不明白?<a href="$staticServer/images/weijifen/youzan_config.jpg" target="_blank">点击这里</a>
+													-->
+													<span class="help-block"></span>
+												</div>
+											</div>
+											
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+            											区域:
+														<select name="area">
+															#foreach($area in $areaList)
+															<option value="$area" #if($area == $deviceBean.area) selected #end>$area</option>
+															#end
+														</select>	
+														<br>
+            										</tt>
+            									</div>
+            								</div>
+											
+											
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+            											设备名称:<input type="text" style="width:250px;display:inline;height:30px;" id="devName" name="devName" value="$!deviceBean.devName" class="form-control">
+														<br>
+            										</tt>
+            									</div>
+            								</div>
+											
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+															温度上限:<input type="text" style="width:100px;display:inline;height:25px;" id="maxTemp" name="maxTemp" value="$!deviceBean.deviceExtendBean.maxTemp" class="form-control">℃
+            												&nbsp;温度下限:<input type="text" style="width:100px;display:inline;height:25px;" id="minTemp" name="minTemp" value="$!deviceBean.deviceExtendBean.minTemp" class="form-control">℃
+            												&nbsp;温度校正值:<input type="text" style="width:100px;display:inline;height:25px;" id="tempHC" name="tempHC" value="$!deviceBean.deviceExtendBean.tempHC" class="form-control">℃
+                										<br>
+            										</tt>
+            									</div>
+            								</div>
+											
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+															湿度上限:<input type="text" style="width:100px;display:inline;height:25px;" id="maxHumi" name="maxHumi" value="$!deviceBean.deviceExtendBean.maxHumi" class="form-control">%RH
+            												&nbsp;湿度下限:<input type="text" style="width:100px;display:inline;height:25px;" id="minHumi" name="minHumi" value="$!deviceBean.deviceExtendBean.minHumi" class="form-control">%RH
+            												&nbsp;湿度校正值:<input type="text" style="width:100px;display:inline;height:25px;" id="humiHC" name="humiHC" value="$!deviceBean.deviceExtendBean.humiHC" class="form-control">%RH
+                										<br>
+            										</tt>
+            									</div>
+            								</div>
+											
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+            											上传间隔:
+														<select name="devGap">
+															<option value="10" #if("$deviceBean.devGap" == "10") selected #end>10秒</option>
+															<option value="20" #if("$deviceBean.devGap" == "20") selected #end>20秒</option>
+															<option value="30" #if("$deviceBean.devGap" == "30") selected #end>30秒</option>
+															<option value="40" #if("$deviceBean.devGap" == "40") selected #end>40秒</option>
+															<option value="50" #if("$deviceBean.devGap" == "50") selected #end>50秒</option>
+															<option value="60" #if("$deviceBean.devGap" == "60") selected #end>1分钟</option>
+														</select>
+														<br>
+            										</tt>
+            									</div>
+            								</div>
+											
+											
+											
+											<!--
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+            											浏览人数要求:<input type="text" style="width:70px;display:inline;height:25px;" id="userNum" name="userNum" #if($!bean.userNum < 1)  value="1" #else  value="$!bean.userNum" #end class="form-control">个人
+														<br>
+            										</tt>
+            									</div>
+            								</div>
+											
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+            											金额1:<input type="text" style="width:100px;display:inline;height:25px;" id="money1" name="money1" value="$!priceUtil.int2double($!bean.money1)" class="form-control">元
+            												&nbsp;概率1:<input type="text" style="width:100px;display:inline;height:25px;" id="percent1" name="percent1" value="$!priceUtil.int2double($!bean.percent1)" class="form-control"> %
+                										<br><br>
+            										</tt>
+            									</div>
+            								</div>
+											
+            								
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+            											红包总金额发送上限：<input type="text" style="width:100px;display:inline;height:25px;" id="totalMoney" name="totalMoney" value="$!priceUtil.int2double($!bean.totalPayRedMoney)" class="form-control">元
+                										<br>如果配置0，那么就代表不限制
+														<br>
+            										</tt>
+            									</div>
+            								</div>
+											-->
+											
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-sm-12">
+								<input name="submit" type="submit" value="保存" class="btn btn-primary col-lg-1"> 
+							</div>
+						</div>
+					</form>
+                          
+				</div>
+
+				
+
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		
+	</script>
+	<div class="container-fluid footer" role="footer">
+		$widget.setTemplate('foot')
+	</div>
+
+

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC
+    "-//SPRING//DTD BEAN//EN"
+     "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+
+    <!--
+
+    <bean id="bDAO" class="xxxxxxxxx.CoopShopCodeDAOIbatis" init-method="cookieData">
+	   <property name="sqlMapClient" ref="sqlMapClientCookie" />
+	 </bean>
+     -->
+     
+     
+     
+
+	<bean id="keyValueDAO" class="com.hsmonkey.weijifen.biz.dal.ibatis.KeyValueDAOIbatis" />
+	
+</beans>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE configuration>
+
+<configuration>
+	<jmxConfigurator />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+             <pattern>%d [%X{requestURIWithQueryString}] %-5p %c{2} - %m%n</pattern>
+        </layout>
+    </appender>
+
+    <appender name="PROJECT" class="wint.lang.logback.WintRollingFileAppender">
+		<File>${weijifen.log.dir}/weijifen.log</File>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>weijifen.log.%i.bak</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>12</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>100MB</MaxFileSize>
+		</triggeringPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n</Pattern>
+		</layout>
+    </appender>
+
+    <appender name="PROJECT-DEBUG" class="wint.lang.logback.WintRollingFileAppender">
+        <File>${weijifen.log.dir}/weijifen-debug.log</File>
+        <append>false</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>weijifen-debug.log.%i.bak</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>12</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>100MB</MaxFileSize>
+		</triggeringPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n</Pattern>
+		</layout>
+		
+    </appender>
+
+    <appender name="BIZ" class="wint.lang.logback.WintRollingFileAppender">
+		<File>${weijifen.log.dir}/weijifen-biz.log</File>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>weijifen-biz.log.%i.bak</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>12</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>100MB</MaxFileSize>
+		</triggeringPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n</Pattern>
+		</layout>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">  <!-- 只打印error日志 -->
+		    <level>ERROR</level>
+		    <onMatch>ACCEPT</onMatch>
+		    <onMismatch>DENY</onMismatch>
+		</filter>
+    </appender>
+
+    <appender name="FILTER" class="wint.lang.logback.WintRollingFileAppender">
+        <File>${weijifen.log.dir}/weijifen-filter.log</File>
+        <append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>weijifen-filter.log.%i.bak</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>12</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>100MB</MaxFileSize>
+		</triggeringPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n</Pattern>
+		</layout>
+    </appender>
+
+    <appender name="APACHE" class="wint.lang.logback.WintFileAppender">
+        <File>${weijifen.log.dir}/weijifen-apache.log</File>
+        <append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>weijifen-apache.log.%i.bak</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>12</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>100MB</MaxFileSize>
+		</triggeringPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n</Pattern>
+		</layout>
+    </appender>
+
+    <appender name="TEMPLATE" class="wint.lang.logback.WintRollingFileAppender">
+        <File>${weijifen.log.dir}/weijifen-template.log</File>
+        <append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>weijifen-template.log.%i.bak</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>12</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>100MB</MaxFileSize>
+		</triggeringPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n</Pattern>
+		</layout>
+    </appender>
+
+     <appender name="DATA" class="wint.lang.logback.WintRollingFileAppender">
+        <File>${weijifen.log.dir}/weijifen-data.log</File>
+        <append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>weijifen-waimai.log.%i.bak</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>12</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>100MB</MaxFileSize>
+		</triggeringPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n</Pattern>
+		</layout>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">  <!-- 只打印INFO日志 -->
+		    <level>INFO</level>
+		    <onMatch>ACCEPT</onMatch>
+		    <onMismatch>DENY</onMismatch>
+		</filter>
+    </appender>
+
+    <logger name="com.hsmonkey.weijifen">
+        <level value="error"/>
+        <appender-ref ref="BIZ"/>
+    </logger>
+    <logger name="wint.lang.misc.profiler">
+        <level value="info"/>
+        <appender-ref ref="FILTER"/>
+    </logger>
+    <logger name="wint.mvc.template.engine">
+        <level value="info"/>
+        <appender-ref ref="TEMPLATE"/>
+    </logger>
+    <logger name="org.apache">
+        <level value="info"/>
+        <appender-ref ref="APACHE"/>
+    </logger>
+    <logger name="org.apache.commons.beanutils">
+        <level value="error"/>
+    </logger>
+    <logger name="org.apache.commons.digester">
+        <level value="error"/>
+    </logger>
+
+    <root>
+        <level value="${weijifen.log.root.level}"/>
+        <appender-ref ref="PROJECT"/>
+        <appender-ref ref="PROJECT-DEBUG"/>
+    </root>
+</configuration>

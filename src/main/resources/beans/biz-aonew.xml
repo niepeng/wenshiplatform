@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC
+    "-//SPRING//DTD BEAN//EN"
+     "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+   
+   
+   <!--  <bean id="adminAO" class="com.hsmonkey.weijifen.biz.ao.impl.AdminAOImpl" /> -->
+
+	<bean id="userAO" class="com.hsmonkey.weijifen.biz.ao.impl.UserAOImpl" />
+
+    <!-- after web container inited call method -->
+    <bean class="com.hsmonkey.weijifen.common.spring.InstantiationTracingBeanPostProcessor">
+        <property name="executer" value="${weijifen.timemachine.execute}"></property>
+    </bean>    
+    
+    <bean id="taskAO" class="com.hsmonkey.weijifen.biz.ao.impl.TaskAOImpl">
+        <property name="executer" value="${weijifen.timemachine.execute}"></property>
+    </bean>    
+    
+
+</beans>

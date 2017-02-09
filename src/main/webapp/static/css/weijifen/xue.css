@@ -1,0 +1,42 @@
+
+	.wenshifont {
+		font-size: 24px;
+	}
+	
+	.wenshifont-small {
+		font-size: 20px;
+	}
+	
+	.circle-notconnection {
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+		background-color:yellow;
+    }
+	
+	.circle-other {
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+		background-color:gray;
+    }
+	
+	
+	.circle-success {
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+		background-color:green;
+    }
+	
+	
+	.container-fluid ul li ul{    
+       display:none;    
+       }   
+        
+        .container-fluid ul li:hover ul{    
+        display:block;    
+        position: absolute; left: 0px; top: 21px;    
+    } 
+    
+	

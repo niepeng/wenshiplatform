@@ -1,0 +1,126 @@
+	
+		$widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('message',$message)
+	<div class="container-fluid">
+		<div class="row">
+			
+			<div class="" style="margin-left:50px;">
+				
+				<div class="clearfix textReplay"  id = "textReplay_manager">
+					
+				<!--
+				<div class="panel panel-info" style="width:200px;">
+						<div class="panel-heading">筛选</div>
+						<div class="panel-body">
+							<form action="$userManagerModule.setTarget('textReplay')" method="get" class="form-horizontal" role="form">
+								<input type="hidden" name="shopId" value="$shopDO.id" />
+								<input type="hidden" name="msgStatus" value="$query.msgStatus" />
+								<div class="form-group">
+									<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">状态</label>
+									<div class="col-sm-8 col-lg-9 col-xs-12">
+										<div class="btn-group">
+											<a href="$userManagerModule.setTarget('textReplay').param('shopId',$shopDO.id).param('msgStatus',0)" #if($query.msgStatus == 0) class="btn btn-primary" #else class="btn btn-default" #end>所有</a>
+											<a href="$userManagerModule.setTarget('textReplay').param('shopId',$shopDO.id).param('msgStatus',1)" #if($query.msgStatus == 1) class="btn btn-primary" #else class="btn btn-default" #end>启用</a> 
+											<a href="$userManagerModule.setTarget('textReplay').param('shopId',$shopDO.id).param('msgStatus',2)" #if($query.msgStatus == 2) class="btn btn-primary" #else class="btn btn-default" #end>禁用</a>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">关键字</label>
+									<div class="col-sm-8 col-xs-12">
+										<input class="form-control" name="queryCondition" type="text" value="$!query.queryCondition">
+									</div>
+									<div class="col-xs-12 col-sm-2 col-lg-1 text-right">
+										<button class="btn btn-default"> <i class="fa fa-search"></i>搜索</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>	
+				-->
+				  
+				<!--
+				 #foreach($i in [1..12])
+    				  <div class="panel panel-info" style="width:200px;float:left;margin-right:20px;">
+    					<div class="panel-heading">
+    						<tt>新SN测试$i</tt>
+    						<tt style="float:right;" class="circle-warn"></tt>
+    					</div>
+    					<div class="clearfix panel-body wenshifont">
+    						<div>
+    							<tt>13.84℃</tt><tt style="float:right;color:red;">↑↓</tt>
+    						</div>	
+    						<div>
+    							<tt>60.42%</tt><tt style="float:right;color:red;">↑↓</tt>
+    						</div>	
+    						<div class="clearfix wenshifont-small">
+    							17-01-19 16:52
+    						</div>	
+    					</div>
+    				</div>
+    			#end	
+				-->
+				
+				#foreach($bean in $beanList)
+				 <div class="panel panel-info" style="width:200px;float:left;margin-right:20px;">
+    					<div class="panel-heading">
+    						<tt>${bean.devName}#if("${bean.area}" != "")(${bean.area})#end</tt>
+							#if($bean.dataBean.isSuccess())
+								<tt style="float:right;" class="circle-success"></tt>
+							#elseif($bean.dataBean.isNotConnection())
+								<tt style="float:right;" class="circle-notconnection"></tt>
+							#else
+								<tt style="float:right;" class="circle-other"></tt>
+							#end	
+    						
+    					</div>
+    					<div class="clearfix panel-body wenshifont">
+    						<div>
+								#if($bean.dataBean.isSuccess())
+    								<tt>${bean.dataBean.temp}℃</tt>
+    								#if($bean.dataBean.tempStatus > 0 )
+    									<tt style="float:right;color:red;">↑</tt>
+    								#elseif($bean.dataBean.tempStatus < 0)
+    									<tt style="float:right;color:blue;">↓</tt>
+    								#end	
+								#else
+									<tt>--</tt>
+								#end
+    						</div>	
+    						<div>
+								#if($bean.dataBean.isSuccess())
+									<tt>${bean.dataBean.humi}%</tt>
+    								#if($bean.dataBean.humiStatus > 0 )
+    									<tt style="float:right;color:red;">↑</tt>
+    								#elseif($bean.dataBean.humiStatus < 0)
+    									<tt style="float:right;color:blue;">↓</tt>
+									#end
+								#else
+									<tt>--</tt>
+								#end
+    							
+    						</div>	
+    						<div class="clearfix wenshifont-small">
+    							${bean.dataBean.time}
+    						</div>	
+    					</div>
+    				</div>
+				#end	
+
+				
+				
+				</div>
+
+				
+
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		
+	</script>
+	<div class="container-fluid footer" role="footer">
+		$widget.setTemplate('foot')
+	</div>
+
+
