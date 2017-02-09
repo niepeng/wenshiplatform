@@ -32,8 +32,8 @@ public class CSVManager {
 
 	public static File createCSVFile(File csvFile, String[] titles, List<String> dataList) {
 		OutputStream os = null;
-		String lineSplit = java.security.AccessController.doPrivileged(new sun.security.action.GetPropertyAction("line.separator"));
-//		String lineSplit = "\n";
+//		String lineSplit = java.security.AccessController.doPrivileged(new sun.security.action.GetPropertyAction("line.separator"));
+		String lineSplit = "\n";
 
 		try {
 			os = new FileOutputStream(csvFile);
