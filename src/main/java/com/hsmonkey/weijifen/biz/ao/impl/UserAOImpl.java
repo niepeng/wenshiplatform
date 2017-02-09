@@ -486,19 +486,14 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			Map<String, String> headerMap = new HashMap<String, String>();
 			headerMap.put("TYPE", "bindMailbox");
 			String body = JsonUtil.fields("user,mail", userBean);
-			body = "{\"user\":\"xsf\",\"mail\":\"cqtek1234@126.com\"}";
-			System.out.println("mailBody--->" + body);
 			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
-			System.out.println("bindMailContent-->" + content);
 			if (!isSuccess(content)) {
 				result.setResultCode(new StringResultCode("绑定邮箱失败，请重试"));
 				return result;
 			}
-			JSONObject json = JsonUtil.getJsonObject(content);
-			String msg = JsonUtil.getString(json, "msg", null);
 			
 			result.getModels().put("userBean", userBean);
-			result.getModels().put("msg", msg);
+			result.getModels().put("msg", "已发送一条激活链接到邮箱，请进入邮箱点击激活链接才能成功绑定");
 			
 			result.setSuccess(true);
 
