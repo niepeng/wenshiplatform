@@ -89,7 +89,8 @@ public class User extends BaseAction {
 		if(!checkUserSessionNeedRedrect(flowData, context)) {
 			return;
 		}
-		Result result = userAO.index(flowData);
+		String area = flowData.getParameters().getString("area");
+		Result result = userAO.index(flowData, area);
 		handleResult(result, flowData, context);
 	}
 	

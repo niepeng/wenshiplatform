@@ -125,12 +125,23 @@ public class UserAOImpl extends BaseAO implements UserAO {
 	}
 
 	@Override
-	public Result index(FlowData flowData) {
+	public Result index(FlowData flowData, String area) {
 		Result result = new ResultSupport(false);
 		try {
 			UserBean userBean = getUserBean(flowData);
-			// 1.获取用户名下所有设备列表
+			// 1.获取用户名下所有设备列表,区域列表
 			List<DeviceBean> beanList = getAllDevice(userBean);
+			List<String> areaList = getAllArea(userBean);
+
+			if(!CollectionUtils.isEmpty(beanList) && !CollectionUtils.isEmpty(areaList) && !StringUtil.isBlank(area)) {
+				for (int i = 0; i < beanList.size();) {
+					if (area.equals(beanList.get(i).getArea())) {
+						i++;
+						continue;
+					}
+					beanList.remove(i);
+				}
+			}
 			
 			// 2.获取每一个设备的实时温湿度获取
 			DeviceDataBean dataBean = null;
@@ -169,6 +180,8 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			
 			result.getModels().put("beanList", beanList);
 			result.getModels().put("userBean", userBean);
+			result.getModels().put("areaList", areaList);
+			result.getModels().put("area", area);
 
 			result.setSuccess(true);
 			

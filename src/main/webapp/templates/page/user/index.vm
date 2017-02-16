@@ -7,6 +7,41 @@
 				
 				<div class="clearfix textReplay"  id = "textReplay_manager">
 					
+					<div id="ul_score">
+    					<ul class="nav nav-tabs">
+    						<li  class="active"><a href="#">实时数据</a></li>
+    					</ul>
+    				</div>
+    				
+    				<form method="post" action="$userModule.setTarget('index')">
+                        	<div class="panel panel-default">
+                                <div class="panel-heading">
+                                  <h3 class="panel-title">筛选</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-lg-10 col-sm-10 col-xs-12">
+											<select name="area" style="width:100px;float:left;height:35px;margin-right:20px;">
+                                            <option value="">全部</option>
+                    						#foreach($tmpArea in $areaList)
+                    						 <option value="$!tmpArea" #if($tmpArea == $area) selected #end>$!tmpArea</option>
+                    						#end
+                    					</select>
+											<input style="float:left;" class="btn btn-primary" id="submit" name="submit" value="筛选" type="submit">       
+										</div>
+                                        <!--
+										<div class="col-lg-2 col-sm-2 col-xs-12">
+        									<input class="btn btn-primary form-control" id="submit" name="submit" value="搜索" type="submit">        
+        								</div>
+										-->
+    								</div>
+    							</div>
+                            </div>
+                    	
+                      </form>
+					  
+					
+					
 				<!--
 				<div class="panel panel-info" style="width:200px;">
 						<div class="panel-heading">筛选</div>
@@ -76,11 +111,14 @@
     					<div class="clearfix panel-body wenshifont">
     						<div>
 								#if($bean.dataBean.isSuccess())
-    								<tt>${bean.dataBean.temp}℃</tt>
     								#if($bean.dataBean.tempStatus > 0 )
+										<tt style="color:red;">${bean.dataBean.temp}℃</tt>
     									<tt style="float:right;color:red;">↑</tt>
     								#elseif($bean.dataBean.tempStatus < 0)
+										<tt style="color:blue;">${bean.dataBean.temp}℃</tt>
     									<tt style="float:right;color:blue;">↓</tt>
+									#else
+										<tt>${bean.dataBean.temp}℃</tt>
     								#end	
 								#else
 									<tt>--</tt>
@@ -88,11 +126,14 @@
     						</div>	
     						<div>
 								#if($bean.dataBean.isSuccess())
-									<tt>${bean.dataBean.humi}%</tt>
     								#if($bean.dataBean.humiStatus > 0 )
+										<tt style="color:red;">${bean.dataBean.humi}%</tt>
     									<tt style="float:right;color:red;">↑</tt>
     								#elseif($bean.dataBean.humiStatus < 0)
+										<tt style="color:blue;">${bean.dataBean.humi}%</tt>
     									<tt style="float:right;color:blue;">↓</tt>
+									#else
+										<tt>${bean.dataBean.humi}%</tt>
 									#end
 								#else
 									<tt>--</tt>

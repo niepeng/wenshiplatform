@@ -23,7 +23,7 @@ public interface UserAO {
 
 	public Result doUpdatePsw(FlowData flowData, UserBean userBean);
 
-	public Result index(FlowData flowData);
+	public Result index(FlowData flowData, String area);
 
 	public Result alarmList(FlowData flowData);
 
