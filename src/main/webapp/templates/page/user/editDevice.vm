@@ -23,7 +23,7 @@
 					</div>	
 					-->
 					
-					<form id="reply-form" class="form-horizontal form ng-pristine ng-valid" action="$userModule.setTarget('doEditDevice')" method="post">
+					<form id="reply-form" class="form-horizontal form ng-pristine ng-valid" action="$userModule.setTarget('doEditDevice')" onsubmit="return checkForm();" method="post">
 						<input type="hidden" name="snaddr" value="$deviceBean.snaddr" />
 
 						<div class="form-group">
@@ -77,7 +77,7 @@
         											<tt id="">
 															温度上限:<input type="text" style="width:100px;display:inline;height:25px;" id="maxTemp" name="maxTemp" value="$!deviceBean.deviceExtendBean.maxTemp" class="form-control">℃
             												&nbsp;温度下限:<input type="text" style="width:100px;display:inline;height:25px;" id="minTemp" name="minTemp" value="$!deviceBean.deviceExtendBean.minTemp" class="form-control">℃
-            												&nbsp;温度校正值:<input type="text" style="width:100px;display:inline;height:25px;" id="tempHC" name="tempHC" value="$!deviceBean.deviceExtendBean.tempHC" class="form-control">℃
+            												&nbsp;温度回差:<input type="text" style="width:100px;display:inline;height:25px;" id="tempHC" name="tempHC" value="$!deviceBean.deviceExtendBean.tempHC" class="form-control">℃
                 										<br>
             										</tt>
             									</div>
@@ -88,7 +88,7 @@
         											<tt id="">
 															湿度上限:<input type="text" style="width:100px;display:inline;height:25px;" id="maxHumi" name="maxHumi" value="$!deviceBean.deviceExtendBean.maxHumi" class="form-control">%RH
             												&nbsp;湿度下限:<input type="text" style="width:100px;display:inline;height:25px;" id="minHumi" name="minHumi" value="$!deviceBean.deviceExtendBean.minHumi" class="form-control">%RH
-            												&nbsp;湿度校正值:<input type="text" style="width:100px;display:inline;height:25px;" id="humiHC" name="humiHC" value="$!deviceBean.deviceExtendBean.humiHC" class="form-control">%RH
+            												&nbsp;湿度回差:<input type="text" style="width:100px;display:inline;height:25px;" id="humiHC" name="humiHC" value="$!deviceBean.deviceExtendBean.humiHC" class="form-control">%RH
                 										<br>
             										</tt>
             									</div>
@@ -100,11 +100,11 @@
             											上传间隔:
 														<select name="devGap">
 															<option value="10" #if("$deviceBean.devGap" == "10") selected #end>10秒</option>
-															<option value="20" #if("$deviceBean.devGap" == "20") selected #end>20秒</option>
 															<option value="30" #if("$deviceBean.devGap" == "30") selected #end>30秒</option>
 															<option value="40" #if("$deviceBean.devGap" == "40") selected #end>40秒</option>
-															<option value="50" #if("$deviceBean.devGap" == "50") selected #end>50秒</option>
 															<option value="60" #if("$deviceBean.devGap" == "60") selected #end>1分钟</option>
+															<option value="120" #if("$deviceBean.devGap" == "120") selected #end>2分钟</option>
+															<option value="300" #if("$deviceBean.devGap" == "300") selected #end>5分钟</option>
 														</select>
 														<br>
             										</tt>
@@ -167,7 +167,37 @@
 	</div>
 	
 	<script type="text/javascript">
-		
+		function checkForm() {
+		 var maxTempValue = parseFloat(document.getElementById("maxTemp").value).toFixed(2);
+		 var minTempValue = parseFloat(document.getElementById("minTemp").value).toFixed(2);
+		 var tempHCValue = parseFloat(document.getElementById("tempHC").value).toFixed(2);
+		 
+		 var maxHumiValue = parseFloat(document.getElementById("maxHumi").value).toFixed(2);
+		 var minHumiValue = parseFloat(document.getElementById("minHumi").value).toFixed(2);
+		 var humiHCValue = parseFloat(document.getElementById("humiHC").value).toFixed(2);
+		 
+		 if(maxTempValue > 500 || maxTempValue < -200) {
+		   alert("温度上限为500℃，温度下限为-200℃");
+		   return false;
+		 }
+		 
+		 if(minTempValue > 500 || minTempValue < -200) {
+		   alert("温度上限为500℃，温度下限为-200℃");
+		   return false;
+		 }
+		 
+		 if(maxHumiValue > 99.9 || minHumiValue < 0) {
+		  alert("湿度上限为99.9%，湿度下限为0%");
+		   return false;
+		 }
+		 
+		if(maxHumiValue > 99.9 || minHumiValue < 0) {
+		   alert("湿度上限为99.9%，湿度下限为0%");
+		   return false;
+		 }
+		 
+		 return true;
+		}
 	</script>
 	<div class="container-fluid footer" role="footer">
 		$widget.setTemplate('foot')

@@ -7,7 +7,7 @@
 				<li #if("$!checkIndex" == "") class="active" #end><a href="$userModule.setTarget('index')">实时数据</a></li>
 				<li #if($checkIndex == 1) class="active" #end><a href="$userModule.setTarget('alarmList')">报警数据</a>
 					 <ul>    
-                        <li><a href="$userModule.setTarget('alarmList')">报警数据</a></li>    
+                        <li><a href="$userModule.setTarget('alarmList')">最新报警</a></li>    
                         <li><a href="$userModule.setTarget('alarmHistoryList')">历史报警</a></li>    
                     </ul>
 				</li>

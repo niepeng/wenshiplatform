@@ -61,10 +61,10 @@
 										<th style="width:80px;">上传间隔</th>
 										<th style="width:80px;">温度上限</th>
 										<th style="width:80px;">温度下限</th>
-										<th style="width:80px;">温度校正值</th>
+										<th style="width:80px;">温度回差</th>
 										<th style="width:80px;">湿度上限</th>
 										<th style="width:80px;">湿度下限</th>
-										<th style="width:80px;">湿度校正值</th>
+										<th style="width:80px;">湿度回差</th>
 										<th style="width:100px;">操作</th>
 									</tr>
 								</thead>

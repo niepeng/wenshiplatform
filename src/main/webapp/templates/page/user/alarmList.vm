@@ -9,12 +9,15 @@
 				
 				<div id="ul_score">
 					<ul class="nav nav-tabs">
-						<li  class="active"><a href="#">报警数据</a></li>
+						<li  class="active"><a href="#">最新报警</a></li>
 					</ul>
 				</div>
 				
 				
 				<div id="main_score">
+					<div style="color:green;font-size:20px;">
+						仅展示最近24小时的所有报警
+                    </div>	
 					<!--
 					<div>
 						<a href="$promotionModule.setTarget('goodEvaluateExport').param('shopId',$shopDO.id).param('status','1')" onclick="return confirm('确认要导出已通过的数据？'); return false;">导出已通过的数据</a>  &nbsp;&nbsp; &nbsp;&nbsp;
