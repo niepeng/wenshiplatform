@@ -45,12 +45,17 @@
 	
 	
 </div>
-<script>
+
+#set($JQ="$.")
+<script type="text/javascript">
 function formcheck() {
 	
 	return true;
 }
+
 var h = document.documentElement.clientHeight;
 $(".login").css('min-height',h);
+
 </script>
+
 
