@@ -37,6 +37,12 @@ public class DeviceDataBean {
 	private String abnormal;
 	
 	// -------------- extend attribute --------------------
+	
+	private String startTime;
+	
+	private String endTime;
+	
+	private String rangeTime;
 
 	// -------------- normal method -----------------------
 	
@@ -114,4 +120,28 @@ public class DeviceDataBean {
 		this.abnormal = abnormal;
 	}
 
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+	public String getRangeTime() {
+		return rangeTime;
+	}
+
+	public void setRangeTime(String rangeTime) {
+		this.rangeTime = rangeTime;
+	}
+	
 }

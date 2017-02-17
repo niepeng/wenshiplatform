@@ -47,6 +47,10 @@ public class CollectionUtils extends CollectionUtil {
 	public static <E> ArrayList<E> newArrayList() {
 		return new ArrayList<E>();
 	}
+	
+	public static <E> ArrayList<E> newArrayList(int size) {
+		return new ArrayList<E>(size);
+	}
 
 	public static <E> HashSet<E> newHashSet() {
 		return new HashSet<E>();

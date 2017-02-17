@@ -4,6 +4,7 @@ import wint.help.biz.result.Result;
 import wint.mvc.flow.FlowData;
 
 import com.hsmonkey.weijifen.biz.bean.DeviceBean;
+import com.hsmonkey.weijifen.biz.bean.DeviceDataBean;
 import com.hsmonkey.weijifen.biz.bean.UserBean;
 import com.hsmonkey.weijifen.biz.query.AlarmQuery;
 import com.hsmonkey.weijifen.biz.query.DeviceQuery;
@@ -24,6 +25,9 @@ public interface UserAO {
 	public Result doUpdatePsw(FlowData flowData, UserBean userBean);
 
 	public Result index(FlowData flowData, String area);
+	
+	public Result historyData(FlowData flowData, DeviceDataBean deviceDataBean);
+	public Result historyDataExport(FlowData flowData, DeviceDataBean deviceDataBean, String exportType);
 
 	public Result alarmList(FlowData flowData);
 

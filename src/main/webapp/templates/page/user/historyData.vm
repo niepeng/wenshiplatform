@@ -1,0 +1,140 @@
+	
+<script type="text/javascript" src="$staticServer/js/weijifen/datepicker/WdatePicker.js"></script>
+
+
+	$widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('checkIndex','4').addToContext('message',$message)
+	<div class="container-fluid">
+		<div class="row">
+			
+			<div class="" style="margin-left:50px;">
+				
+				<div id="ul_score">
+					<ul class="nav nav-tabs">
+						<li  class="active"><a href="#">历史数据</a></li>
+					</ul>
+				</div>
+				
+				
+				<div id="main_score">
+					<!--
+					<div>
+						<a href="$promotionModule.setTarget('goodEvaluateExport').param('shopId',$shopDO.id).param('status','1')" onclick="return confirm('确认要导出已通过的数据？'); return false;">导出已通过的数据</a>  &nbsp;&nbsp; &nbsp;&nbsp;
+						<a href="$promotionModule.setTarget('goodEvaluatePayAll').param('shopId',$shopDO.id).param('status','1')" onclick="return confirm('此操作不可恢复，确认把已经通过的用户标记已支付？'); return false;" >把已通过的用户标记已支付</a> 
+					</div>	
+					-->
+					<form method="post" id="form1" name="form1">
+						<input type="hidden" name="selectForm" id="selectForm" value="$userModule.setTarget('historyData')" />
+						<input type="hidden" name="exportForm" id="exportForm" value="$userModule.setTarget('historyDataExport')" />
+						<input type="hidden" name="exportType" id="exportType" />
+                        	<div class="panel panel-default">
+                                <div class="panel-heading">
+                                  <h3 class="panel-title">搜索 （选择设备，选择间隔时间，查询的日期段）</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-lg-10 col-sm-10 col-xs-12">
+											<select name="snaddr" style="padding-right:10px;float:left;height:35px;margin-right:20px;">
+												#foreach($bean in $beanList)
+												 <option value="$!bean.snaddr" #if($!deviceDataBean.snaddr == $bean.snaddr) selected #end>$!bean.devName</option>
+												#end
+											</select>
+											<select name="rangeTime" style="padding-right:10px;float:left;height:35px;margin-right:20px;">
+												 <option value="1"  #if($!deviceDataBean.rangeTime == 1) selected #end>1分钟</option>
+												 <option value="5" #if($!deviceDataBean.rangeTime == 5) selected #end>5分钟</option>
+												 <option value="10" #if($!deviceDataBean.rangeTime == 10) selected #end>10分钟</option>
+												 <option value="15" #if($!deviceDataBean.rangeTime == 15) selected #end>15分钟</option>
+												 <option value="20" #if($!deviceDataBean.rangeTime == 20) selected #end>20分钟</option>
+												 <option value="25" #if($!deviceDataBean.rangeTime == 25) selected #end>25分钟</option>
+												 <option value="30" #if($!deviceDataBean.rangeTime == 30) selected #end>30分钟</option>
+											</select>
+        									<input style="width:160px;float:left;margin-right:20px;" class="form-control" placeholder="开始时间" id="startTime" name="startTime" value="$!deviceDataBean.startTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'2017-01-01 00:00:00',maxDate:''})" type="text">        
+        									<input style="width:160px;float:left;margin-right:20px;" class="form-control" placeholder="结束时间" id="endTime" name="endTime" value="$!deviceDataBean.endTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'2017-01-01 00:00:00',maxDate:''})" type="text">        
+											<input style="float:left;margin-right:10px;" class="btn btn-primary" type="button" value="搜索" onclick="submitSelect()" >      
+											<input style="float:left;margin-right:10px;" class="btn btn-primary" type="button"  value="导出excel" onclick="submitExport('excel')" >       
+											<input style="float:left;" class="btn btn-primary" type="button"  value="导出pdf" onclick="submitExport('pdf')" >       
+										</div>
+                                        <!--
+										<div class="col-lg-2 col-sm-2 col-xs-12">
+        									<input class="btn btn-primary form-control" id="submit" name="submit" value="搜索" type="submit">        
+        								</div>
+										-->
+    								</div>
+    							</div>
+                            </div>
+                    	
+                      </form>
+                          
+					<div class="main scoreChange" id = "scoreChange_manager">
+						<div style="padding:15px;">
+							<table class="table table-hover">
+								<thead class="navbar-inner">
+									<tr>
+										<th style="width:140px;">编号</th>
+										<th style="width:140px;">温度(℃)</th>
+										<th style="width:120px;">湿度(%RH)</th>
+										<th style="width:70px;">时间</th>
+									</tr>
+								</thead>
+								<tbody>
+									#foreach($dataBean in $dataList)
+    									<tr>
+    										<td>$velocityCount</td>	
+    										<td>$!dataBean.temp</td>	
+    										<td>$!dataBean.humi</td>	
+											<td>$!dataBean.time</td>	
+    									</tr>
+									#end
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+				</div>
+
+				
+
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+	
+		function submitSelect() {
+			if(checkForm()) {
+				var actionUrl = document.getElementById("selectForm").value;
+			   	document.form1.action = actionUrl;
+				document.form1.submit();
+				return;
+			}	
+		}
+		
+		function submitExport(type) {
+			document.getElementById("exportType").value = type;
+			var actionUrl = document.getElementById("exportForm").value;
+			document.form1.action = actionUrl;
+			document.form1.submit();
+		}
+		
+		
+		function checkForm() {
+    		var startTimeValue = document.getElementById("startTime").value;
+    		var endTimeValue = document.getElementById("endTime").value;
+    			
+    		 if(startTimeValue == null || startTimeValue.length == 0) {
+    		 	alert("开始时间不能为空");
+    			return false;
+    		 }
+    		 
+    		 if(endTimeValue == null || endTimeValue.length == 0) {
+    		 	alert("结束时间不能为空");
+    			return false;
+    		 }
+    	 
+    		return true;
+		}
+	</script>
+	<div class="container-fluid footer" role="footer">
+		$widget.setTemplate('foot')
+	</div>
+
+

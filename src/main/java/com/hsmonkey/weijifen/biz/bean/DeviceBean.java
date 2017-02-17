@@ -2,6 +2,8 @@ package com.hsmonkey.weijifen.biz.bean;
 
 import java.util.List;
 
+import wint.lang.utils.StringUtil;
+
 /**
  * <p>标题: 设备</p>
  * <p>描述: </p>
@@ -38,11 +40,20 @@ public class DeviceBean {
 	
 	private DeviceDataBean dataBean;
 	
+	private List<DeviceDataBean> deviceDataBeanList;
+	
 	private List<AlarmBean> alarmBeanList;
 	
 	private String user;
-
+	
 	// -------------- normal method -----------------------
+	
+	public String getShowValue() {
+		if (!StringUtil.isBlank(area)) {
+			return area + "-" + devName;
+		}
+		return devName;
+	}
 
 	// -------------- setter/getter -----------------------
 
@@ -134,6 +145,14 @@ public class DeviceBean {
 
 	public void setUser(String user) {
 		this.user = user;
+	}
+
+	public List<DeviceDataBean> getDeviceDataBeanList() {
+		return deviceDataBeanList;
+	}
+
+	public void setDeviceDataBeanList(List<DeviceDataBean> deviceDataBeanList) {
+		this.deviceDataBeanList = deviceDataBeanList;
 	}
 	
 }

@@ -1,9 +1,16 @@
 package com.hsmonkey.weijifen.web.action;
 
+import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,12 +20,17 @@ import wint.help.biz.result.ResultSupport;
 import wint.help.biz.result.results.CommonResultCodes;
 import wint.lang.utils.StringUtil;
 import wint.mvc.flow.FlowData;
+import wint.mvc.flow.ServletFlowData;
 import wint.mvc.flow.Session;
 import wint.mvc.template.Context;
 
+import com.hsmonkey.weijifen.biz.bean.DeviceBean;
 import com.hsmonkey.weijifen.biz.bean.UserBean;
 import com.hsmonkey.weijifen.common.SessionKeys;
 import com.hsmonkey.weijifen.common.http.HttpClient;
+import com.hsmonkey.weijifen.util.DateUtil;
+import com.hsmonkey.weijifen.web.common.csv.CSVManager;
+import com.hsmonkey.weijifen.web.common.pdf.PDFGenUtil;
 
 /**
  * @author niepeng
@@ -114,7 +126,97 @@ public class BaseAction {
 		if(resultCode != null) {
 			context.put("resultmessage", resultCode);
 		}
-
 	}
+	
+	protected void handleExcel(FlowData flowData, Result result, HSSFWorkbook wb, String fileName, String charset) {
+		ServletOutputStream out = null;
+		try {
+			ServletFlowData servletFlowData = (ServletFlowData) flowData;
+			flowData.setViewType("nop");
+
+			final String userAgent = servletFlowData.getRequest().getHeader("USER-AGENT");
+			// 处理各个浏览器乱码问题
+			try {
+				if (userAgent.indexOf("MSIE") >= 0) {// IE浏览器
+					fileName = URLEncoder.encode(fileName, "UTF-8");
+				} else if (userAgent.indexOf("Firefox") >= 0) {
+					fileName = fileName.replaceAll(" ", "+");
+					fileName = new String(fileName.getBytes("UTF-8"), "ISO8859-1");
+				} else if (userAgent.indexOf("Mozilla") >= 0) {
+					fileName = new String(fileName.getBytes("UTF-8"), "ISO8859-1");
+				} else {
+					fileName = URLEncoder.encode(fileName, "UTF-8");// 其他浏览器
+				}
+
+			} catch (Exception e) {
+			}
+
+			HttpServletResponse response = servletFlowData.getResponse();
+			response.reset();
+			// response.setContentType("application/octet-stream;charset=" +
+			// charset);
+			response.setContentType("application/msexcel;charset=" + charset);
+			response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+			// response.setHeader("Content-Description","abc.xls open or download");
+
+			out = response.getOutputStream();
+			wb.write(out);
+			out.flush();
+		} catch (Exception e) {
+			// log.error("export excel error", e);
+		} finally {
+			try {
+				out.close();
+			} catch (IOException e) {
+				// log.error("export excel close out error", e);
+			}
+		}
+	}
+	
+	protected void handlePdf(FlowData flowData, Result result, DeviceBean deviceBean, String fileName, String charset) {
+		ServletOutputStream out = null;
+		try {
+			ServletFlowData servletFlowData = (ServletFlowData) flowData;
+			flowData.setViewType("nop");
+			
+			final String userAgent = servletFlowData.getRequest().getHeader("USER-AGENT");
+			// 处理各个浏览器乱码问题
+			try {
+				if (userAgent.indexOf("MSIE") >= 0) {// IE浏览器
+					fileName = URLEncoder.encode(fileName, "UTF-8");
+				} else if (userAgent.indexOf("Firefox") >= 0) {
+					fileName = fileName.replaceAll(" ", "+");
+					fileName = new String(fileName.getBytes("UTF-8"), "ISO8859-1");
+				} else if (userAgent.indexOf("Mozilla") >= 0) {
+					fileName = new String(fileName.getBytes("UTF-8"), "ISO8859-1");
+				} else {
+					fileName = URLEncoder.encode(fileName, "UTF-8");// 其他浏览器
+				}
+				
+			} catch (Exception e) {
+			}
+			
+			HttpServletResponse response = servletFlowData.getResponse();
+			response.reset();
+			// response.setContentType("application/octet-stream;charset=" +
+			// charset);
+			response.setContentType("application/pdf;charset=" + charset);
+			response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+			// response.setHeader("Content-Description","abc.xls open or download");
+			
+			out = response.getOutputStream();
+			PDFGenUtil.genPdf(deviceBean, out);
+			out.flush();
+		} catch (Exception e) {
+			// log.error("export excel error", e);
+		} finally {
+			try {
+				out.close();
+			} catch (IOException e) {
+				// log.error("export excel close out error", e);
+			}
+		}
+	}
+	
 
 }

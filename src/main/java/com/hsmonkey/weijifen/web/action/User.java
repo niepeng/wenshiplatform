@@ -1,5 +1,9 @@
 package com.hsmonkey.weijifen.web.action;
 
+import java.util.Date;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
 import wint.help.biz.result.Result;
 import wint.help.biz.result.ResultSupport;
 import wint.mvc.flow.FlowData;
@@ -11,11 +15,14 @@ import wint.mvc.template.Context;
 import com.hsmonkey.weijifen.biz.ao.UserAO;
 import com.hsmonkey.weijifen.biz.bean.AdminBean;
 import com.hsmonkey.weijifen.biz.bean.DeviceBean;
+import com.hsmonkey.weijifen.biz.bean.DeviceDataBean;
 import com.hsmonkey.weijifen.biz.bean.DeviceExtendBean;
 import com.hsmonkey.weijifen.biz.bean.UserBean;
 import com.hsmonkey.weijifen.biz.query.AlarmQuery;
 import com.hsmonkey.weijifen.biz.query.DeviceQuery;
 import com.hsmonkey.weijifen.common.SessionKeys;
+import com.hsmonkey.weijifen.util.DateUtil;
+import com.hsmonkey.weijifen.web.common.excel.ExcelUtil;
 
 /**
  * <p>标题: </p>
@@ -98,12 +105,42 @@ public class User extends BaseAction {
 		if (!checkUserSessionNeedRedrect(flowData, context)) {
 			return;
 		}
-		AlarmQuery alarmQuery = new AlarmQuery();
-		alarmQuery.setSnaddr(flowData.getParameters().getString("snaddr"));
-		alarmQuery.setStartTime(flowData.getParameters().getString("startTime"));
-		alarmQuery.setEndTime(flowData.getParameters().getString("endTime"));
-		
-		Result result = userAO.alarmHistoryList(flowData, alarmQuery);
+
+		DeviceDataBean deviceDataBean = new DeviceDataBean();
+		deviceDataBean.setSnaddr(flowData.getParameters().getString("snaddr"));
+		deviceDataBean.setStartTime(flowData.getParameters().getString("startTime"));
+		deviceDataBean.setEndTime(flowData.getParameters().getString("endTime"));
+		deviceDataBean.setRangeTime(flowData.getParameters().getString("rangeTime"));
+
+		Result result = userAO.historyData(flowData, deviceDataBean);
+		handleResult(result, flowData, context);
+	}
+	
+	public void historyDataExport(FlowData flowData, Context context) {
+		if (!checkUserSessionNeedRedrect(flowData, context)) {
+			return;
+		}
+
+		DeviceDataBean deviceDataBean = new DeviceDataBean();
+		deviceDataBean.setSnaddr(flowData.getParameters().getString("snaddr"));
+		deviceDataBean.setStartTime(flowData.getParameters().getString("startTime"));
+		deviceDataBean.setEndTime(flowData.getParameters().getString("endTime"));
+		deviceDataBean.setRangeTime(flowData.getParameters().getString("rangeTime"));
+		// pdf or excel
+		String exportType = flowData.getParameters().getString("exportType");
+		Result result = userAO.historyDataExport(flowData, deviceDataBean, exportType);
+		if (result.isSuccess()) {
+			DeviceBean deviceBean = (DeviceBean) result.getModels().get("deviceBean");
+			if ("excel".equals(exportType)) {
+				handleExcel(flowData, result, ExcelUtil.genExcel(deviceBean), "export-" + DateUtil.format(new Date(), DateUtil.DATE_YMDHMS) + ".xls", "utf-8");
+				return;
+			}
+
+			if ("pdf".equals(exportType)) {
+				handlePdf(flowData, result, deviceBean, "export-" + DateUtil.format(new Date(), DateUtil.DATE_YMDHMS) + ".pdf", "utf-8");
+				return;
+			}
+		}
 		handleResult(result, flowData, context);
 	}
 	

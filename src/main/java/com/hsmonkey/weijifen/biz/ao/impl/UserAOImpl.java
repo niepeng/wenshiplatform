@@ -190,6 +190,94 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		}
 		return result;
 	}
+	
+	@Override
+	public Result historyData(FlowData flowData, DeviceDataBean deviceDataBean) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = getUserBean(flowData);
+			List<DeviceBean> beanList = getAllDevice(userBean);
+			result.getModels().put("beanList", beanList);
+			if(StringUtil.isBlank(deviceDataBean.getSnaddr())) {
+				result.setSuccess(true);
+				return result;
+			}
+			
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "getHisData");
+			String body = JsonUtil.fields("snaddr,startTime,endTime,rangeTime", deviceDataBean);
+			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			JSONObject jsonObject = JsonUtil.getJsonObject(content);
+			JSONArray timeList = JsonUtil.getJsonArray(jsonObject, "timeList");
+			JSONArray humiList = JsonUtil.getJsonArray(jsonObject, "humiList");
+			JSONArray tempList = JsonUtil.getJsonArray(jsonObject, "tempList");
+			if (timeList != null && humiList != null && tempList != null && timeList.length() > 0
+					&& timeList.length() == humiList.length() && timeList.length() == tempList.length()) {
+				List<DeviceDataBean> dataList = CollectionUtils.newArrayList(timeList.length());
+				for (int i = 0, size = timeList.length(); i < size; i++) {
+					DeviceDataBean bean = new DeviceDataBean();
+					bean.setTemp(tempList.getString(i));
+					bean.setHumi(humiList.getString(i));
+					bean.setTime(timeList.getString(i));
+					dataList.add(bean);
+				}
+				result.getModels().put("dataList", dataList);
+			}
+			
+			
+			result.getModels().put("deviceDataBean", deviceDataBean);
+			result.setSuccess(true);
+			
+		} catch (Exception e) {
+			log.error("historyDataError", e);
+		}
+		return result;
+	}
+	
+	@Override
+	public Result historyDataExport(FlowData flowData, DeviceDataBean deviceDataBean, String exportType) {
+		Result result = new ResultSupport(false);
+		try {
+//			UserBean userBean = getUserBean(flowData);
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "getDevInfo");
+			String body = JsonUtil.fields("snaddr", deviceDataBean);
+			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			if (!isSuccess(content)) {
+				result.setResultCode(new StringResultCode("当前参数错误"));
+				return result;
+			}
+			DeviceBean fromDBDeviceBean = JsonUtil.jsonToBean(content, DeviceBean.class);
+			
+			headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "getHisData");
+			body = JsonUtil.fields("snaddr,startTime,endTime,rangeTime", deviceDataBean);
+			content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			JSONObject jsonObject = JsonUtil.getJsonObject(content);
+			JSONArray timeList = JsonUtil.getJsonArray(jsonObject, "timeList");
+			JSONArray humiList = JsonUtil.getJsonArray(jsonObject, "humiList");
+			JSONArray tempList = JsonUtil.getJsonArray(jsonObject, "tempList");
+			if (timeList != null && humiList != null && tempList != null && timeList.length() > 0
+					&& timeList.length() == humiList.length() && timeList.length() == tempList.length()) {
+				List<DeviceDataBean> dataList = CollectionUtils.newArrayList(timeList.length());
+				for (int i = 0, size = timeList.length(); i < size; i++) {
+					DeviceDataBean bean = new DeviceDataBean();
+					bean.setTemp(tempList.getString(i));
+					bean.setHumi(humiList.getString(i));
+					bean.setTime(timeList.getString(i));
+					dataList.add(bean);
+				}
+				fromDBDeviceBean.setDeviceDataBeanList(dataList);
+			}
+			
+			result.getModels().put("deviceBean", fromDBDeviceBean);
+			result.setSuccess(true);
+			
+		} catch (Exception e) {
+			log.error("historyDataExportError", e);
+		}
+		return result;
+	}
 
 	@Override
 	public Result alarmList(FlowData flowData) {
