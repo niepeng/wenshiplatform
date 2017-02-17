@@ -1,0 +1,207 @@
+	
+<script type="text/javascript" src="$staticServer/js/weijifen/datepicker/WdatePicker.js"></script>
+
+
+	$widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('checkIndex','2').addToContext('message',$message)
+	<div class="container-fluid">
+		<div class="row">
+			
+			<div class="" style="margin-left:50px;">
+				
+				<div id="ul_score">
+					<ul class="nav nav-tabs">
+						<li  class=""><a href="$userModule.setTarget('deviceList')">设备列表</a></li>
+						<li  class="active"><a href="#">添加设备</a></li>
+					</ul>
+				</div>
+				
+				
+				<div id="main_score">
+					<!--
+					<div>
+						<a href="$promotionModule.setTarget('goodEvaluateExport').param('shopId',$shopDO.id).param('status','1')" onclick="return confirm('确认要导出已通过的数据？'); return false;">导出已通过的数据</a>  &nbsp;&nbsp; &nbsp;&nbsp;
+						<a href="$promotionModule.setTarget('goodEvaluatePayAll').param('shopId',$shopDO.id).param('status','1')" onclick="return confirm('此操作不可恢复，确认把已经通过的用户标记已支付？'); return false;" >把已通过的用户标记已支付</a> 
+					</div>	
+					-->
+					
+					<form id="reply-form" class="form-horizontal form ng-pristine ng-valid" action="$userModule.setTarget('doAddDevice')" onsubmit="return checkForm();" method="post">
+						<div class="form-group">
+							<div class="col-sm-12">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										 <tt style="color:red;">$!msg</tt>
+									</div>
+									
+									<ul class="list-group">
+										<li class="list-group-item">
+											<div class="form-group">
+												<div class="col-sm-6 col-md-8 col-xs-12">
+													
+													<!--
+													配置红包金额和概率<br>
+														登录有赞，<a href="https://login.youzan.com/sso/index?service=kdt" target="_blank">点击登录</a>， 登录后进入店铺，点击左边的 "营销" -> "有赞API", 开启，并复制应用ID 和 应用密钥,  还不明白?<a href="$staticServer/images/weijifen/youzan_config.jpg" target="_blank">点击这里</a>
+													-->
+													<span class="help-block"></span>
+												</div>
+											</div>
+											
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+            											区域:
+														<select name="area">
+															#foreach($area in $areaList)
+															<option value="$area" #if($area == $deviceBean.area) selected #end>$area</option>
+															#end
+														</select>	
+														<br>
+            										</tt>
+            									</div>
+            								</div>
+											
+											
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+            											设备snaddr地址:<input type="text" style="width:250px;display:inline;height:30px;" id="snaddr" name="snaddr" value="" class="form-control">
+														<br>
+            										</tt>
+            									</div>
+            								</div>
+											
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+            											设备ac码:<input type="text" style="width:250px;display:inline;height:30px;" id="ac" name="ac" value="" class="form-control">
+														<br>
+            										</tt>
+            									</div>
+            								</div>
+											
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+            											设备名称:<input type="text" style="width:250px;display:inline;height:30px;" id="devName" name="devName" value="$!deviceBean.devName" class="form-control">
+														<br>
+            										</tt>
+            									</div>
+            								</div>
+											
+											<!--
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+															温度上限:<input type="text" style="width:100px;display:inline;height:25px;" id="maxTemp" name="maxTemp" value="$!deviceBean.deviceExtendBean.maxTemp" class="form-control">℃
+            												&nbsp;温度下限:<input type="text" style="width:100px;display:inline;height:25px;" id="minTemp" name="minTemp" value="$!deviceBean.deviceExtendBean.minTemp" class="form-control">℃
+            												&nbsp;温度回差:<input type="text" style="width:100px;display:inline;height:25px;" id="tempHC" name="tempHC" value="$!deviceBean.deviceExtendBean.tempHC" class="form-control">℃
+                										<br>
+            										</tt>
+            									</div>
+            								</div>
+											
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+															湿度上限:<input type="text" style="width:100px;display:inline;height:25px;" id="maxHumi" name="maxHumi" value="$!deviceBean.deviceExtendBean.maxHumi" class="form-control">%RH
+            												&nbsp;湿度下限:<input type="text" style="width:100px;display:inline;height:25px;" id="minHumi" name="minHumi" value="$!deviceBean.deviceExtendBean.minHumi" class="form-control">%RH
+            												&nbsp;湿度回差:<input type="text" style="width:100px;display:inline;height:25px;" id="humiHC" name="humiHC" value="$!deviceBean.deviceExtendBean.humiHC" class="form-control">%RH
+                										<br>
+            										</tt>
+            									</div>
+            								</div>
+											
+											<div class="form-group">
+            									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+        											<tt id="">
+            											上传间隔:
+														<select name="devGap">
+															<option value="10" #if("$deviceBean.devGap" == "10") selected #end>10秒</option>
+															<option value="30" #if("$deviceBean.devGap" == "30") selected #end>30秒</option>
+															<option value="40" #if("$deviceBean.devGap" == "40") selected #end>40秒</option>
+															<option value="60" #if("$deviceBean.devGap" == "60") selected #end>1分钟</option>
+															<option value="120" #if("$deviceBean.devGap" == "120") selected #end>2分钟</option>
+															<option value="300" #if("$deviceBean.devGap" == "300") selected #end>5分钟</option>
+														</select>
+														<br>
+            										</tt>
+            									</div>
+            								</div>
+											-->
+											
+											
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-sm-12">
+								<input name="submit" type="submit" value="提交" class="btn btn-primary col-lg-1"> 
+							</div>
+						</div>
+					</form>
+                          
+				</div>
+
+				
+
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		function checkForm() {
+		 var snaddrValue = document.getElementById("snaddr").value;
+		 var acValue = document.getElementById("ac").value;
+		 
+		  if(snaddrValue == null || snaddrValue.length == 0) {
+		 	alert("snaddr地址不能为空");
+			return false;
+		 }
+		 
+		 if(acValue == null || acValue.length == 0) {
+		 	alert("ac码不能为空");
+			return false;
+		 }
+		 
+		 /*
+		 var maxTempValue = parseFloat(document.getElementById("maxTemp").value).toFixed(2);
+		 var minTempValue = parseFloat(document.getElementById("minTemp").value).toFixed(2);
+		 var tempHCValue = parseFloat(document.getElementById("tempHC").value).toFixed(2);
+		 
+		 var maxHumiValue = parseFloat(document.getElementById("maxHumi").value).toFixed(2);
+		 var minHumiValue = parseFloat(document.getElementById("minHumi").value).toFixed(2);
+		 var humiHCValue = parseFloat(document.getElementById("humiHC").value).toFixed(2);
+		 
+		
+		 
+		 if(maxTempValue > 500 || maxTempValue < -200) {
+		   alert("温度上限为500℃，温度下限为-200℃");
+		   return false;
+		 }
+		 
+		 if(minTempValue > 500 || minTempValue < -200) {
+		   alert("温度上限为500℃，温度下限为-200℃");
+		   return false;
+		 }
+		 
+		 if(maxHumiValue > 99.9 || minHumiValue < 0) {
+		  alert("湿度上限为99.9%，湿度下限为0%");
+		   return false;
+		 }
+		 
+		if(maxHumiValue > 99.9 || minHumiValue < 0) {
+		   alert("湿度上限为99.9%，湿度下限为0%");
+		   return false;
+		 }
+		 */
+		 
+		 return true;
+		}
+	</script>
+	<div class="container-fluid footer" role="footer">
+		$widget.setTemplate('foot')
+	</div>
+
+

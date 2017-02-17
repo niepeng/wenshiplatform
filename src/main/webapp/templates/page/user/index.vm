@@ -11,6 +11,8 @@
     					<ul class="nav nav-tabs">
     						<li  class="active"><a href="#">实时数据</a></li>
     					</ul>
+                        <!-- <embed autostart='true' loop='true' src="$staticServer/alarmHtc1.mp3" width="200" height="30" showTracker="true"></embed> -->
+						<!-- <audio src="$staticServer/alarmHtc1.mp3" id="audio1" hidden="false"  autoplay="true" loop="true"></audio>  -->
     				</div>
     				
     				<form method="post" action="$userModule.setTarget('index')">

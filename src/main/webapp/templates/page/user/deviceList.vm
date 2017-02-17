@@ -10,7 +10,8 @@
 				
 				<div id="ul_score">
 					<ul class="nav nav-tabs">
-						<li  class="active"><a href="#">设备管理</a></li>
+						<li  class="active"><a href="#">设备列表</a></li>
+						<li  class=""><a href="$userModule.setTarget('addDevice')">添加设备</a></li>
 					</ul>
 				</div>
 				

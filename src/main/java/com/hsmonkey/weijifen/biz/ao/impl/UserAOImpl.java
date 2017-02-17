@@ -359,6 +359,89 @@ public class UserAOImpl extends BaseAO implements UserAO {
 	
 	
 	@Override
+	public Result viewAddDevice(FlowData flowData) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = getUserBean(flowData);
+			List<String> areaList = getAllArea(userBean);
+
+			result.getModels().put("userBean", userBean);
+			result.getModels().put("areaList", areaList);
+			result.setSuccess(true);
+		} catch (Exception e) {
+			log.error("viewAddDeviceError", e);
+		}
+		return result;
+	}
+
+	@Override
+	public Result addDevice(FlowData flowData, DeviceBean deviceBean) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = getUserBean(flowData);
+			deviceBean.setUser(userBean.getUser());
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "getDevInfo");
+			String body = JsonUtil.fields("snaddr", deviceBean);
+			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			if (isSuccess(content)) {
+				result.setResultCode(new StringResultCode("当前设备已经存在"));
+				return result;
+			}
+			
+			// 0.添加设备
+			headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "addDeviceBySN");
+			body = JsonUtil.fields("snaddr,user,ac,devName", deviceBean);
+			content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			if (!isSuccess(content)) {
+				result.setResultCode(new StringResultCode("添加设备失败,确保snaddr和ac码对应值正确"));
+				return result;
+			}
+			
+			// 1.设置区域
+			if(!StringUtil.isBlank(deviceBean.getArea())) {
+				Map<String, String> tmpMap = new HashMap<String, String>();
+				tmpMap.put("TYPE", "setDevArea");
+				String tmpBody = JsonUtil.fields("snaddr,area", deviceBean);
+				String tmpContent = client.subPostFrom(API_URL, tmpBody, "utf-8", tmpMap);
+				if(!isSuccess(tmpContent)) {
+					result.setResultCode(new StringResultCode("修改区域失败请重试"));
+					return result;
+				}
+			}
+			
+			// 2.设置设备上传间隔
+//			if(!StringUtil.isBlank(deviceBean.getDevGap())) {
+//				Map<String, String> tmpMap = new HashMap<String, String>();
+//				tmpMap.put("TYPE", "modifyTH");
+//				String tmpBody = JsonUtil.fields("snaddr,devGap", deviceBean.getDeviceExtendBean());
+//				String tmpContent = client.subPostFrom(API_URL, tmpBody, "utf-8", tmpMap);
+//				if(!isSuccess(tmpContent)) {
+//					result.setResultCode(new StringResultCode("设备上传间隔失败请重试"));
+//					return result;
+//				}
+//			}
+			
+			// 3.设置设备温湿度上下限信息
+//			Map<String, String> tmpMap = new HashMap<String, String>();
+//			tmpMap.put("TYPE", "modifyTH");
+//			String tmpBody = JsonUtil.fields("snaddr,maxTemp,minTemp,maxHumi,minHumi,tempHC,humiHC", deviceBean.getDeviceExtendBean());
+//			String tmpContent = client.subPostFrom(API_URL, tmpBody, "utf-8", tmpMap);
+//			if(!isSuccess(tmpContent)) {
+//				result.setResultCode(new StringResultCode("设备温湿度上下限信息失败请重试"));
+//				return result;
+//			}
+			
+			result.setSuccess(true);
+
+		} catch (Exception e) {
+			log.error("addDeviceError", e);
+		}
+		return result;
+	}
+
+	@Override
 	public Result viewEditDevice(FlowData flowData, String snaddr) {
 		Result result = new ResultSupport(false);
 		try {

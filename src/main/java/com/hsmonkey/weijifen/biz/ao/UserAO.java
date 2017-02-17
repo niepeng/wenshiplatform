@@ -31,6 +31,10 @@ public interface UserAO {
 
 	public Result deviceList(FlowData flowData, DeviceQuery deviceQuery);
 	
+	public Result viewAddDevice(FlowData flowData);
+
+	public Result addDevice(FlowData flowData, DeviceBean deviceBean);
+
 	public Result viewEditDevice(FlowData flowData, String snaddr);
 
 	public Result doEditDevice(FlowData flowData, DeviceBean deviceBean);

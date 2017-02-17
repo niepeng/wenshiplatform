@@ -7,7 +7,7 @@
 	<title>成前科技-云平台</title>
 	<meta name="keywords" content="成前科技-云平台">
 	<meta name="description" content="成前科技-云平台">
-	<link rel="shortcut icon" href="http://wx.alashu.com/attachment/images/global/wechat.jpg">
+	<link rel="shortcut icon" href="$staticServer/logo.jpg">
 	<link href="$cssServer/weijifen/bootstrap.min.css" rel="stylesheet">
 	<link href="$cssServer/weijifen/font-awesome.min.css" rel="stylesheet">
 	<link href="$cssServer/weijifen/common.css?ts=20160603" rel="stylesheet">

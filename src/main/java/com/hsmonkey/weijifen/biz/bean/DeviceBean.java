@@ -14,6 +14,9 @@ public class DeviceBean {
 	// 设备唯一标识
 	private String snaddr;
 	
+	// ac码
+	private String ac;
+	
 	// 权限,暂不使用
 	private int authority;
 	
@@ -36,6 +39,8 @@ public class DeviceBean {
 	private DeviceDataBean dataBean;
 	
 	private List<AlarmBean> alarmBeanList;
+	
+	private String user;
 
 	// -------------- normal method -----------------------
 
@@ -113,6 +118,22 @@ public class DeviceBean {
 
 	public void setDevGap(String devGap) {
 		this.devGap = devGap;
+	}
+
+	public String getAc() {
+		return ac;
+	}
+
+	public void setAc(String ac) {
+		this.ac = ac;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
 	}
 	
 }

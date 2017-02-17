@@ -94,6 +94,19 @@ public class User extends BaseAction {
 		handleResult(result, flowData, context);
 	}
 	
+	public void historyData(FlowData flowData, Context context) {
+		if (!checkUserSessionNeedRedrect(flowData, context)) {
+			return;
+		}
+		AlarmQuery alarmQuery = new AlarmQuery();
+		alarmQuery.setSnaddr(flowData.getParameters().getString("snaddr"));
+		alarmQuery.setStartTime(flowData.getParameters().getString("startTime"));
+		alarmQuery.setEndTime(flowData.getParameters().getString("endTime"));
+		
+		Result result = userAO.alarmHistoryList(flowData, alarmQuery);
+		handleResult(result, flowData, context);
+	}
+	
 	public void alarmList(FlowData flowData, Context context) {
 		if(!checkUserSessionNeedRedrect(flowData, context)) {
 			return;
@@ -129,6 +142,50 @@ public class User extends BaseAction {
 		context.put("msg", msg);
 		handleResult(result, flowData, context);
 	}
+	
+	public void addDevice(FlowData flowData, Context context) {
+		if (!checkUserSessionNeedRedrect(flowData, context)) {
+			return;
+		}
+
+		Result result = userAO.viewAddDevice(flowData);
+		handleResult(result, flowData, context);
+	}
+	
+	public void doAddDevice(FlowData flowData, Context context) {
+		if (!checkUserSessionNeedRedrect(flowData, context)) {
+			return;
+		}
+		
+		DeviceBean deviceBean = new DeviceBean();
+		deviceBean.setSnaddr(flowData.getParameters().getString("snaddr"));
+		deviceBean.setAc(flowData.getParameters().getString("ac"));
+		deviceBean.setArea(flowData.getParameters().getString("area"));
+		deviceBean.setDevName(flowData.getParameters().getString("devName"));
+//		deviceBean.setDevGap(flowData.getParameters().getString("devGap"));
+//		DeviceExtendBean deviceExtendBean = new DeviceExtendBean();
+//		deviceExtendBean.setSnaddr(deviceBean.getSnaddr());
+//		deviceExtendBean.setMaxTemp(flowData.getParameters().getString("maxTemp"));
+//		deviceExtendBean.setMinTemp(flowData.getParameters().getString("minTemp"));
+//		deviceExtendBean.setTempHC(flowData.getParameters().getString("tempHC"));
+//		deviceExtendBean.setMaxHumi(flowData.getParameters().getString("maxHumi"));
+//		deviceExtendBean.setMinHumi(flowData.getParameters().getString("minHumi"));
+//		deviceExtendBean.setHumiHC(flowData.getParameters().getString("humiHC"));
+//		deviceBean.setDeviceExtendBean(deviceExtendBean);
+
+		Result result = userAO.addDevice(flowData, deviceBean);
+		if (result.isSuccess()) {
+			flowData.redirectTo("userModule", "deviceList").param("msg", urlEncode("操作成功"));
+			return;
+		}
+		String str = "操作失败";
+		if (result.getResultCode() != null) {
+			str = result.getResultCode().getMessage();
+		}
+		flowData.redirectTo("userModule", "deviceList").param("msg", urlEncode(str));
+		
+	}
+	
 	
 	public void editDevice(FlowData flowData, Context context) {
 		if (!checkUserSessionNeedRedrect(flowData, context)) {
