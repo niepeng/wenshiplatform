@@ -15,6 +15,11 @@
     					</ul>
                         <!-- <embed autostart='true' loop='true' src="$staticServer/alarmHtc1.mp3" width="200" height="30" showTracker="true"></embed> -->
 						<!-- <audio src="$staticServer/alarmHtc1.mp3" id="audio1" hidden="false"  autoplay="true" loop="true"></audio>  -->
+						#if($showMp3)
+							<audio id="music" src="$staticServer/alarmHtc1.mp3" controls="controls" width="200" height="30"  preload="auto" autoplay="true" loop="true">
+                               您当前浏览器暂无发播放报警音乐
+                            </audio>
+						#end	
     				</div>
     				
     				<form method="post" action="$userModule.setTarget('index')">
@@ -163,6 +168,7 @@
 	
 	<script type="text/javascript">
 		
+	
 	</script>
 	<div class="container-fluid footer" role="footer">
 		$widget.setTemplate('foot')

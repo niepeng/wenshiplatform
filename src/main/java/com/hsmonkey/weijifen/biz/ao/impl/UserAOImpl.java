@@ -178,7 +178,18 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				}
 			});
 			
+			boolean showMp3 = false;
+			if(beanList != null) {
+				for(DeviceBean bean: beanList) {
+					if(bean.getDataBean() != null && bean.getDataBean().getTempStatus() != 0) {
+						showMp3 = true;
+						break;
+					}
+				}
+			}
+			
 			result.getModels().put("beanList", beanList);
+			result.getModels().put("showMp3", showMp3);
 			result.getModels().put("userBean", userBean);
 			result.getModels().put("areaList", areaList);
 			result.getModels().put("area", area);
