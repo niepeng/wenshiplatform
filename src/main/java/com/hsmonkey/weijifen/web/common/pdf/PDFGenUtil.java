@@ -107,6 +107,12 @@ public class PDFGenUtil {
 			
 			PdfPTable table = createTable(4);
 			table.addCell(createCell("成前云平台", keyfont, Element.ALIGN_CENTER, 4, true));
+
+			table.addCell(createCell("时间间隔:"+deviceBean.getDataBean().getRangeTime()+"分钟", keyfont, Element.ALIGN_CENTER));
+			table.addCell(createCell("时间段：", keyfont, Element.ALIGN_CENTER));
+			table.addCell(createCell(deviceBean.getDataBean().getStartTime(), keyfont, Element.ALIGN_CENTER));
+			table.addCell(createCell(deviceBean.getDataBean().getEndTime(), keyfont, Element.ALIGN_CENTER));
+			
 			table.addCell(createCell(deviceBean.getShowValue(), keyfont, Element.ALIGN_CENTER, 4, true));
 
 			table.addCell(createCell("NO", keyfont, Element.ALIGN_CENTER));

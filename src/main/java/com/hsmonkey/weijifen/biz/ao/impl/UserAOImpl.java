@@ -281,6 +281,10 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				fromDBDeviceBean.setDeviceDataBeanList(dataList);
 			}
 			
+			if(fromDBDeviceBean != null) {
+				fromDBDeviceBean.setDataBean(deviceDataBean);
+			}
+			
 			result.getModels().put("deviceBean", fromDBDeviceBean);
 			result.setSuccess(true);
 			

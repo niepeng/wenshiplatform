@@ -28,7 +28,7 @@ public class ExcelUtil {
 	 * 
 	 * 成前科技云平台——历史数据
 	 * 
-	 * 
+	 * 用户选择时间间隔xx分钟 用户选择开始时间	用户选择结束时间
 	 * NO 记录时间 区域名-名称 区域名-名称
 	 * 			  温度(℃)   湿度(%RH)
 	 * 1 2014-09-18 19:41:00 26.62 0.00
@@ -58,11 +58,23 @@ public class ExcelUtil {
 		// cell.setCellStyle(style);
 
 		HSSFRow row2 = sheet.createRow((int) 1);
-		HSSFCell cell2 = row2.createCell((short) 0);
-		cell2.setCellValue("");
-		cell2.setCellStyle(style);
-		cell2 = row2.createCell((short) 1);
+		HSSFCell cell21 = row2.createCell((short) 0);
+		cell21.setCellValue("时间间隔:" + deviceBean.getDataBean().getRangeTime() + "分钟");
+		cell21.setCellStyle(style);
+		
+		HSSFCell cell22 = row2.createCell((short) 1);
+		cell22.setCellValue("时间段：");
+		cell22.setCellStyle(style);
+		
+		HSSFCell cell23 = row2.createCell((short) 2);
+		cell23.setCellValue(deviceBean.getDataBean().getStartTime());
+		cell23.setCellStyle(style);
+		
+		HSSFCell cell24 = row2.createCell((short) 3);
+		cell24.setCellValue(deviceBean.getDataBean().getEndTime());
+		cell24.setCellStyle(style);
 
+		
 		HSSFRow row3 = sheet.createRow((int) 2);
 		HSSFCell cell3 = row3.createCell((short) 0);
 		cell3.setCellValue("");

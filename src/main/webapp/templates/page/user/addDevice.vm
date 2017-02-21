@@ -63,8 +63,9 @@
 											<div class="form-group">
             									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
         											<tt id="">
-            											设备snaddr地址:<input type="text" style="width:250px;display:inline;height:30px;" id="snaddr" name="snaddr" value="" class="form-control">
+            											设备SN码:<input type="text" style="width:250px;display:inline;height:30px;" id="snaddr" name="snaddr" value="" class="form-control">
 														<br>
+														<span class="help-block">设备SN码注意区分大小写</span>
             										</tt>
             									</div>
             								</div>
@@ -72,8 +73,9 @@
 											<div class="form-group">
             									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
         											<tt id="">
-            											设备ac码:<input type="text" style="width:250px;display:inline;height:30px;" id="ac" name="ac" value="" class="form-control">
+            											设备AC码:<input type="text" style="width:250px;display:inline;height:30px;" id="ac" name="ac" value="" class="form-control">
 														<br>
+														<span class="help-block">设备AC码注意区分大小写</span>
             										</tt>
             									</div>
             								</div>
@@ -156,12 +158,12 @@
 		 var acValue = document.getElementById("ac").value;
 		 
 		  if(snaddrValue == null || snaddrValue.length == 0) {
-		 	alert("snaddr地址不能为空");
+		 	alert("设备SN码不能为空");
 			return false;
 		 }
 		 
 		 if(acValue == null || acValue.length == 0) {
-		 	alert("ac码不能为空");
+		 	alert("设备AC码不能为空");
 			return false;
 		 }
 		 
