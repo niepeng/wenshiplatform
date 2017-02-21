@@ -81,7 +81,7 @@
     										<td>$!{deviceBean.deviceExtendBean.maxHumi}%RH</td>	
     										<td>$!{deviceBean.deviceExtendBean.minHumi}%RH</td>	
     										<td>$!{deviceBean.deviceExtendBean.humiHC}%RH</td>	
-    										<td><a href="$userModule.setTarget('editDevice').param('snaddr',$deviceBean.snaddr)">编辑</a>&nbsp;<a href="" onclick="javascript:return confirm('确定要删除操作？');">删除</a></td>	
+    										<td><a href="$userModule.setTarget('editDevice').param('snaddr',$deviceBean.snaddr)">编辑</a>&nbsp;<a href="$userModule.setTarget('deleteDevice').param('snaddr',$deviceBean.snaddr)" onclick="javascript:return confirm('确定要删除操作？');">删除</a></td>	
     									</tr>
 									#end
 								</tbody>

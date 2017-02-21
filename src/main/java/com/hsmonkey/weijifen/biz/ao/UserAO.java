@@ -42,6 +42,8 @@ public interface UserAO {
 	public Result viewEditDevice(FlowData flowData, String snaddr);
 
 	public Result doEditDevice(FlowData flowData, DeviceBean deviceBean);
+
+	public Result deleteDevice(FlowData flowData, String snaddr);
 	
 	public Result showBindMail(FlowData flowData);
 

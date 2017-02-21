@@ -483,24 +483,26 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		try {
 			UserBean userBean = getUserBean(flowData);
 			deviceBean.setUser(userBean.getUser());
+//			Map<String, String> headerMap = new HashMap<String, String>();
+//			headerMap.put("TYPE", "getDevInfo");
+//			String body = JsonUtil.fields("snaddr", deviceBean);
+//			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+//			if (isSuccess(content)) {
+//				result.setResultCode(new StringResultCode("当前设备已经存在"));
+//				return result;
+//			}
+			
+			// 0.添加设备
 			Map<String, String> headerMap = new HashMap<String, String>();
-			headerMap.put("TYPE", "getDevInfo");
-			String body = JsonUtil.fields("snaddr", deviceBean);
+			headerMap.put("TYPE", "addDeviceBySN");
+			String body = JsonUtil.fields("snaddr,user,ac,devName", deviceBean);
 			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
-			if (isSuccess(content)) {
-				result.setResultCode(new StringResultCode("当前设备已经存在"));
+			if (!isSuccess(content)) {
+				result.setResultCode(new StringResultCode("添加设备失败,当前设备已经存在 或 snaddr和ac码对应值正确"));
 				return result;
 			}
 			
-			// 0.添加设备
-			headerMap = new HashMap<String, String>();
-			headerMap.put("TYPE", "addDeviceBySN");
-			body = JsonUtil.fields("snaddr,user,ac,devName", deviceBean);
-			content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
-			if (!isSuccess(content)) {
-				result.setResultCode(new StringResultCode("添加设备失败,确保snaddr和ac码对应值正确"));
-				return result;
-			}
+			result.setSuccess(true);
 			
 			// 1.设置区域
 			if(!StringUtil.isBlank(deviceBean.getArea())) {
@@ -513,6 +515,19 @@ public class UserAOImpl extends BaseAO implements UserAO {
 					return result;
 				}
 			}
+			
+			// 2.修改名称
+			if(!StringUtil.isBlank(deviceBean.getDevName())) {
+				Map<String, String> tmpMap = new HashMap<String, String>();
+				tmpMap.put("TYPE", "setDevName");
+				String tmpBody = JsonUtil.fields("snaddr,devName", deviceBean);
+				String tmpContent = client.subPostFrom(API_URL, tmpBody, "utf-8", tmpMap);
+				if(!isSuccess(tmpContent)) {
+					result.setResultCode(new StringResultCode("修改设备名称失败请重试"));
+					return result;
+				}
+			}
+			
 			
 			// 2.设置设备上传间隔
 //			if(!StringUtil.isBlank(deviceBean.getDevGap())) {
@@ -536,8 +551,6 @@ public class UserAOImpl extends BaseAO implements UserAO {
 //				return result;
 //			}
 			
-			result.setSuccess(true);
-
 		} catch (Exception e) {
 			log.error("addDeviceError", e);
 		}
@@ -613,7 +626,6 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				tmpMap.put("TYPE", "setDevName");
 				String tmpBody = JsonUtil.fields("snaddr,devName", deviceBean);
 				String tmpContent = client.subPostFrom(API_URL, tmpBody, "utf-8", tmpMap);
-				System.out.println("devName:" + tmpContent);
 				if(!isSuccess(tmpContent)) {
 					result.setResultCode(new StringResultCode("修改设备名称失败请重试"));
 					return result;
@@ -653,6 +665,36 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		return result;
 	}
 	
+	@Override
+	public Result deleteDevice(FlowData flowData, String snaddr) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = getUserBean(flowData);
+			DeviceBean deviceBean = new DeviceBean();
+			deviceBean.setUser(userBean.getUser());
+			deviceBean.setSnaddr(snaddr);
+
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "getDevInfo");
+			String body = JsonUtil.fields("snaddr", deviceBean);
+			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			if (isSuccess(content)) {
+				headerMap = new HashMap<String, String>();
+				headerMap.put("TYPE", "delDevice");
+				body = JsonUtil.fields("snaddr,user", deviceBean);
+				content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+				if (!isSuccess(content)) {
+					result.setResultCode(new StringResultCode("删除失败，确保拥有权限"));
+					return result;
+				}
+			}
+			result.setSuccess(true);
+		} catch (Exception e) {
+			log.error("deleteDeviceError", e);
+		}
+		return result;
+	}
+
 	@Override
 	public Result showBindMail(FlowData flowData) {
 		Result result = new ResultSupport(false);

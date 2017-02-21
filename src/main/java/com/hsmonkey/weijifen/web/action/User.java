@@ -265,6 +265,19 @@ public class User extends BaseAction {
 		flowData.redirectTo("userModule", "deviceList").param("msg", urlEncode(str));
 	}
 	
+	public void deleteDevice(FlowData flowData, Context context) {
+		if (!checkUserSessionNeedRedrect(flowData, context)) {
+			return;
+		}
+		String snaddr = flowData.getParameters().getString("snaddr");
+		Result result = userAO.deleteDevice(flowData, snaddr);
+		String str = "操作成功";
+		if (result.getResultCode() != null) {
+			str = result.getResultCode().getMessage();
+		}
+		flowData.redirectTo("userModule", "deviceList").param("msg", urlEncode(str));
+	}
+	
 	public void bindMail(FlowData flowData, Context context) {
 		if (!checkUserSessionNeedRedrect(flowData, context)) {
 			return;
