@@ -22,7 +22,7 @@
 						#end	
     				</div>
     				
-    				<form method="post" action="$userModule.setTarget('index')">
+    				<form name="form11" id="form11" method="post" action="$userModule.setTarget('index')">
                         	<div class="panel panel-default">
                                 <div class="panel-heading">
                                   <h3 class="panel-title">筛选</h3>
@@ -36,7 +36,7 @@
                     						 <option value="$!tmpArea" #if($tmpArea == $area) selected #end>$!tmpArea</option>
                     						#end
                     					</select>
-											<input style="float:left;" class="btn btn-primary" id="submit" name="submit" value="筛选" type="submit">       
+											<input style="float:left;" class="btn btn-primary" value="筛选" type="submit">       
 										</div>
                                         <!--
 										<div class="col-lg-2 col-sm-2 col-xs-12">
@@ -172,8 +172,12 @@
 	</div>
 	
 	<script type="text/javascript">
+		 window.setInterval(reloadPage, 5 * 60 * 1000);
+        function reloadPage()
+        {
+        	document.form11.submit();
+        } 
 		
-	
 	</script>
 	<div class="container-fluid footer" role="footer">
 		$widget.setTemplate('foot')
