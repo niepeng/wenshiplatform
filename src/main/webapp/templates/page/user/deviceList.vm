@@ -75,12 +75,12 @@
     										<td>#if("$!deviceBean.area" != "") $!deviceBean.area #else -- #end</td>	
     										<td>$!deviceBean.devName</td>	
     										<td>$!{deviceBean.devGap}秒</td>	
-    										<td>${deviceBean.deviceExtendBean.maxTemp}℃</td>	
-    										<td>${deviceBean.deviceExtendBean.minTemp}℃</td>	
-    										<td>${deviceBean.deviceExtendBean.tempHC}℃</td>	
-    										<td>${deviceBean.deviceExtendBean.maxHumi}%RH</td>	
-    										<td>${deviceBean.deviceExtendBean.minHumi}%RH</td>	
-    										<td>${deviceBean.deviceExtendBean.humiHC}%RH</td>	
+    										<td>$!{deviceBean.deviceExtendBean.maxTemp}℃</td>	
+    										<td>$!{deviceBean.deviceExtendBean.minTemp}℃</td>	
+    										<td>$!{deviceBean.deviceExtendBean.tempHC}℃</td>	
+    										<td>$!{deviceBean.deviceExtendBean.maxHumi}%RH</td>	
+    										<td>$!{deviceBean.deviceExtendBean.minHumi}%RH</td>	
+    										<td>$!{deviceBean.deviceExtendBean.humiHC}%RH</td>	
     										<td><a href="$userModule.setTarget('editDevice').param('snaddr',$deviceBean.snaddr)">编辑</a>&nbsp;<a href="" onclick="javascript:return confirm('确定要删除操作？');">删除</a></td>	
     									</tr>
 									#end
