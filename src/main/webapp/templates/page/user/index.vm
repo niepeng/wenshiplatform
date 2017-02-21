@@ -30,7 +30,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-lg-10 col-sm-10 col-xs-12">
-											<select name="area" style="width:100px;float:left;height:35px;margin-right:20px;">
+											<select name="area" style="padding-right:10px;float:left;height:35px;margin-right:20px;">
                                             <option value="">全部</option>
                     						#foreach($tmpArea in $areaList)
                     						 <option value="$!tmpArea" #if($tmpArea == $area) selected #end>$!tmpArea</option>
@@ -46,7 +46,12 @@
     								</div>
     							</div>
                             </div>
-                    	
+							
+							#if($beanList.size() == 0)
+    							<div class="panel-heading">
+                                  <h3 class="panel-title">暂无设备</h3>
+                                </div>
+							#end
                       </form>
 					  
 					

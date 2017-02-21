@@ -51,7 +51,7 @@ public class ExcelUtil {
 		style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
 
 		HSSFCell cell = row1.createCell((short) 0);
-		cell.setCellValue("成前科技云平台――历史数据");
+		cell.setCellValue("成前云平台――历史数据");
 		cell.setCellStyle(style);
 		cell = row1.createCell((short) 1);
 		// cell.setCellValue(String.valueOf(address));

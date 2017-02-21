@@ -38,7 +38,7 @@
 												 <option value="$!bean.snaddr" #if($!deviceDataBean.snaddr == $bean.snaddr) selected #end>$!bean.devName</option>
 												#end
 											</select>
-											<select name="rangeTime" style="padding-right:10px;float:left;height:35px;margin-right:20px;">
+											<select name="rangeTime" id="rangeTime" style="padding-right:10px;float:left;height:35px;margin-right:20px;">
 												 <option value="1"  #if($!deviceDataBean.rangeTime == 1) selected #end>1分钟</option>
 												 <option value="5" #if($!deviceDataBean.rangeTime == 5) selected #end>5分钟</option>
 												 <option value="10" #if($!deviceDataBean.rangeTime == 10) selected #end>10分钟</option>
@@ -46,9 +46,10 @@
 												 <option value="20" #if($!deviceDataBean.rangeTime == 20) selected #end>20分钟</option>
 												 <option value="25" #if($!deviceDataBean.rangeTime == 25) selected #end>25分钟</option>
 												 <option value="30" #if($!deviceDataBean.rangeTime == 30) selected #end>30分钟</option>
+												 <option value="60" #if($!deviceDataBean.rangeTime == 60) selected #end>60分钟</option>
 											</select>
-        									<input style="width:160px;float:left;margin-right:20px;" class="form-control" placeholder="开始时间" id="startTime" name="startTime" value="$!deviceDataBean.startTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'2017-01-01 00:00:00',maxDate:''})" type="text">        
-        									<input style="width:160px;float:left;margin-right:20px;" class="form-control" placeholder="结束时间" id="endTime" name="endTime" value="$!deviceDataBean.endTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'2017-01-01 00:00:00',maxDate:''})" type="text">        
+        									<input style="width:160px;float:left;margin-right:20px;" class="form-control" placeholder="开始时间" id="startTime" name="startTime" value="$!deviceDataBean.startTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm',minDate:'2017-01-01 00:00:00',maxDate:''})" type="text">        
+        									<input style="width:160px;float:left;margin-right:20px;" class="form-control" placeholder="结束时间" id="endTime" name="endTime" value="$!deviceDataBean.endTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm',minDate:'2017-01-01 00:00:00',maxDate:''})" type="text">        
 											<input style="float:left;margin-right:10px;" class="btn btn-primary" type="button" value="搜索" onclick="submitSelect()" >      
 											<input style="float:left;margin-right:10px;" class="btn btn-primary" type="button"  value="导出excel" onclick="submitExport('excel')" >       
 											<input style="float:left;" class="btn btn-primary" type="button"  value="导出pdf" onclick="submitExport('pdf')" >       
@@ -129,9 +130,42 @@
     		 	alert("结束时间不能为空");
     			return false;
     		 }
-    	 
+    	 	 
+			var start = stringToDate(startTimeValue);
+			var end = stringToDate(endTimeValue);
+			var distanceDay = dateDiff(end,start);
+			
+			var rangeTimeValue = parseInt(document.getElementById("rangeTime").value);
+			if(distanceDay > rangeTimeValue * 7) {
+				var showMsg = "选择"+rangeTimeValue+"分钟，导出时间段最多为"+(rangeTimeValue * 7)+"天";
+				alert(showMsg);
+				return false;
+			}
+			
     		return true;
 		}
+		
+		function dateDiff(d1, d2) {
+			var day = 24 * 60 * 60 * 1000;
+			var dis = d1.getTime() - d2.getTime();
+			var diff = dis % day == 0 ? dis/day : (dis/day + 1);
+			return parseInt(diff);
+		}
+		
+		function stringToDate(str) {
+            var tempStrs = str.split(" ");
+            var dateStrs = tempStrs[0].split("-");
+            var year = parseInt(dateStrs[0], 10);
+            var month = parseInt(dateStrs[1], 10) - 1;
+            var day = parseInt(dateStrs[2], 10);
+            var timeStrs = tempStrs[1].split(":");
+            var hour = parseInt(timeStrs [0], 10);
+            var minute = parseInt(timeStrs[1], 10);
+            var second = 0;
+            var date = new Date(year, month, day, hour, minute, second);
+            return date;
+        }
+
 	</script>
 	<div class="container-fluid footer" role="footer">
 		$widget.setTemplate('foot')

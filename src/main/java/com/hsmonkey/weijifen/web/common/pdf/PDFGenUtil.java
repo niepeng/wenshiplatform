@@ -106,7 +106,7 @@ public class PDFGenUtil {
 			document.open();
 			
 			PdfPTable table = createTable(4);
-			table.addCell(createCell("成前科技云平台", keyfont, Element.ALIGN_CENTER, 4, true));
+			table.addCell(createCell("成前云平台", keyfont, Element.ALIGN_CENTER, 4, true));
 			table.addCell(createCell(deviceBean.getShowValue(), keyfont, Element.ALIGN_CENTER, 4, true));
 
 			table.addCell(createCell("NO", keyfont, Element.ALIGN_CENTER));
