@@ -9,6 +9,7 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 
 import com.hsmonkey.weijifen.biz.bean.DeviceBean;
 import com.hsmonkey.weijifen.biz.bean.DeviceDataBean;
@@ -26,11 +27,11 @@ public class ExcelUtil {
 	/*
 	 * 生成excel文件，格式如下：
 	 * 
-	 * 成前科技云平台——历史数据
+	 * 成前云平台——历史数据
 	 * 
 	 * 用户选择时间间隔xx分钟 用户选择开始时间	用户选择结束时间
-	 * NO 记录时间 区域名-名称 区域名-名称
-	 * 			  温度(℃)   湿度(%RH)
+	 * 	区域设备名称
+	 * NO 记录时间 温度(℃)   湿度(%RH)
 	 * 1 2014-09-18 19:41:00 26.62 0.00
 	 * 2 2014-09-18 19:42:00 26.62 0.00
 	 * 3 2014-09-18 19:43:00 26.62 0.00
@@ -50,14 +51,16 @@ public class ExcelUtil {
 		HSSFCellStyle style = wb.createCellStyle();
 		style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
 
-		HSSFCell cell = row1.createCell((short) 0);
+		int rowIndex = 0;
+		
+		HSSFCell cell = row1.createCell((short) rowIndex++);
 		cell.setCellValue("成前云平台――历史数据");
 		cell.setCellStyle(style);
 		cell = row1.createCell((short) 1);
 		// cell.setCellValue(String.valueOf(address));
 		// cell.setCellStyle(style);
 
-		HSSFRow row2 = sheet.createRow((int) 1);
+		HSSFRow row2 = sheet.createRow((int) rowIndex++);
 		HSSFCell cell21 = row2.createCell((short) 0);
 		cell21.setCellValue("时间间隔:" + deviceBean.getDataBean().getRangeTime() + "分钟");
 		cell21.setCellStyle(style);
@@ -75,45 +78,27 @@ public class ExcelUtil {
 		cell24.setCellStyle(style);
 
 		
-		HSSFRow row3 = sheet.createRow((int) 2);
+		// 设定合并的单元格
+		sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 3));
+		HSSFRow row3 = sheet.createRow((int) rowIndex++);
 		HSSFCell cell3 = row3.createCell((short) 0);
-		cell3.setCellValue("");
+		cell3.setCellValue(deviceBean.getShowValue());
 		cell3.setCellStyle(style);
-
-		HSSFRow row4 = sheet.createRow((int) 3);
+		HSSFRow row4 = sheet.createRow((int) rowIndex++);
 		HSSFCell cell4 = row4.createCell((short) 0);
 		cell4.setCellValue("NO");
 		cell4.setCellStyle(style);
 		cell4 = row4.createCell((short) 1);
 		cell4.setCellValue("记录时间");
 		cell4.setCellStyle(style);
-
-		// 添加一个设备
-		int titleCellNum = 2;
-		cell4 = row4.createCell((short) titleCellNum++);
-		cell4.setCellValue(deviceBean.getShowValue());
+		cell4 = row4.createCell((short) 2);
+		cell4.setCellValue("温度(℃)");
 		cell4.setCellStyle(style);
-		cell4 = row4.createCell((short) titleCellNum++);
-		cell4.setCellValue(deviceBean.getShowValue());
+		cell4 = row4.createCell((short) 3);
+		cell4.setCellValue("湿度(%RH)");
 		cell4.setCellStyle(style);
 
-		HSSFRow row5 = sheet.createRow((int) 4);
-		HSSFCell cell5 = row5.createCell((short) 0);
-		cell5.setCellValue("");
-		cell5.setCellStyle(style);
-		cell5 = row5.createCell((short) 1);
-		cell5.setCellValue("");
-		cell5.setCellStyle(style);
-		titleCellNum = 2;
-
-		cell5 = row5.createCell((short) titleCellNum++);
-		cell5.setCellValue("温度(℃)");
-		cell5.setCellStyle(style);
-		cell5 = row5.createCell((short) titleCellNum++);
-		cell5.setCellValue("湿度(%RH)");
-		cell5.setCellStyle(style);
-
-		int rowIndex = 5;
+		
 		int startCell = 0;
 		if (deviceBean.getDeviceDataBeanList() != null) {
 			for (int k = 0, size = deviceBean.getDeviceDataBeanList().size(); k < size; k++) {
