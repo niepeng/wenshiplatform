@@ -498,7 +498,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			String body = JsonUtil.fields("snaddr,user,ac,devName", deviceBean);
 			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
 			if (!isSuccess(content)) {
-				result.setResultCode(new StringResultCode("添加设备失败,当前设备已经存在 或 snaddr和ac码对应值正确"));
+				result.setResultCode(new StringResultCode("添加设备失败,当前设备已经存在 或 SN和AC码对应不正确"));
 				return result;
 			}
 			
