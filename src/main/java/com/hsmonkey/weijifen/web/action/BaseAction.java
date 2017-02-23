@@ -38,7 +38,8 @@ public class BaseAction {
 	protected static HttpClient client = new HttpClient(false);
 	
 //	protected static final String API_URL = "http://42.121.53.218:2500";
-	protected static final String API_URL = "http://api.eefield.com:2500";
+//	protected static final String API_URL = "http://api.eefield.com:2500";
+	protected static final String API_URL = "http://api.eefield.com/";
 
 	protected boolean checkUserSession(FlowData flowData, Context context) {
 		Session session = flowData.getSession();

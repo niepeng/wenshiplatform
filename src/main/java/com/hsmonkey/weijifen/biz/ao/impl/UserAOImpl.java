@@ -51,7 +51,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			headerMap.put("TYPE", "login");
 			userBean.setPassword(MD5.encrypt(userBean.getPassword()));
 			String body = JsonUtil.fields("user,password", userBean);
-			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 			if (isSuccess(content)) {
 				Session session = flowData.getSession();
 				session.setAttribute(SessionKeys.USER_NAME, userBean.getUser());
@@ -96,7 +96,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			userBean.setUser(fromSessionUser.getUser());
 			userBean.setPassword(MD5.encrypt(userBean.getPassword()));
 			String body = JsonUtil.fields("user,password", userBean);
-			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 			if (!isSuccess(content)) {
 				result.setResultCode(new StringResultCode("原密码错误"));
 				return result;
@@ -110,7 +110,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			argsMap.put("newPass", MD5.encrypt(userBean.getNewPsw()));
 			body = JsonUtil.mapToJson(argsMap);
 			System.out.println(body);
-			content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 			System.out.println("updatePsw:" + content);
 			if(isSuccess(content)) {
 				result.setSuccess(true);
@@ -217,7 +217,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			Map<String, String> headerMap = new HashMap<String, String>();
 			headerMap.put("TYPE", "getHisData");
 			String body = JsonUtil.fields("snaddr,startTime,endTime,rangeTime", deviceDataBean);
-			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 			JSONObject jsonObject = JsonUtil.getJsonObject(content);
 			JSONArray timeList = JsonUtil.getJsonArray(jsonObject, "timeList");
 			JSONArray humiList = JsonUtil.getJsonArray(jsonObject, "humiList");
@@ -253,7 +253,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			Map<String, String> headerMap = new HashMap<String, String>();
 			headerMap.put("TYPE", "getDevInfo");
 			String body = JsonUtil.fields("snaddr", deviceDataBean);
-			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 			if (!isSuccess(content)) {
 				result.setResultCode(new StringResultCode("当前参数错误"));
 				return result;
@@ -263,7 +263,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			headerMap = new HashMap<String, String>();
 			headerMap.put("TYPE", "getHisData");
 			body = JsonUtil.fields("snaddr,startTime,endTime,rangeTime", deviceDataBean);
-			content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 			JSONObject jsonObject = JsonUtil.getJsonObject(content);
 			JSONArray timeList = JsonUtil.getJsonArray(jsonObject, "timeList");
 			JSONArray humiList = JsonUtil.getJsonArray(jsonObject, "humiList");
@@ -303,7 +303,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			Map<String, String> headerMap = new HashMap<String, String>();
 			headerMap.put("TYPE", "getAccountErr");
 			String body = JsonUtil.fields("user", userBean);
-			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 			JSONArray array = JsonUtil.getJsonArray(content);
 			
 			JSONObject json = null;
@@ -361,7 +361,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			// alarmQuery.setEndTime("2017-01-19 13:19:00");
 
 			String body = JsonUtil.fields("snaddr,startTime,endTime", alarmQuery);
-			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 			JSONObject json = JsonUtil.getJsonObject(content);
 			DeviceBean bean = null;
 			if (json != null) {
@@ -439,7 +439,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			headerMap.put("TYPE", "getDevInfo");
 			for (DeviceBean deviceBean : beanList) {
 				String body = JsonUtil.fields("snaddr", deviceBean);
-				String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+				String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 				if (!isSuccess(content)) {
 					continue;
 				}
@@ -496,7 +496,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			Map<String, String> headerMap = new HashMap<String, String>();
 			headerMap.put("TYPE", "addDeviceBySN");
 			String body = JsonUtil.fields("snaddr,user,ac,devName", deviceBean);
-			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 			if (!isSuccess(content)) {
 				result.setResultCode(new StringResultCode("添加设备失败,当前设备已经存在 或 SN和AC码对应不正确"));
 				return result;
@@ -509,7 +509,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				Map<String, String> tmpMap = new HashMap<String, String>();
 				tmpMap.put("TYPE", "setDevArea");
 				String tmpBody = JsonUtil.fields("snaddr,area", deviceBean);
-				String tmpContent = client.subPostFrom(API_URL, tmpBody, "utf-8", tmpMap);
+				String tmpContent = client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
 				if(!isSuccess(tmpContent)) {
 					result.setResultCode(new StringResultCode("修改区域失败请重试"));
 					return result;
@@ -521,7 +521,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				Map<String, String> tmpMap = new HashMap<String, String>();
 				tmpMap.put("TYPE", "setDevName");
 				String tmpBody = JsonUtil.fields("snaddr,devName", deviceBean);
-				String tmpContent = client.subPostFrom(API_URL, tmpBody, "utf-8", tmpMap);
+				String tmpContent = client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
 				if(!isSuccess(tmpContent)) {
 					result.setResultCode(new StringResultCode("修改设备名称失败请重试"));
 					return result;
@@ -568,7 +568,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			DeviceBean deviceBean = new DeviceBean();
 			deviceBean.setSnaddr(snaddr);
 			String body = JsonUtil.fields("snaddr", deviceBean);
-			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 			if (!isSuccess(content)) {
 				result.setResultCode(new StringResultCode("当前参数错误"));
 				return result;
@@ -601,7 +601,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			Map<String, String> headerMap = new HashMap<String, String>();
 			headerMap.put("TYPE", "getDevInfo");
 			String body = JsonUtil.fields("snaddr", deviceBean);
-			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 			if (!isSuccess(content)) {
 				result.setResultCode(new StringResultCode("当前参数错误"));
 				return result;
@@ -613,7 +613,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				Map<String, String> tmpMap = new HashMap<String, String>();
 				tmpMap.put("TYPE", "setDevArea");
 				String tmpBody = JsonUtil.fields("snaddr,area", deviceBean);
-				String tmpContent = client.subPostFrom(API_URL, tmpBody, "utf-8", tmpMap);
+				String tmpContent = client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
 				if(!isSuccess(tmpContent)) {
 					result.setResultCode(new StringResultCode("修改区域失败请重试"));
 					return result;
@@ -625,7 +625,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				Map<String, String> tmpMap = new HashMap<String, String>();
 				tmpMap.put("TYPE", "setDevName");
 				String tmpBody = JsonUtil.fields("snaddr,devName", deviceBean);
-				String tmpContent = client.subPostFrom(API_URL, tmpBody, "utf-8", tmpMap);
+				String tmpContent = client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
 				if(!isSuccess(tmpContent)) {
 					result.setResultCode(new StringResultCode("修改设备名称失败请重试"));
 					return result;
@@ -637,7 +637,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				Map<String, String> tmpMap = new HashMap<String, String>();
 				tmpMap.put("TYPE", "modifyTH");
 				String tmpBody = JsonUtil.fields("snaddr,devGap", deviceBean.getDeviceExtendBean());
-				String tmpContent = client.subPostFrom(API_URL, tmpBody, "utf-8", tmpMap);
+				String tmpContent = client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
 				if(!isSuccess(tmpContent)) {
 					result.setResultCode(new StringResultCode("修改设备上传间隔失败请重试"));
 					return result;
@@ -650,7 +650,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				Map<String, String> tmpMap = new HashMap<String, String>();
 				tmpMap.put("TYPE", "modifyTH");
 				String tmpBody = JsonUtil.fields("snaddr,maxTemp,minTemp,maxHumi,minHumi,tempHC,humiHC", deviceBean.getDeviceExtendBean());
-				String tmpContent = client.subPostFrom(API_URL, tmpBody, "utf-8", tmpMap);
+				String tmpContent = client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
 				if(!isSuccess(tmpContent)) {
 					result.setResultCode(new StringResultCode("修改设备温湿度上下限信息失败请重试"));
 					return result;
@@ -677,12 +677,12 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			Map<String, String> headerMap = new HashMap<String, String>();
 			headerMap.put("TYPE", "getDevInfo");
 			String body = JsonUtil.fields("snaddr", deviceBean);
-			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 			if (isSuccess(content)) {
 				headerMap = new HashMap<String, String>();
 				headerMap.put("TYPE", "delDevice");
 				body = JsonUtil.fields("snaddr,user", deviceBean);
-				content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+				content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 				if (!isSuccess(content)) {
 					result.setResultCode(new StringResultCode("删除失败，确保拥有权限"));
 					return result;
@@ -703,7 +703,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			Map<String, String> headerMap = new HashMap<String, String>();
 			headerMap.put("TYPE", "userInfo");
 			String body = JsonUtil.fields("user", userBean);
-			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 			if (isSuccess(content)) {
 				JSONObject json = JsonUtil.getJsonObject(content);
 				userBean.setMail(JsonUtil.getString(json, "mail", null));
@@ -727,7 +727,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			Map<String, String> headerMap = new HashMap<String, String>();
 			headerMap.put("TYPE", "bindMailbox");
 			String body = JsonUtil.fields("user,mail", userBean);
-			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 			if (!isSuccess(content)) {
 				result.setResultCode(new StringResultCode("绑定邮箱失败，请重试"));
 				return result;
@@ -753,7 +753,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			Map<String, String> headerMap = new HashMap<String, String>();
 			headerMap.put("TYPE", "retrievePass");
 			String body = JsonUtil.fields("user", userBean);
-			String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 			if (!isSuccess(content)) {
 				result.setResultCode(new StringResultCode("账户未绑定邮箱"));
 				return result;
@@ -774,7 +774,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		Map<String, String> headerMap = new HashMap<String, String>();
 		headerMap.put("TYPE", "getThreshold");
 		String body = JsonUtil.fields("snaddr", deviceBean);
-		String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 		return JsonUtil.jsonToBean(content, DeviceExtendBean.class);
 	}
 
@@ -783,7 +783,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		Map<String, String> headerMap = new HashMap<String, String>();
 		headerMap.put("TYPE", "getAllDevice");
 		String body = JsonUtil.fields("user", userBean);
-		String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 		JSONArray array = JsonUtil.getJsonArray(content);
 		try {
 			if (array != null) {
@@ -806,7 +806,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		Map<String, String> headerMap = new HashMap<String, String>();
 		headerMap.put("TYPE", "getAreaInfo");
 		String body = JsonUtil.fields("user", userBean);
-		String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 		JSONArray array = JsonUtil.getJsonArray(content);
 		try {
 			if (array != null) {
@@ -824,7 +824,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		Map<String, String> headerMap = new HashMap<String, String>();
 		headerMap.put("TYPE", "getRTData");
 		String body = JsonUtil.fields("snaddr,curve", bean);
-		String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 		/*
 		 *  {
 		 *  "humi": { "value"："52.59","status":"-1"}, 

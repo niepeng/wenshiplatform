@@ -18,18 +18,30 @@ import com.hsmonkey.weijifen.util.JsonUtil;
 public class TestAPI {
 	
 //	protected static final String API_URL = "http://42.121.53.218:2500";
-	protected static final String API_URL = "http://api.eefield.com:2500";
+//	protected static final String API_URL = "http://api.eefield.com:2500";
+	protected static final String API_URL = "http://api.eefield.com/";
 	protected static HttpClient client = new HttpClient(false);
 
 	public static void main(String[] args) {
 		String snaddr = "W2000901";
 		String user = "xsf";
 		String ac = "5d68371a";
-		getDevice(user, snaddr);
+//		getDevice(user, snaddr);
 //		String content = client.subGet("http://yun.eefield.com/user/login.htm", "utf-8");
 //		System.out.println(content);
 //		addDevice(user, snaddr, ac);
 //		deleteDevice(user, snaddr);
+		getArea();
+	}
+
+	private static void getArea() {
+		UserBean userBean = new UserBean();
+		userBean.setUser("xsf");
+		Map<String, String> headerMap = new HashMap<String, String>();
+		headerMap.put("TYPE", "getAreaInfo");
+		String body = JsonUtil.fields("user", userBean);
+		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+		System.out.println(content);
 	}
 
 	private static void getDevice(String user, String snaddr) {
@@ -40,7 +52,7 @@ public class TestAPI {
 		Map<String, String> headerMap = new HashMap<String, String>();
 		headerMap.put("TYPE", "getDevInfo");
 		String body = JsonUtil.fields("snaddr", deviceBean);
-		String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 		System.out.println("getDeviceResult=" + content);
 	}
 
@@ -51,7 +63,7 @@ public class TestAPI {
 		Map<String, String> headerMap = new HashMap<String, String>();
 		headerMap.put("TYPE", "delDevice");
 		String body = JsonUtil.fields("snaddr,user", deviceBean);
-		String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 		System.out.println(content);
 	}
 
@@ -64,7 +76,7 @@ public class TestAPI {
 		Map<String, String> headerMap = new HashMap<String, String>();
 		headerMap.put("TYPE", "addDeviceBySN");
 		String body = JsonUtil.fields("snaddr,user,ac,devName", deviceBean);
-		String content = client.subPostFrom(API_URL, body, "utf-8", headerMap);
+		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 		System.out.println("addDevice: "+content);
 	}
 	

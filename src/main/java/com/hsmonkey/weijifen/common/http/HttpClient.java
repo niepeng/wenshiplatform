@@ -664,6 +664,47 @@ public class HttpClient {
 	}
 	
 	/**
+	 * 只是给请求 api.eefield.com 的时候使用，因为返回结果不仅仅是json格式，可能还带有前面有数字和后面有数字的情况，
+	 * 因为服务端api开发人员无法解决该问题，导致这里只能这么扯淡的解决该问题，请见谅
+	 * 
+	 * 例如返回结果可能是：
+	 * 4d
+	 * {"devGap": "60", "code": 0, "devName": "niepengonline", "area": "1号仓库"}
+	 * 0
+	 * 我们只是需要中间的json部分内容，所以需要做截取工作, 
+	 * 
+	 * 注意：同时也有可能是[xxxx] 这种类型的
+	 * 
+	 * @return
+	 */
+	public String subPostForOnlyOneClient(String url, String content, String code, Map<String, String> headerMap) {
+		String resultValue = subPostFrom(url, content, code, headerMap);
+		if (resultValue != null) {
+
+			int length = resultValue.length();
+			int start1 = resultValue.indexOf("{");
+			int start2 = resultValue.indexOf("[");
+			int end = -1;
+			if ((start1 < start2 || start2 == -1) && start1 >= 0) {
+				end = resultValue.lastIndexOf("}");
+				if (length - 1 >= end) {
+					end++;
+				}
+				return resultValue.substring(start1, end);
+			}
+
+			if ((start2 < start1 || start1 == -1) && start2 >= 0) {
+				end = resultValue.lastIndexOf("]");
+				if (length - 1 >= end) {
+					end++;
+				}
+				return resultValue.substring(start2, end);
+			}
+		}
+		return resultValue;
+	}
+	
+	/**
 	 * 以post方式访问指定url
 	 *
 	 * @param hm
