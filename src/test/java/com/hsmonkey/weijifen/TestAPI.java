@@ -17,7 +17,8 @@ import com.hsmonkey.weijifen.util.JsonUtil;
  */
 public class TestAPI {
 	
-	protected static final String API_URL = "http://42.121.53.218:2500";
+//	protected static final String API_URL = "http://42.121.53.218:2500";
+	protected static final String API_URL = "http://api.eefield.com:2500";
 	protected static HttpClient client = new HttpClient(false);
 
 	public static void main(String[] args) {
@@ -25,7 +26,8 @@ public class TestAPI {
 		String user = "xsf";
 		String ac = "5d68371a";
 		getDevice(user, snaddr);
-		
+//		String content = client.subGet("http://yun.eefield.com/user/login.htm", "utf-8");
+//		System.out.println(content);
 //		addDevice(user, snaddr, ac);
 //		deleteDevice(user, snaddr);
 	}

@@ -3,8 +3,6 @@ package com.hsmonkey.weijifen.web.action;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
@@ -16,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import wint.help.biz.result.Result;
 import wint.help.biz.result.ResultCode;
-import wint.help.biz.result.ResultSupport;
 import wint.help.biz.result.results.CommonResultCodes;
 import wint.lang.utils.StringUtil;
 import wint.mvc.flow.FlowData;
@@ -28,8 +25,6 @@ import com.hsmonkey.weijifen.biz.bean.DeviceBean;
 import com.hsmonkey.weijifen.biz.bean.UserBean;
 import com.hsmonkey.weijifen.common.SessionKeys;
 import com.hsmonkey.weijifen.common.http.HttpClient;
-import com.hsmonkey.weijifen.util.DateUtil;
-import com.hsmonkey.weijifen.web.common.csv.CSVManager;
 import com.hsmonkey.weijifen.web.common.pdf.PDFGenUtil;
 
 /**
@@ -42,7 +37,8 @@ public class BaseAction {
 	
 	protected static HttpClient client = new HttpClient(false);
 	
-	protected static final String API_URL = "http://42.121.53.218:2500";
+//	protected static final String API_URL = "http://42.121.53.218:2500";
+	protected static final String API_URL = "http://api.eefield.com:2500";
 
 	protected boolean checkUserSession(FlowData flowData, Context context) {
 		Session session = flowData.getSession();
