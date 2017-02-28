@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -86,8 +88,24 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		Result result = new ResultSupport(false);
 		try {
 			UserBean fromSessionUser = getUserBean(flowData);
-			if(StringUtil.isBlank(userBean.getNewPsw()) || StringUtil.isBlank(userBean.getNewPsw()) || !userBean.getNewPsw().equals(userBean.getNewPsw2())) {
+			
+			if(StringUtil.isBlank(userBean.getPassword())) {
+				result.setResultCode(new StringResultCode("原密码不能为空"));
+				return result;
+			}
+			
+			if(StringUtil.isBlank(userBean.getNewPsw()) || StringUtil.isBlank(userBean.getNewPsw())) {
+				result.setResultCode(new StringResultCode("新密码和确认密码都不能为空"));
+				return result;
+			}
+			
+			if(!userBean.getNewPsw().equals(userBean.getNewPsw2())) {
 				result.setResultCode(new StringResultCode("新密码和确认密码不一致"));
+				return result;
+			}
+			
+			if(userBean.getNewPsw().length() < 6) {
+				result.setResultCode(new StringResultCode("新密码长度至少需要6位"));
 				return result;
 			}
 			
@@ -635,8 +653,8 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			// 3.修改设备上传间隔
 			if(!StringUtil.isBlank(deviceBean.getDevGap()) && !deviceBean.getDevGap().equals(fromDBDeviceBean.getDevGap())) {
 				Map<String, String> tmpMap = new HashMap<String, String>();
-				tmpMap.put("TYPE", "modifyTH");
-				String tmpBody = JsonUtil.fields("snaddr,devGap", deviceBean.getDeviceExtendBean());
+				tmpMap.put("TYPE", "modifyDeviceGap");
+				String tmpBody = JsonUtil.fields("snaddr,devGap", deviceBean);
 				String tmpContent = client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
 				if(!isSuccess(tmpContent)) {
 					result.setResultCode(new StringResultCode("修改设备上传间隔失败请重试"));
@@ -661,6 +679,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 
 		} catch (Exception e) {
 			log.error("doEditDeviceError", e);
+			e.printStackTrace();
 		}
 		return result;
 	}
@@ -722,6 +741,11 @@ public class UserAOImpl extends BaseAO implements UserAO {
 	public Result bindMail(FlowData flowData, String mail) {
 		Result result = new ResultSupport(false);
 		try {
+			Matcher matcher = emailPatten.matcher(mail);
+			if (!matcher.matches()) {
+				result.setResultCode(new StringResultCode("请输入正确的邮箱格式"));
+				return result;
+			}
 			UserBean userBean = getUserBean(flowData);
 			userBean.setMail(mail);
 			Map<String, String> headerMap = new HashMap<String, String>();
@@ -732,10 +756,10 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				result.setResultCode(new StringResultCode("绑定邮箱失败，请重试"));
 				return result;
 			}
-			
+
 			result.getModels().put("userBean", userBean);
 			result.getModels().put("msg", "已发送一条激活链接到邮箱，请进入邮箱点击激活链接才能成功绑定");
-			
+
 			result.setSuccess(true);
 
 		} catch (Exception e) {

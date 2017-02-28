@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +41,10 @@ public class BaseAction {
 //	protected static final String API_URL = "http://42.121.53.218:2500";
 //	protected static final String API_URL = "http://api.eefield.com:2500";
 	protected static final String API_URL = "http://api.eefield.com/";
+	
+	//电子邮件    
+	 private static final String EMAIL_PATTEN = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";    
+	 public static Pattern emailPatten = Pattern.compile(EMAIL_PATTEN);
 
 	protected boolean checkUserSession(FlowData flowData, Context context) {
 		Session session = flowData.getSession();

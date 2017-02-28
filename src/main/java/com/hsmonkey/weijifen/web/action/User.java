@@ -79,7 +79,7 @@ public class User extends BaseAction {
 		userBean.setNewPsw2(flowData.getParameters().getString("newPsw2"));
 		Result result = userAO.doUpdatePsw(flowData, userBean);
 		if (result.isSuccess()) {
-			flowData.redirectTo("userModule", "loginOut");
+			flowData.redirectTo("userModule", "loginOut").param("msg", urlEncode("修改密码成功"));
 			return;
 		}
 		String msg = "操作失败";
@@ -307,10 +307,12 @@ public class User extends BaseAction {
 	
 	public void loginOut(FlowData flowData, Context context) {
 		Result result = new ResultSupport(true);
+		String msg = urlDecode(flowData.getParameters().getString("msg"));
 		Session session = flowData.getSession();
 		session.removeAttribute(SessionKeys.USER_NAME);
+		context.put("msg", msg);
 		if (result.isSuccess()) {
-			flowData.redirectTo("userModule", "login");
+//			flowData.redirectTo("userModule", "login");
 			return;
 		}
 		handleResult(result, flowData, context);

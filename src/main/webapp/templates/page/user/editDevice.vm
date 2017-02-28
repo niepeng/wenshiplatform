@@ -195,6 +195,12 @@
 		   return false;
 		 }
 		 
+		 if(maxTempValue < minTempValue) {
+		   alert("温度上限必须大于温度下限");
+		   return false;
+		 }
+		 
+		 
 		 if(maxHumiValue > 99.9 || minHumiValue < 0) {
 		  alert("湿度上限为99.9%，湿度下限为0%");
 		   return false;
@@ -203,6 +209,21 @@
 		if(maxHumiValue > 99.9 || minHumiValue < 0) {
 		   alert("湿度上限为99.9%，湿度下限为0%");
 		   return false;
+		 }
+		 
+		 if(maxHumiValue < minHumiValue) {
+		   alert("湿度上限必须大于温度下限");
+		   return false;
+		 }
+		 
+		 if(tempHCValue < 0 || tempHCValue > 1) {
+		 	  alert("温度回差值在0到1之间");
+		      return false;
+		 }
+		 
+		 if(humiHCValue < 0 || humiHCValue > 5) {
+		 	  alert("湿度回差值在0到5之间");
+		      return false;
 		 }
 		 
 		 return true;

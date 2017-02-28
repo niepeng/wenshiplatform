@@ -133,6 +133,12 @@
     	 	 
 			var start = stringToDate(startTimeValue);
 			var end = stringToDate(endTimeValue);
+			
+			if(end.getTime() < start.getTime()) {
+				alert("结束时间必须大于开始时间");
+			 	return false;
+			}
+			
 			var distanceDay = dateDiff(end,start);
 			
 			var rangeTimeValue = parseInt(document.getElementById("rangeTime").value);
