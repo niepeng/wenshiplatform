@@ -183,7 +183,9 @@ public class User extends BaseAction {
 			return;
 		}
 
+		String msg = urlDecode(flowData.getParameters().getString("msg"));
 		Result result = userAO.viewAddDevice(flowData);
+		context.put("msg", msg);
 		handleResult(result, flowData, context);
 	}
 	
@@ -217,7 +219,7 @@ public class User extends BaseAction {
 		if (result.getResultCode() != null) {
 			str = result.getResultCode().getMessage();
 		}
-		flowData.redirectTo("userModule", "deviceList").param("msg", urlEncode(str));
+		flowData.redirectTo("userModule", "addDevice").param("msg", urlEncode(str));
 		
 	}
 	

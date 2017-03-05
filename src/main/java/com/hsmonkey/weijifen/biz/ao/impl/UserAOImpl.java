@@ -741,6 +741,11 @@ public class UserAOImpl extends BaseAO implements UserAO {
 	public Result bindMail(FlowData flowData, String mail) {
 		Result result = new ResultSupport(false);
 		try {
+			String oldMail = flowData.getParameters().getString("bindMailValue");
+			if(!StringUtil.isBlank(oldMail) && oldMail.equals(mail)) {
+				result.setResultCode(new StringResultCode("请勿绑定当前邮箱"));
+				return result;
+			}
 			Matcher matcher = emailPatten.matcher(mail);
 			if (!matcher.matches()) {
 				result.setResultCode(new StringResultCode("请输入正确的邮箱格式"));

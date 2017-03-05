@@ -23,7 +23,7 @@
 					-->
 					
 					<form id="reply-form" class="form-horizontal form ng-pristine ng-valid" action="$userModule.setTarget('doBindMail')" method="post">
-
+						<input type="hidden" name="bindMailValue" id="bindMailValue" value="$!userBean.mail" />
 						<div class="form-group">
 							<div class="col-sm-12">
 								<div class="panel panel-default">
@@ -101,7 +101,6 @@
 	</div>
 	
 	<script type="text/javascript">
-		
 	</script>
 	<div class="container-fluid footer" role="footer">
 		$widget.setTemplate('foot')

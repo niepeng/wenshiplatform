@@ -23,7 +23,7 @@
 					</div>	
 					-->
 					
-					<form id="reply-form" class="form-horizontal form ng-pristine ng-valid" action="$userModule.setTarget('doEditDevice')" onsubmit="return checkForm();" method="post">
+					<form id="reply-form" class="form-horizontal form ng-pristine ng-valid" action="$userModule.setTarget('doEditDevice')" onsubmit="javascript:return checkForm();" method="post">
 						<input type="hidden" name="snaddr" value="$deviceBean.snaddr" />
 
 						<div class="form-group">
@@ -177,13 +177,50 @@
 	
 	<script type="text/javascript">
 		function checkForm() {
-		 var maxTempValue = parseFloat(document.getElementById("maxTemp").value).toFixed(2);
-		 var minTempValue = parseFloat(document.getElementById("minTemp").value).toFixed(2);
-		 var tempHCValue = parseFloat(document.getElementById("tempHC").value).toFixed(2);
+		 // var maxTempValue = parseFloat(document.getElementById("maxTemp").value).toFixed(2);
+		 var maxTempValue = parseFloat(document.getElementById("maxTemp").value);
+		 var minTempValue = parseFloat(document.getElementById("minTemp").value);
+		 var tempHCValue = parseFloat(document.getElementById("tempHC").value);
 		 
-		 var maxHumiValue = parseFloat(document.getElementById("maxHumi").value).toFixed(2);
-		 var minHumiValue = parseFloat(document.getElementById("minHumi").value).toFixed(2);
-		 var humiHCValue = parseFloat(document.getElementById("humiHC").value).toFixed(2);
+		 var maxHumiValue = parseFloat(document.getElementById("maxHumi").value);
+		 var minHumiValue = parseFloat(document.getElementById("minHumi").value);
+		 var humiHCValue = parseFloat(document.getElementById("humiHC").value);
+		 
+		 
+		 if(isNaN(maxTempValue)) {
+		 	 alert("温度上限必须为数字");
+			return false;
+		 }
+		 
+		 if(isNaN(minTempValue)) {
+		 	 alert("温度下限必须为数字");
+			return false;
+		 }
+		 
+		 
+		 if(isNaN(tempHCValue)) {
+		 	 alert("温度回差必须为数字");
+			return false;
+		 }
+		 
+		 
+		 if(isNaN(maxHumiValue)) {
+		 	 alert("湿度上限必须为数字");
+			return false;
+		 }
+		 
+		 
+		 if(isNaN(minHumiValue)) {
+		 	 alert("湿度下限必须为数字");
+			return false;
+		 }
+		 
+		 
+		 if(isNaN(humiHCValue)) {
+		 	 alert("湿度回差必须为数字");
+			return false;
+		 }
+		 
 		 
 		 if(maxTempValue > 500 || maxTempValue < -200) {
 		   alert("温度上限为500℃，温度下限为-200℃");
@@ -198,8 +235,7 @@
 		 if(maxTempValue < minTempValue) {
 		   alert("温度上限必须大于温度下限");
 		   return false;
-		 }
-		 
+		 } 
 		 
 		 if(maxHumiValue > 99.9 || minHumiValue < 0) {
 		  alert("湿度上限为99.9%，湿度下限为0%");
@@ -212,7 +248,7 @@
 		 }
 		 
 		 if(maxHumiValue < minHumiValue) {
-		   alert("湿度上限必须大于温度下限");
+		   alert("湿度上限必须大于湿度下限");
 		   return false;
 		 }
 		 
@@ -226,7 +262,7 @@
 		      return false;
 		 }
 		 
-		 return true;
+		   return true;
 		}
 	</script>
 	<div class="container-fluid footer" role="footer">
