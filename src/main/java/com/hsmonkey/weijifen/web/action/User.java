@@ -336,7 +336,12 @@ public class User extends BaseAction {
 		}
 		flowData.redirectTo("userModule", "findPsw").param("msg", urlEncode(msg));
 	}
-
+	
+	public void version(FlowData flowData, Context context) {
+		Result result = userAO.version(flowData);
+		handleJsonResult(result, flowData, context);
+	}
+	
 	public void setUserAO(UserAO userAO) {
 		this.userAO = userAO;
 	}

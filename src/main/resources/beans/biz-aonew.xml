@@ -7,7 +7,9 @@
    
    <!--  <bean id="adminAO" class="com.hsmonkey.weijifen.biz.ao.impl.AdminAOImpl" /> -->
 
-	<bean id="userAO" class="com.hsmonkey.weijifen.biz.ao.impl.UserAOImpl" />
+	<bean id="userAO" class="com.hsmonkey.weijifen.biz.ao.impl.UserAOImpl">
+	    <property name="filePath" value="${weijifen.file.path}"></property>
+	</bean>    
 
     <!-- after web container inited call method -->
     <bean class="com.hsmonkey.weijifen.common.spring.InstantiationTracingBeanPostProcessor">

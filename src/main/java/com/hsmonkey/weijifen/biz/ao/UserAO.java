@@ -50,4 +50,6 @@ public interface UserAO {
 	public Result bindMail(FlowData flowData, String mail);
 
 	public Result doFindPsw(FlowData flowData, String user);
+
+	public Result version(FlowData flowData);
 }

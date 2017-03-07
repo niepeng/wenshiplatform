@@ -1,5 +1,6 @@
 package com.hsmonkey.weijifen.biz.ao.impl;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -17,6 +18,7 @@ import wint.help.biz.result.Result;
 import wint.help.biz.result.ResultSupport;
 import wint.help.biz.result.StringResultCode;
 import wint.help.codec.MD5;
+import wint.lang.utils.FileUtil;
 import wint.lang.utils.StringUtil;
 import wint.mvc.flow.FlowData;
 import wint.mvc.flow.Session;
@@ -45,6 +47,16 @@ import com.hsmonkey.weijifen.util.JsonUtil;
  */
 public class UserAOImpl extends BaseAO implements UserAO {
 
+	private String filePath;
+	
+	static final String appCheckVersionJson = "{"+
+											    "\"code\": 0,"+
+											    "\"data\": {"+
+											     "   \"lastversion\": 1,"+
+											     "   \"downurl\": \"http://static.uxiang.com/others/eewebclient-1.4.apk\""+
+											    "}"+
+											"}";
+	
 	@Override
 	public Result login(FlowData flowData, UserBean userBean) {
 		Result result = new ResultSupport(false);
@@ -323,7 +335,6 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			String body = JsonUtil.fields("user", userBean);
 			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 			JSONArray array = JsonUtil.getJsonArray(content);
-			
 			JSONObject json = null;
 			DeviceBean bean = null;
 			JSONArray alarmArray = null;
@@ -806,6 +817,34 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 		return JsonUtil.jsonToBean(content, DeviceExtendBean.class);
 	}
+	
+
+	
+	@Override
+	public Result version(FlowData flowData) {
+		Result result = new ResultSupport(true);
+		String content = appCheckVersionJson;
+		try {
+			if (StringUtil.isBlank(filePath)) {
+				return result;
+			}
+			
+			if(!FileUtil.exist(filePath)) {
+				File file = new File(filePath);
+				file.createNewFile();
+				FileUtil.writeContent(file, content);
+			}
+
+			String tmp = FileUtil.readAsString(new File(filePath));
+			if (!StringUtil.isBlank(tmp)) {
+				content = tmp;
+			}
+		} catch (Exception e) {
+			log.error("versionEror", e);
+		}
+		result.getModels().put("content", content);
+		return result;
+	}
 
 	private List<DeviceBean> getAllDevice(UserBean userBean) {
 		List<DeviceBean> result = CollectionUtils.newArrayList();
@@ -885,4 +924,9 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		JSONObject json = JsonUtil.getJsonObject(content);
 		return JsonUtil.getInt(json, "code", -1) == 0;
 	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+	
 }

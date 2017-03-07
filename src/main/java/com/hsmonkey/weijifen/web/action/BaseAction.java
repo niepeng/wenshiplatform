@@ -36,6 +36,9 @@ public class BaseAction {
 
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
+	public static final String JSON_TYPE = "application/json;charset=UTF-8";
+
+	
 	protected static HttpClient client = new HttpClient(false);
 	
 //	protected static final String API_URL = "http://42.121.53.218:2500";
@@ -83,6 +86,25 @@ public class BaseAction {
 			return;
 		}
 		result2Context(result, context);
+	}
+	
+	protected void handleJsonResult(Result result, FlowData flowData, Context context) {
+		flowData.setContentType(JSON_TYPE);
+		if(!result.isSuccess()) {
+			handleJsonError(result, flowData, context);
+			return;
+		}
+		result2Context(result, context);
+	}
+	
+	protected void handleJsonError(Result result, FlowData flowData, Context context) {
+		ResultCode resultCode = result.getResultCode();
+		if (resultCode == null) {
+			resultCode = CommonResultCodes.SYSTEM_ERROR;
+		}
+		context.put("code", resultCode.getCode());
+		context.put("errorMessage", resultCode.getMessage());
+		flowData.forwardTo("/json/error");
 	}
 
 	protected void handleError(Result result, FlowData flowData, Context context) {
