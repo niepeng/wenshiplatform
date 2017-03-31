@@ -239,6 +239,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			UserBean userBean = getUserBean(flowData);
 			List<DeviceBean> beanList = getAllDevice(userBean);
 			result.getModels().put("beanList", beanList);
+			result.getModels().put("userBean", userBean);
 			if(StringUtil.isBlank(deviceDataBean.getSnaddr())) {
 				result.setSuccess(true);
 				return result;
@@ -265,7 +266,6 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				result.getModels().put("dataList", dataList);
 			}
 			
-			
 			result.getModels().put("deviceDataBean", deviceDataBean);
 			result.setSuccess(true);
 			
@@ -283,6 +283,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			UserBean userBean = getUserBean(flowData);
 			List<DeviceBean> beanList = getAllDevice(userBean);
 			result.getModels().put("beanList", beanList);
+			result.getModels().put("userBean", userBean);
 			if(CollectionUtils.isEmpty(beanList)) {
 				result.setSuccess(true);
 				return result;
