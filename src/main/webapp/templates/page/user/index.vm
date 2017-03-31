@@ -179,7 +179,7 @@
         } 
 		
 	</script>
-	<div class="container-fluid footer" role="footer">
+	<div id="footerForFootId" class="container-fluid footerForFoot" role="footer">
 		$widget.setTemplate('foot')
 	</div>
 

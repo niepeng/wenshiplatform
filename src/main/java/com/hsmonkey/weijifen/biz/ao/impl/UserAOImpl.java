@@ -139,9 +139,9 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			argsMap.put("oldPass", userBean.getPassword());
 			argsMap.put("newPass", MD5.encrypt(userBean.getNewPsw()));
 			body = JsonUtil.mapToJson(argsMap);
-			System.out.println(body);
+//			System.out.println(body);
 			content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-			System.out.println("updatePsw:" + content);
+//			System.out.println("updatePsw:" + content);
 			if(isSuccess(content)) {
 				result.setSuccess(true);
 				return result;
@@ -275,6 +275,54 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		return result;
 	}
 	
+	
+	@Override
+	public Result historyCurve(FlowData flowData, DeviceDataBean deviceDataBean) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = getUserBean(flowData);
+			List<DeviceBean> beanList = getAllDevice(userBean);
+			result.getModels().put("beanList", beanList);
+			if(CollectionUtils.isEmpty(beanList)) {
+				result.setSuccess(true);
+				return result;
+			}
+			if(StringUtil.isBlank(deviceDataBean.getSnaddr())) {
+				// 设定一个默认的设备
+				deviceDataBean.setSnaddr(beanList.get(0).getSnaddr());
+			}
+			
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "getHisData");
+			String body = JsonUtil.fields("snaddr,startTime,endTime,rangeTime", deviceDataBean);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			JSONObject jsonObject = JsonUtil.getJsonObject(content);
+			JSONArray timeList = JsonUtil.getJsonArray(jsonObject, "timeList");
+			JSONArray humiList = JsonUtil.getJsonArray(jsonObject, "humiList");
+			JSONArray tempList = JsonUtil.getJsonArray(jsonObject, "tempList");
+			if (timeList != null && humiList != null && tempList != null && timeList.length() > 0
+					&& timeList.length() == humiList.length() && timeList.length() == tempList.length()) {
+				List<DeviceDataBean> dataList = CollectionUtils.newArrayList(timeList.length());
+				for (int i = 0, size = timeList.length(); i < size; i++) {
+					DeviceDataBean bean = new DeviceDataBean();
+					bean.setTemp(tempList.getString(i));
+					bean.setHumi(humiList.getString(i));
+					bean.setTime(DateUtil.format(DateUtil.parse(timeList.getString(i)), DateUtil.DATE_FMT_MD_AND_HM));
+					dataList.add(bean);
+				}
+				result.getModels().put("dataList", dataList);
+			}
+			
+			
+			result.getModels().put("deviceDataBean", deviceDataBean);
+			result.setSuccess(true);
+			
+		} catch (Exception e) {
+			log.error("historyCurveError", e);
+		}
+		return result;
+	}
+
 	@Override
 	public Result historyDataExport(FlowData flowData, DeviceDataBean deviceDataBean, String exportType) {
 		Result result = new ResultSupport(false);

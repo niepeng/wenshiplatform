@@ -17,10 +17,29 @@
 	<script src="$staticServer/js/weijifen/util.js"></script>
 	<script src="$staticServer/js/weijifen/require.js"></script>
 	<script src="$staticServer/js/weijifen/config.js"></script>
-		
+	<style>
+		.containerForFoot{position:relative;width:100%;height:auto;min-height:100%; padding-bottom:100px;}
+		.footerForFoot{height:100px;bottom:0px;position:absolute;left:0px;align:center;text-align:center;width: 100%;}
+		.footerForFootFixed{height:100px;bottom:0px;position:fixed;left:0px;align:center;text-align:center;width: 100%;}
+	</style>	
 </head>
 	<body>
-		$page_content
+		<div class="containerForFoot">
+			$page_content
+		</div>
 	</body>
+	
+	<script>
+		var bodyHeightLength = document.body.clientHeight;
+		var showLength = document.documentElement.clientHeight;
+		var ele = document.getElementById("footerForFootId");
+		if(ele != null) {
+			if(showLength > bodyHeightLength) {
+				ele.setAttribute("class", "footerForFootFixed"); 
+    		} else {
+    			ele.setAttribute("class", "footerForFoot"); 
+    		}
+		}
+	</script>
 
 </html>

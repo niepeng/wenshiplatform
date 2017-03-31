@@ -4,6 +4,7 @@ import java.util.Date;
 
 import wint.help.biz.result.Result;
 import wint.help.biz.result.ResultSupport;
+import wint.lang.utils.StringUtil;
 import wint.mvc.flow.FlowData;
 import wint.mvc.flow.Session;
 import wint.mvc.form.Form;
@@ -18,6 +19,7 @@ import com.hsmonkey.weijifen.biz.bean.DeviceExtendBean;
 import com.hsmonkey.weijifen.biz.bean.UserBean;
 import com.hsmonkey.weijifen.biz.query.AlarmQuery;
 import com.hsmonkey.weijifen.biz.query.DeviceQuery;
+import com.hsmonkey.weijifen.common.Constant;
 import com.hsmonkey.weijifen.common.SessionKeys;
 import com.hsmonkey.weijifen.util.DateUtil;
 import com.hsmonkey.weijifen.web.common.excel.ExcelUtil;
@@ -113,6 +115,36 @@ public class User extends BaseAction {
 		Result result = userAO.historyData(flowData, deviceDataBean);
 		handleResult(result, flowData, context);
 	}
+	
+	
+	static final String DEFAULT_RANGE_TIME = "60";
+	static final int DEFAULT_DISTANCE_DAY = 1;
+	public void historyCurve(FlowData flowData, Context context) {
+		if (!checkUserSessionNeedRedrect(flowData, context)) {
+			return;
+		}
+
+		DeviceDataBean deviceDataBean = new DeviceDataBean();
+		deviceDataBean.setSnaddr(flowData.getParameters().getString("snaddr"));
+		deviceDataBean.setStartTime(flowData.getParameters().getString("startTime"));
+		deviceDataBean.setEndTime(flowData.getParameters().getString("endTime"));
+		deviceDataBean.setRangeTime(flowData.getParameters().getString("rangeTime"));
+
+		if(StringUtil.isBlank(deviceDataBean.getRangeTime())) {
+			deviceDataBean.setRangeTime(DEFAULT_RANGE_TIME);
+		}
+		
+		if(StringUtil.isBlank(deviceDataBean.getStartTime()) || StringUtil.isBlank(deviceDataBean.getEndTime())) {
+			Date now = new Date();
+			deviceDataBean.setEndTime(DateUtil.format(now));
+			deviceDataBean.setStartTime(DateUtil.format(DateUtil.changeDay(now, -DEFAULT_DISTANCE_DAY)));
+//			deviceDataBean.setStartTime(DateUtil.format(DateUtil.changeHour(now, -2)));
+		}
+		
+		Result result = userAO.historyCurve(flowData, deviceDataBean);
+		handleResult(result, flowData, context);
+	}
+	
 	
 	public void historyDataExport(FlowData flowData, Context context) {
 		if (!checkUserSessionNeedRedrect(flowData, context)) {

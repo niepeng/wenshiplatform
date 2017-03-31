@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)http://wx.alashu.com/web/index.php?c=user&a=login& -->
+<html lang="zh-cn">
+	<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>成前科技-云平台</title>
+	<meta name="keywords" content="成前科技-云平台">
+	<meta name="description" content="成前科技-云平台">
+	<link rel="shortcut icon" href="$staticServer/logo.jpg">
+	<link href="$cssServer/weijifen/bootstrap.min.css" rel="stylesheet">
+	<link href="$cssServer/weijifen/font-awesome.min.css" rel="stylesheet">
+	<link href="$cssServer/weijifen/common.css?ts=20160603" rel="stylesheet">
+	<link href="$cssServer/weijifen/xue.css" rel="stylesheet">
+	<script>var require = { urlArgs: 'v=2016052611' };</script>
+	<script src="$staticServer/js/weijifen/jquery-1.11.1.min.js"></script>
+	<script src="$staticServer/js/weijifen/util.js"></script>
+	<script src="$staticServer/js/weijifen/require.js"></script>
+	<script src="$staticServer/js/weijifen/config.js"></script>
+	<style>
+		.containerForFoot{position:relative;width:100%;height:auto;min-height:100%;}
+		.footerForFoot{height:100px;bottom:0px;position:absolute;left:0px;align:center;text-align:center;width: 100%;}
+		.footerForFootFixed{height:100px;bottom:0px;position:fixed;left:0px;align:center;text-align:center;width: 100%;}
+	</style>	
+</head>
+	<body>
+		<div class="containerForFoot">
+			$page_content
+		</div>
+	</body>
+	
+	<script>
+		var bodyHeightLength = document.body.clientHeight;
+		var showLength = document.documentElement.clientHeight;
+		var ele = document.getElementById("footerForFootId");
+		ele.setAttribute("class", "footerForFootFixed"); 
+	</script>
+
+</html>

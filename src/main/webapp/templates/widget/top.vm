@@ -5,7 +5,12 @@
 			<ul class="nav navbar-nav">
 				<li><a href="$userModule.setTarget('index')" style="color:white;font-size:25px;">成前云平台</a></li>
 				<li #if("$!checkIndex" == "") class="active" #end><a href="$userModule.setTarget('index')">实时数据</a></li>
-				<li #if("$!checkIndex" == "4") class="active" #end><a href="$userModule.setTarget('historyData')">历史数据</a></li>
+				<li #if("$!checkIndex" == "4") class="active" #end><a href="$userModule.setTarget('historyData')">历史数据</a>
+					<ul>    
+                        <li><a href="$userModule.setTarget('historyData')">历史报表</a></li>    
+                        <li><a href="$userModule.setTarget('historyCurve')">历史曲线</a></li>    
+                    </ul> 
+				</li>
 				<li #if($checkIndex == 1) class="active" #end><a href="$userModule.setTarget('alarmList')">报警数据</a>
 					 <ul>    
                         <li><a href="$userModule.setTarget('alarmList')">最新报警</a></li>    

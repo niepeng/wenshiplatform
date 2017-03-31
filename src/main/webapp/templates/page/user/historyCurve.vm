@@ -1,6 +1,8 @@
 	
 <script type="text/javascript" src="$staticServer/js/weijifen/datepicker/WdatePicker.js"></script>
-
+<script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+<script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+<script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
 
 	$widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('checkIndex','4').addToContext('message',$message)
 	<div class="container-fluid">
@@ -10,7 +12,7 @@
 				
 				<div id="ul_score">
 					<ul class="nav nav-tabs">
-						<li  class="active"><a href="#">历史报表</a></li>
+						<li  class="active"><a href="#">历史曲线</a></li>
 					</ul>
 				</div>
 				
@@ -23,9 +25,7 @@
 					</div>	
 					-->
 					<form method="post" id="form1" name="form1">
-						<input type="hidden" name="selectForm" id="selectForm" value="$userModule.setTarget('historyData')" />
-						<input type="hidden" name="exportForm" id="exportForm" value="$userModule.setTarget('historyDataExport')" />
-						<input type="hidden" name="exportType" id="exportType" />
+						<input type="hidden" name="selectForm" id="selectForm" value="$userModule.setTarget('historyCurve')" />
                         	<div class="panel panel-default">
                                 <div class="panel-heading">
                                   <h3 class="panel-title">搜索 （选择设备，选择间隔时间，查询的日期段）</h3>
@@ -33,9 +33,10 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-lg-10 col-sm-10 col-xs-12">
+											
 											<select name="snaddr" style="padding-right:10px;float:left;height:35px;margin-right:20px;">
 												#foreach($bean in $beanList)
-												 <option value="$!bean.snaddr" #if($!deviceDataBean.snaddr == $bean.snaddr) selected #end>$!bean.devName</option>
+												 <option value="$!bean.snaddr" #if($!deviceDataBean.snaddr == $bean.snaddr) #set($devName = $bean.devName) selected #end>$!bean.devName</option>
 												#end
 											</select>
 											<select name="rangeTime" id="rangeTime" style="padding-right:10px;float:left;height:35px;margin-right:20px;">
@@ -51,20 +52,18 @@
         									<input style="width:160px;float:left;margin-right:20px;" class="form-control" placeholder="开始时间" id="startTime" name="startTime" value="$!deviceDataBean.startTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm',minDate:'2017-01-01 00:00:00',maxDate:''})" type="text">        
         									<input style="width:160px;float:left;margin-right:20px;" class="form-control" placeholder="结束时间" id="endTime" name="endTime" value="$!deviceDataBean.endTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm',minDate:'2017-01-01 00:00:00',maxDate:''})" type="text">        
 											<input style="float:left;margin-right:10px;" class="btn btn-primary" type="button" value="搜索" onclick="submitSelect()" >      
-											<input style="float:left;margin-right:10px;" class="btn btn-primary" type="button"  value="导出excel" onclick="submitExport('excel')" >       
-											<input style="float:left;" class="btn btn-primary" type="button"  value="导出pdf" onclick="submitExport('pdf')" >       
 										</div>
-                                        <!--
-										<div class="col-lg-2 col-sm-2 col-xs-12">
-        									<input class="btn btn-primary form-control" id="submit" name="submit" value="搜索" type="submit">        
-        								</div>
-										-->
     								</div>
     							</div>
                             </div>
                     	
                       </form>
+					  
+					  <div id="container" style="min-width:400px;height:400px"></div>
+
+					  
                           
+					<!--
 					<div class="main scoreChange" id = "scoreChange_manager">
 						<div style="padding:15px;">
 							<table class="table table-hover">
@@ -89,6 +88,7 @@
 							</table>
 						</div>
 					</div>
+					  -->
 
 				</div>
 
@@ -108,14 +108,6 @@
 				return;
 			}	
 		}
-		
-		function submitExport(type) {
-			document.getElementById("exportType").value = type;
-			var actionUrl = document.getElementById("exportForm").value;
-			document.form1.action = actionUrl;
-			document.form1.submit();
-		}
-		
 		
 		function checkForm() {
     		var startTimeValue = document.getElementById("startTime").value;
@@ -173,8 +165,115 @@
         }
 
 	</script>
-	<div class="container-fluid footerForFoot" id="footerForFootId">
+	<div class="container-fluid footer" role="footer">
 		$widget.setTemplate('foot')
 	</div>
 
+	<script>
+	$(function () {
+    $('#container').highcharts({
+        chart: {
+            zoomType: 'xy'
+        },
+        title: {
+            text: '($!devName)温湿度历史曲线数据'
+        },
+        subtitle: {
+            text: '成前科技-云平台'
+        },
+        xAxis: [{
+            //categories: ['一月', '二月', '三月', '四月', '五月', '六月',
+            //             '七月', '八月', '九月', '十月', '十一月', '十二月'],
+			
+			categories: [
+    			#foreach($dataBean in $dataList)
+    				#if($velocityCount > 1)
+    					,
+    				#end
+    				'$!dataBean.time'
+        		#end
+			],
+
+            crosshair: true
+        }],
+        yAxis: [{ // Primary yAxis
+            labels: {
+                format: '{value}°C',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            },
+            title: {
+                text: '温度',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            },
+            opposite: true
+        }, { // Secondary yAxis
+            gridLineWidth: 0,
+            title: {
+                text: '湿度',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            labels: {
+                format: '{value} %RH',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            }
+        }
+		],
+        tooltip: {
+            shared: true
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'left',
+            x: 80,
+            verticalAlign: 'top',
+            y: 55,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+        },
+        series: [{
+            name: '湿度',
+            type: 'spline',
+            yAxis: 1,
+			// // 49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4
+            data: [
+			
+				#foreach($dataBean in $dataList)
+    				#if($velocityCount > 1)
+    					,
+    				#end
+    				$!dataBean.humi
+        		#end
+			],
+            tooltip: {
+                valueSuffix: ' %RH'
+            }
+        },
+		{
+            name: '温度',
+            type: 'spline',
+			// 7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6
+            data: [
+				#foreach($dataBean in $dataList)
+    				#if($velocityCount > 1)
+    					,
+    				#end
+    				$!dataBean.temp
+        		#end
+			],
+            tooltip: {
+                valueSuffix: ' °C'
+            }
+        }]
+    });
+});
+
+	</script>
 

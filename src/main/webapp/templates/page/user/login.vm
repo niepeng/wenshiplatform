@@ -4,7 +4,7 @@
 	@media screen and (min-width:768px){.login .panel.panel-default{width:70%;}}
 	@media screen and (min-width:1200px){.login .panel.panel-default{width:50%;}}
 </style>
-<div class="login" style="min-height: 619px;">
+<div class="login">
 	<div class="logo" style="color:white;font-size:40px;margin-bottom:20px;">
 		成前云平台
 	</div>
@@ -41,7 +41,9 @@
 		</div>
 	</div>
 	
-	$widget.setTemplate('foot')
+	<div id="footerForFootId" class="container-fluid footerForFoot" role="footer">
+		$widget.setTemplate('foot')
+	</div>	
 	
 	
 </div>

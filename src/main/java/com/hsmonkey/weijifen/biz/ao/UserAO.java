@@ -27,6 +27,7 @@ public interface UserAO {
 	public Result index(FlowData flowData, String area);
 	
 	public Result historyData(FlowData flowData, DeviceDataBean deviceDataBean);
+	public Result historyCurve(FlowData flowData, DeviceDataBean deviceDataBean);
 	public Result historyDataExport(FlowData flowData, DeviceDataBean deviceDataBean, String exportType);
 
 	public Result alarmList(FlowData flowData);
