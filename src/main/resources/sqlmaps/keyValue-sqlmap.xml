@@ -20,7 +20,7 @@
 	
 	<insert id="create" parameterClass="keyValue">
 		<![CDATA[
-			insert into weijifen_key_value(gmt_modified, key_name, type, gmt_create, value) 
+			insert into cqtek_key_value(gmt_modified, key_name, type, gmt_create, value) 
 				values (now(), #keyName#, #type#, now(), #value#)
 		]]>
 		<selectKey resultClass="long" keyProperty="id">
@@ -31,29 +31,29 @@
 	<select id="queryById" resultMap="keyValueMapping" parameterClass="long">
 		select
 			<include refid="keyValue-full-columns" />
-		from weijifen_key_value t where t.id = #value#  and t.deleted = 0 
+		from cqtek_key_value t where t.id = #value#  and t.deleted = 0 
 	</select>
 
 	<select id="queryByKey" resultMap="keyValueMapping" parameterClass="string">
 		select
 			<include refid="keyValue-full-columns" />
-		from weijifen_key_value t where t.key_name = #value#  and t.deleted = 0  limit 1
+		from cqtek_key_value t where t.key_name = #value#  and t.deleted = 0  limit 1
 	</select>
 	<select id="queryByKeyDesc" resultMap="keyValueMapping" parameterClass="string">
 		select
 			<include refid="keyValue-full-columns" />
-		from weijifen_key_value t where t.key_name = #value#  and t.deleted = 0  order by id desc limit 1
+		from cqtek_key_value t where t.key_name = #value#  and t.deleted = 0  order by id desc limit 1
 	</select>
 	
 	<update id="delete" parameterClass="long">
-			update weijifen_key_value t set t.deleted = 1  , t.gmt_modified = now()  where t.id = #value#
+			update cqtek_key_value t set t.deleted = 1  , t.gmt_modified = now()  where t.id = #value#
 	
 	</update>
 	
 	<update id="update" parameterClass="keyValue">
 		<![CDATA[
 			update 
-				weijifen_key_value 
+				cqtek_key_value 
 			set 
 				gmt_modified= now(),
 				key_name= #keyName#,
@@ -65,13 +65,13 @@
 	</update>
 
     <select id="queryForPageCount" resultClass="int">
-        select count(0) from weijifen_key_value t  where t.deleted = 0 
+        select count(0) from cqtek_key_value t  where t.deleted = 0 
     </select>
 
     <select id="queryForPage" resultMap="keyValueMapping">
         select
         <include refid="keyValue-full-columns" />
-        from weijifen_key_value t  where t.deleted = 0 
+        from cqtek_key_value t  where t.deleted = 0 
         limit #startRow#, #pageSize#
     </select>
 

@@ -1,5 +1,9 @@
 package com.hsmonkey.weijifen.biz.test;
 
+import wint.help.codec.MD5;
+
+import com.hsmonkey.weijifen.util.RandomUtil;
+
 /**
  * <p>标题: </p>
  * <p>描述: </p>
@@ -8,8 +12,14 @@ package com.hsmonkey.weijifen.biz.test;
  * <p>作者：niepeng</p>
  */
 public class Main {
-
+	
 	public static void main(String[] args) {
+		String f = RandomUtil.getRandomString(17) + System.currentTimeMillis() % RandomUtil.randomInt(100, 600);
+		String value = MD5.encrypt(f) + RandomUtil.getRandomString(10).toLowerCase();
+		System.out.println(value);
+	}
+
+	public static void main2(String[] args) {
 		String value = "🍀🍀茼蒿🍀🍀";
 //		String value = "@内我陪你过爱对方的2432fd++--@#￥%……&*";
 		System.out.println(trimSp(value));

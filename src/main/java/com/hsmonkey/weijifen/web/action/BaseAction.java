@@ -88,6 +88,25 @@ public class BaseAction {
 		result2Context(result, context);
 	}
 	
+	protected void handleApiResult(Result result, FlowData flowData, Context context) {
+		flowData.setContentType(JSON_TYPE);
+		if(!result.isSuccess()) {
+			handleJsonApiError(result, flowData, context);
+			return;
+		}
+		result2Context(result, context);
+	}
+	
+	protected void handleJsonApiError(Result result, FlowData flowData, Context context) {
+		ResultCode resultCode = result.getResultCode();
+		if (resultCode == null) {
+			resultCode = CommonResultCodes.SYSTEM_ERROR;
+		}
+		context.put("code", resultCode.getCode());
+		context.put("errorMessage", resultCode.getMessage());
+		flowData.forwardTo("/json/apierror");
+	}
+	
 	protected void handleJsonResult(Result result, FlowData flowData, Context context) {
 		flowData.setContentType(JSON_TYPE);
 		if(!result.isSuccess()) {

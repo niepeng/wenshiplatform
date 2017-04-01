@@ -4,12 +4,17 @@ import junit.framework.TestCase;
 import wint.help.tools.gen.AutoGen;
 import wint.help.tools.ibatis.AutoGenDAO;
 
+import com.hsmonkey.weijifen.biz.dal.dataobject.ApiAccessTokenDO;
 import com.hsmonkey.weijifen.biz.dal.dataobject.KeyValueDO;
 
 
 public class GenCodes extends TestCase {
 
-	private static final String suffix = "weijifen_";
+	private static final String suffix = "cqtek_";
+	
+	public void testApiAccessToken() {
+		genDAO(ApiAccessTokenDO.class);
+	}
 	
     public void testKeyValueDO() {
     		genDAO(KeyValueDO.class);

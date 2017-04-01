@@ -16,4 +16,5 @@
 
 	<bean id="keyValueDAO" class="com.hsmonkey.weijifen.biz.dal.ibatis.KeyValueDAOIbatis" />
 	
+	<bean id="apiAccessTokenDAO" class="com.hsmonkey.weijifen.biz.dal.ibatis.ApiAccessTokenDAOIbatis" />
 </beans>

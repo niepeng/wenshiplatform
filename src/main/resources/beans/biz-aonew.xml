@@ -11,6 +11,8 @@
 	    <property name="filePath" value="${weijifen.file.path}"></property>
 	</bean>    
 
+	<bean id="apiAO" class="com.hsmonkey.weijifen.biz.ao.impl.ApiAOImpl" />
+
     <!-- after web container inited call method -->
     <bean class="com.hsmonkey.weijifen.common.spring.InstantiationTracingBeanPostProcessor">
         <property name="executer" value="${weijifen.timemachine.execute}"></property>

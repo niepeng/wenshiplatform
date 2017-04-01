@@ -81,9 +81,8 @@ public class RandomUtil {
 		}
 	}
 
-
+	static String base = "ABCDEFGHKMNPQRSTWXY3456789";  // 去掉了一些字母和数字比较难分辨的值
 	public static String getRandomString(int length) { //length表示生成字符串的长度
-	    String base = "ABCDEFGHKMNPQRSTWXY3456789";  // 去掉了一些字母和数字比较难分辨的值
 	    Random random = new Random();
 	    StringBuffer sb = new StringBuffer();
 	    for (int i = 0; i < length; i++) {
@@ -92,6 +91,8 @@ public class RandomUtil {
 	    }
 	    return sb.toString().toUpperCase();
 	 }
+	
+	
 
 	public static String showDate() {
 		try {

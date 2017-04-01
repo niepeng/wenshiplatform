@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ApiAccessTokenDAO">
+
+	<typeAlias type="com.hsmonkey.weijifen.biz.dal.dataobject.ApiAccessTokenDO" alias="apiAccessToken" />
+
+	<resultMap id="apiAccessTokenMapping" class="apiAccessToken">
+		<result property="gmtModified" column="gmt_modified"/>
+		<result property="psw" column="psw"/>
+		<result property="id" column="id"/>
+		<result property="accessToken" column="access_token"/>
+		<result property="gmtCreate" column="gmt_create"/>
+		<result property="user" column="user"/>
+		<result property="expireDate" column="expire_date"/>
+	</resultMap>
+	
+	<sql id="apiAccessToken-full-columns">
+		t.gmt_modified, t.psw, t.id, t.access_token, t.gmt_create, t.user, t.expire_date
+	</sql>
+	
+	<insert id="create" parameterClass="apiAccessToken">
+		<![CDATA[
+			insert into cqtek_api_access_token(gmt_modified, psw, access_token, gmt_create, user, expire_date) 
+				values (now(), #psw#, #accessToken#, now(), #user#, #expireDate#)
+		]]>
+		<selectKey resultClass="long" keyProperty="id">
+			SELECT LAST_INSERT_ID();
+	   	</selectKey>
+	</insert>
+	
+	<select id="queryById" resultMap="apiAccessTokenMapping" parameterClass="long">
+		select
+			<include refid="apiAccessToken-full-columns" />
+		from cqtek_api_access_token t where t.id = #value#  and t.deleted = 0 
+	</select>
+	
+	<select id="queryByUserLimit1" resultMap="apiAccessTokenMapping" parameterClass="string">
+		select
+			<include refid="apiAccessToken-full-columns" />
+		from cqtek_api_access_token t where t.user = #value#  and t.deleted = 0 order by id desc limit 1
+	</select>
+	
+	<select id="queryByAccessToken" resultMap="apiAccessTokenMapping" parameterClass="string">
+		select
+			<include refid="apiAccessToken-full-columns" />
+		from cqtek_api_access_token t where t.access_token = #value#  and t.deleted = 0 order by id desc limit 1
+	</select>
+	
+	<update id="delete" parameterClass="long">
+			update cqtek_api_access_token t set t.deleted = 1  , t.gmt_modified = now()  where t.id = #value#
+	
+	</update>
+	
+	<update id="update" parameterClass="apiAccessToken">
+		<![CDATA[
+			update 
+				cqtek_api_access_token 
+			set 
+				gmt_modified= now(),
+				psw= #psw#,
+				access_token= #accessToken#,
+				user= #user#
+			where 
+				id=#id#
+		]]>
+	</update>
+
+    <select id="queryForPageCount" resultClass="int">
+        select count(0) from cqtek_api_access_token t  where t.deleted = 0 
+    </select>
+
+    <select id="queryForPage" resultMap="apiAccessTokenMapping">
+        select
+        <include refid="apiAccessToken-full-columns" />
+        from cqtek_api_access_token t  where t.deleted = 0 
+        limit #startRow#, #pageSize#
+    </select>
+
+</sqlMap>
+

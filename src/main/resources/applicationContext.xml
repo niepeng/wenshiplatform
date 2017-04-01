@@ -7,7 +7,8 @@
 	<import resource="beans/biz-aonew.xml" />
 	<import resource="beans/biz-service.xml" />
 	
-	<!-- <import resource="beans/biz-dao.xml" /> -->
+	<!---->
+	 <import resource="beans/biz-dao.xml" /> 
 	<import resource="beans/persistence.xml" />
 	<import resource="beans/jndi-datasource.xml" />
 

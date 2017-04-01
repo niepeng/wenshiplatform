@@ -1,8 +1,10 @@
-CREATE DATABASE `weijifen`;
-use `weijifen`;
+use `cqtek`;
+grant all on `cqtek`.* to 'cqtekuser'@'%' identified by 'cqtekuser123321';
+flush privileges;
 
 
-CREATE TABLE `weijifen_key_value` (
+
+CREATE TABLE `cqtek_key_value` (
 `id` bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
 `gmt_modified` datetime  not null ,
 `key_name` varchar(128),
@@ -12,6 +14,26 @@ CREATE TABLE `weijifen_key_value` (
 `deleted` tinyint  not null  default 0 
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-ALTER TABLE weijifen_key_value ADD INDEX keyName (key_name);
+ALTER TABLE cqtek_key_value ADD INDEX keyName (key_name);
+
+
+CREATE TABLE `cqtek_api_access_token` (
+`id` bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
+`gmt_modified` datetime  not null ,
+`psw` varchar(128) ,
+`access_token` varchar(256),
+`gmt_create` datetime  not null ,
+`user` varchar(128) ,
+`deleted` tinyint  not null  default 0 
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+ALTER TABLE cqtek_api_access_token ADD INDEX accessToken (access_token);
+ALTER TABLE cqtek_api_access_token ADD INDEX user (user);
+
+ALTER TABLE `cqtek`.`cqtek_api_access_token` 
+ADD COLUMN `expire_date` DATETIME NULL AFTER `deleted`;
+
+
+
 
 

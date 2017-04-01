@@ -61,11 +61,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 	public Result login(FlowData flowData, UserBean userBean) {
 		Result result = new ResultSupport(false);
 		try {
-			Map<String, String> headerMap = new HashMap<String, String>();
-			headerMap.put("TYPE", "login");
-			userBean.setPassword(MD5.encrypt(userBean.getPassword()));
-			String body = JsonUtil.fields("user,password", userBean);
-			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			String content = loginCall(userBean);
 			if (isSuccess(content)) {
 				Session session = flowData.getSession();
 				session.setAttribute(SessionKeys.USER_NAME, userBean.getUser());
@@ -121,26 +117,20 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				return result;
 			}
 			
-			Map<String, String> headerMap = new HashMap<String, String>();
-			headerMap.put("TYPE", "login");
-			userBean.setUser(fromSessionUser.getUser());
-			userBean.setPassword(MD5.encrypt(userBean.getPassword()));
-			String body = JsonUtil.fields("user,password", userBean);
-			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-			if (!isSuccess(content)) {
+			if (!isSuccess(loginCall(userBean))) {
 				result.setResultCode(new StringResultCode("原密码错误"));
 				return result;
 			}
 
-			headerMap = new HashMap<String, String>();
+			Map<String, String> headerMap = new HashMap<String, String>();
 			headerMap.put("TYPE", "modifyPass");
 			Map<String, Object> argsMap = new HashMap<String, Object>();
 			argsMap.put("user", fromSessionUser.getUser());
 			argsMap.put("oldPass", userBean.getPassword());
 			argsMap.put("newPass", MD5.encrypt(userBean.getNewPsw()));
-			body = JsonUtil.mapToJson(argsMap);
+			String body = JsonUtil.mapToJson(argsMap);
 //			System.out.println(body);
-			content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 //			System.out.println("updatePsw:" + content);
 			if(isSuccess(content)) {
 				result.setSuccess(true);
@@ -967,11 +957,6 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		dataBean.setTempStatus(ChangeUtil.str2int(JsonUtil.getString(tempJson, "status", null)));
 		
 		return dataBean;
-	}
-
-	private boolean isSuccess(String content) {
-		JSONObject json = JsonUtil.getJsonObject(content);
-		return JsonUtil.getInt(json, "code", -1) == 0;
 	}
 
 	public void setFilePath(String filePath) {
