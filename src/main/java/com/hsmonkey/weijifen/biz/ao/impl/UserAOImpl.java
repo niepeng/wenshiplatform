@@ -167,7 +167,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			DeviceDataBean dataBean = null;
 			for(DeviceBean bean : beanList) {
 				if(!StringUtil.isBlank(bean.getSnaddr())) {
-					dataBean = requestDeviceDataBean(bean);
+					dataBean = getDeviceDataBean(bean);
 					bean.setDataBean(dataBean);
 				}
 			}
@@ -883,80 +883,6 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		}
 		result.getModels().put("content", content);
 		return result;
-	}
-
-	private List<DeviceBean> getAllDevice(UserBean userBean) {
-		List<DeviceBean> result = CollectionUtils.newArrayList();
-		Map<String, String> headerMap = new HashMap<String, String>();
-		headerMap.put("TYPE", "getAllDevice");
-		String body = JsonUtil.fields("user", userBean);
-		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-		JSONArray array = JsonUtil.getJsonArray(content);
-		try {
-			if (array != null) {
-				JSONObject jsonObject = null;
-				DeviceBean bean = null;
-				for (int i = 0, size = array.length(); i < size; i++) {
-					jsonObject = array.getJSONObject(i);
-					bean = JsonUtil.jsonToBean(jsonObject.toString(), DeviceBean.class);
-					result.add(bean);
-				}
-			}
-		} catch (JSONException e) {
-		}
-
-		return result;
-	}
-	
-	private List<String> getAllArea(UserBean userBean) {
-		List<String> result = CollectionUtils.newArrayList();
-		Map<String, String> headerMap = new HashMap<String, String>();
-		headerMap.put("TYPE", "getAreaInfo");
-		String body = JsonUtil.fields("user", userBean);
-		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-		JSONArray array = JsonUtil.getJsonArray(content);
-		try {
-			if (array != null) {
-				for (int i = 0, size = array.length(); i < size; i++) {
-					result.add(array.getString(i));
-				}
-			}
-		} catch (JSONException e) {
-		}
-		return result;
-	}
-	
-
-	private DeviceDataBean requestDeviceDataBean(DeviceBean bean) {
-		Map<String, String> headerMap = new HashMap<String, String>();
-		headerMap.put("TYPE", "getRTData");
-		String body = JsonUtil.fields("snaddr,curve", bean);
-		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-		/*
-		 *  {
-		 *  "humi": { "value"："52.59","status":"-1"}, 
-		 *  "in1": "0000", 
-		 *  "temp": { "value"："25.59","status":"1"}, 
-		 *  "time": "16-10-10 10:18", 
-		 *  "abnormal": "0"
-		 *  }
-		 */
-		JSONObject json = JsonUtil.getJsonObject(content);
-		if(json == null) {
-			return null;
-		}
-		DeviceDataBean dataBean = new DeviceDataBean();
-		dataBean.setAbnormal(JsonUtil.getString(json, "abnormal", null));
-		dataBean.setTime(JsonUtil.getString(json, "time", null));
-		JSONObject humiJson = JsonUtil.getJSONObject(json, "humi");
-		dataBean.setHumi(JsonUtil.getString(humiJson, "value", null));
-		dataBean.setHumiStatus(ChangeUtil.str2int(JsonUtil.getString(humiJson, "status", null)));
-		
-		JSONObject tempJson = JsonUtil.getJSONObject(json, "temp");
-		dataBean.setTemp(JsonUtil.getString(tempJson, "value", null));
-		dataBean.setTempStatus(ChangeUtil.str2int(JsonUtil.getString(tempJson, "status", null)));
-		
-		return dataBean;
 	}
 
 	public void setFilePath(String filePath) {

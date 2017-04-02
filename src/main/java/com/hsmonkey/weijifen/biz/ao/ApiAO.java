@@ -13,5 +13,32 @@ import wint.mvc.flow.FlowData;
  */
 public interface ApiAO {
 
+	/**
+	 * 获取某个用户的accessToken的值
+	 * 
+	 * @param flowData
+	 * @param user
+	 * @param psw
+	 * @return
+	 */
 	public Result getAccessToken(FlowData flowData, String user, String psw);
+	
+	/**
+	 * 获取accessToken这个对应用户的设备列表
+	 * 
+	 * @param flowData
+	 * @param accessToken
+	 * @return
+	 */
+	public Result getDeviceList(FlowData flowData, String accessToken);
+
+	/**
+	 * 根据提供的snaddrs，获取实时数据
+	 * 
+	 * @param flowData
+	 * @param accessToken
+	 * @param snaddrs，以英文逗号分隔的snaddr数据集
+	 * @return
+	 */
+	public Result intimeData(FlowData flowData, String accessToken, String snaddrs);
 }

@@ -1,0 +1,8 @@
+{"code":0,
+    "data":
+    	{
+		#if($deviceList.size() > 0)
+			"deviceList": $jsonUtil.mfields("snaddr,devName,area",$deviceList, 'yyyy-MM-dd HH:mm:ss')
+		#end	
+        }
+}
