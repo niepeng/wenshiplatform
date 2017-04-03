@@ -32,12 +32,23 @@ public class BaseAO extends BaseAction {
 		return JsonUtil.getInt(json, "code", -1) == 0;
 	}
 	
-	protected String loginCall(UserBean userBean) {
+	protected String loginCall(String user, String psw, boolean isPswAlreadyMd5) {
+		UserBean userBean = new UserBean();
+		userBean.setUser(user);
+		if (isPswAlreadyMd5) {
+			userBean.setPassword(psw);
+		} else {
+			userBean.setPassword(MD5.encrypt(psw));
+		}
+
 		Map<String, String> headerMap = new HashMap<String, String>();
 		headerMap.put("TYPE", "login");
-		userBean.setPassword(MD5.encrypt(userBean.getPassword()));
 		String body = JsonUtil.fields("user,password", userBean);
 		return client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+	}
+	
+	protected String loginCall(UserBean userBean) {
+		return loginCall(userBean.getUser(), userBean.getPassword(), false);
 	}
 	
 	protected List<DeviceBean> getAllDevice(UserBean userBean) {

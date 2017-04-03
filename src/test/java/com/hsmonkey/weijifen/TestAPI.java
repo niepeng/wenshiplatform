@@ -3,6 +3,8 @@ package com.hsmonkey.weijifen;
 import java.util.HashMap;
 import java.util.Map;
 
+import wint.help.codec.MD5;
+
 import com.hsmonkey.weijifen.biz.bean.DeviceBean;
 import com.hsmonkey.weijifen.biz.bean.UserBean;
 import com.hsmonkey.weijifen.common.http.HttpClient;
@@ -23,6 +25,11 @@ public class TestAPI {
 	protected static HttpClient client = new HttpClient(false);
 
 	public static void main(String[] args) {
+		String psw = "123456";
+		System.out.println(MD5.encrypt(psw));
+	}
+	
+	public static void main2(String[] args) {
 		String snaddr = "W2000901";
 		String user = "xsf";
 		String ac = "5d68371a";

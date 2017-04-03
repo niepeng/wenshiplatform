@@ -44,10 +44,10 @@ public class ApiAOImpl extends BaseAO implements ApiAO {
 				return result;
 			}
 			
-			UserBean userBean = new UserBean();
-			userBean.setUser(user);
-			userBean.setPassword(psw);
-			if (!isSuccess(loginCall(userBean))) {
+//			UserBean userBean = new UserBean();
+//			userBean.setUser(user);
+//			userBean.setPassword(psw);
+			if (!isSuccess(loginCall(user, psw, true))) {
 				result.setResultCode(ApiResultCodes.USER_PSW_ERROR);
 				return result;
 			}
