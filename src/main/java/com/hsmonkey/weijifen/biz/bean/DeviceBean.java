@@ -43,6 +43,8 @@ public class DeviceBean {
 	private List<DeviceDataBean> deviceDataBeanList;
 	
 	private List<AlarmBean> alarmBeanList;
+
+	private AlarmBean alarmBean;
 	
 	private String user;
 	
@@ -153,6 +155,14 @@ public class DeviceBean {
 
 	public void setDeviceDataBeanList(List<DeviceDataBean> deviceDataBeanList) {
 		this.deviceDataBeanList = deviceDataBeanList;
+	}
+
+	public AlarmBean getAlarmBean() {
+		return alarmBean;
+	}
+
+	public void setAlarmBean(AlarmBean alarmBean) {
+		this.alarmBean = alarmBean;
 	}
 	
 }

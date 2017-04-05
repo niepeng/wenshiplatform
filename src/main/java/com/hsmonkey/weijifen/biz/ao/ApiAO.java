@@ -5,7 +5,7 @@ import wint.help.biz.result.Result;
 import wint.mvc.flow.FlowData;
 
 /**
- * <p>标题: </p>
+ * <p>标题: 对外开放的api接口</p>
  * <p>描述: </p>
  * <p>版权: lsb</p>
  * <p>创建时间: 2017年4月1日  下午8:45:11</p>

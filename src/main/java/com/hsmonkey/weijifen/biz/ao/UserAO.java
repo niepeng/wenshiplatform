@@ -1,5 +1,7 @@
 package com.hsmonkey.weijifen.biz.ao;
 
+import java.util.Date;
+
 import wint.help.biz.result.Result;
 import wint.mvc.flow.FlowData;
 
@@ -53,4 +55,12 @@ public interface UserAO {
 	public Result doFindPsw(FlowData flowData, String user);
 
 	public Result version(FlowData flowData);
+	
+	/**
+	 * 获取最近报警的信息
+	 * @param flowData
+	 * @param user
+	 * @return
+	 */
+	public Result jsonRecentlyAlarmList(FlowData flowData, String user, Date requestTime);
 }

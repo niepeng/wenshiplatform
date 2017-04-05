@@ -19,7 +19,6 @@ import com.hsmonkey.weijifen.biz.bean.DeviceExtendBean;
 import com.hsmonkey.weijifen.biz.bean.UserBean;
 import com.hsmonkey.weijifen.biz.query.AlarmQuery;
 import com.hsmonkey.weijifen.biz.query.DeviceQuery;
-import com.hsmonkey.weijifen.common.Constant;
 import com.hsmonkey.weijifen.common.SessionKeys;
 import com.hsmonkey.weijifen.util.DateUtil;
 import com.hsmonkey.weijifen.web.common.excel.ExcelUtil;
@@ -371,6 +370,18 @@ public class User extends BaseAction {
 	
 	public void version(FlowData flowData, Context context) {
 		Result result = userAO.version(flowData);
+		handleJsonResult(result, flowData, context);
+	}
+	
+	public void jsonRecentlyAlarmList(FlowData flowData, Context context) {
+		flowData.setLayout("/json/default");
+		Date requestTime = flowData.getParameters().getDate("requestTime", DateUtil.DEFAULT_DATE_FMT);
+		// 默认获取最近10个小时的报警数据
+		if(requestTime == null) {
+			requestTime = DateUtil.changeHour(new Date(), -10);
+		}
+		String user = flowData.getParameters().getString("user");
+		Result result = userAO.jsonRecentlyAlarmList(flowData, user, requestTime);
 		handleJsonResult(result, flowData, context);
 	}
 	

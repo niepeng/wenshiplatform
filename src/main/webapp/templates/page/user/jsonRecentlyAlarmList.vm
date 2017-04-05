@@ -1,0 +1,23 @@
+{"code":0,
+    "data":
+    	{
+		"requsetTime" : "$!requsetTime"
+		#if($deviceBeanList.size() > 0)
+			, "deviceList": [
+				#foreach($bean in $deviceBeanList)
+					#if($velocityCount > 1),#end
+					{
+						"snaddr":"$!bean.snaddr",
+						"devName":"$!bean.devName",
+						"area":"$!bean.area",
+						"msg":"$!bean.alarmBean.msg",
+						"alarmTime":"$!bean.alarmBean.alarmTime",
+						"type":$!bean.alarmBean.type
+					}
+				#end
+			]
+		#end
+			
+        }
+}
+

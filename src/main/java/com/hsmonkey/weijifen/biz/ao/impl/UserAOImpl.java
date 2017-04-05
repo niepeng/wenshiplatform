@@ -8,10 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import wint.help.biz.result.Result;
@@ -33,7 +31,6 @@ import com.hsmonkey.weijifen.biz.bean.UserBean;
 import com.hsmonkey.weijifen.biz.query.AlarmQuery;
 import com.hsmonkey.weijifen.biz.query.DeviceQuery;
 import com.hsmonkey.weijifen.common.SessionKeys;
-import com.hsmonkey.weijifen.util.ChangeUtil;
 import com.hsmonkey.weijifen.util.CollectionUtils;
 import com.hsmonkey.weijifen.util.DateUtil;
 import com.hsmonkey.weijifen.util.JsonUtil;
@@ -882,6 +879,56 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			log.error("versionEror", e);
 		}
 		result.getModels().put("content", content);
+		return result;
+	}
+	
+	@Override
+	public Result jsonRecentlyAlarmList(FlowData flowData, String user, Date requestTime) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = new UserBean();
+			userBean.setUser(user);
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "getAccountErr");
+			String body = JsonUtil.fields("user", userBean);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			JSONArray array = JsonUtil.getJsonArray(content);
+			List<DeviceBean> deviceBeanList = CollectionUtils.newArrayList(array.length());
+
+			JSONObject json = null;
+			JSONArray alarmArray = null;
+			AlarmBean alarmBean = null;
+			DeviceBean bean = null;
+			for (int i = 0, size = array.length(); i < size; i++) {
+				json = array.getJSONObject(i);
+				if (json == null) {
+					continue;
+				}
+				bean = new DeviceBean();
+				bean.setSnaddr(JsonUtil.getString(json, "snaddr", null));
+				bean.setDevName(JsonUtil.getString(json, "devName", null));
+				bean.setArea(JsonUtil.getString(json, "area", null));
+				alarmArray = json.getJSONArray("detail");
+
+				for (int j = 0, alarmLenth = alarmArray.length(); j < alarmLenth; j++) {
+					alarmBean = JsonUtil.jsonToBean(alarmArray.getJSONObject(j).toString(), AlarmBean.class);
+					if (alarmBean.isBegin()) {
+						// 过滤时间不符合条件的数据
+						if (alarmBean.isDateAfter(requestTime)) {
+							bean.setAlarmBean(alarmBean);
+							deviceBeanList.add(bean);
+						}
+						break;
+					}
+				}
+			}
+
+			result.getModels().put("requsetTime", DateUtil.format(requestTime));
+			result.getModels().put("deviceBeanList", deviceBeanList);
+			result.setSuccess(true);
+		} catch (Exception e) {
+			log.error("jsonRecentlyAlarmListError", e);
+		}
 		return result;
 	}
 

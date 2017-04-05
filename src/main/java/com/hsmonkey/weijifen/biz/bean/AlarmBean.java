@@ -1,5 +1,9 @@
 package com.hsmonkey.weijifen.biz.bean;
 
+import java.util.Date;
+
+import com.hsmonkey.weijifen.util.DateUtil;
+
 /**
  * <p>标题: 报警信息</p>
  * <p>描述: </p>
@@ -21,7 +25,23 @@ public class AlarmBean {
 	// -------------- extend attribute --------------------
 
 	// -------------- normal method -----------------------
+	
+	public boolean isBegin() {
+		return "0".equals(beginEndMark);
+	}
+	
+	public boolean isDateAfter(Date time) {
+		if (alarmTime == null) {
+			return false;
+		}
+		Date alarmDate = DateUtil.parseNoException(alarmTime);
+		if (alarmDate == null) {
+			return false;
+		}
+		return DateUtil.isDateAfter(alarmDate, time);
+	}
 
+	
 	// -------------- setter/getter -----------------------
 
 	public String getMsg() {
