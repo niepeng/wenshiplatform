@@ -1,7 +1,6 @@
 package com.hsmonkey.weijifen.biz.ao.impl;
 
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,10 +10,13 @@ import wint.help.codec.MD5;
 import wint.lang.utils.StringUtil;
 import wint.mvc.flow.FlowData;
 
+import com.google.common.util.concurrent.RateLimiter;
 import com.hsmonkey.weijifen.biz.ao.ApiAO;
 import com.hsmonkey.weijifen.biz.ao.BaseAO;
+import com.hsmonkey.weijifen.biz.bean.ApiMethodEnum;
 import com.hsmonkey.weijifen.biz.bean.DeviceBean;
 import com.hsmonkey.weijifen.biz.bean.DeviceDataBean;
+import com.hsmonkey.weijifen.biz.bean.UserApiCallBean;
 import com.hsmonkey.weijifen.biz.bean.UserBean;
 import com.hsmonkey.weijifen.biz.dal.dataobject.ApiAccessTokenDO;
 import com.hsmonkey.weijifen.common.ApiResultCodes;
@@ -31,9 +33,14 @@ import com.hsmonkey.weijifen.util.RandomUtil;
  * <p>作者：niepeng</p>
  */
 public class ApiAOImpl extends BaseAO implements ApiAO {
-
+	
 	// accessToken的过期时间，单位：秒
 	static final int ACCESS_TOKEN_EXPIRE = 7 * Constant.Time.DAY;
+	
+	static Map<String, UserApiCallBean> apiCallLimiterMap = CollectionUtils.newHashMap();
+	static Map<String, RateLimiter> accessTokenMap = CollectionUtils.newHashMap();
+	// 1秒钟限制调用次数， 1/60 表示1分钟限制1次调用
+	static double accessTokenCallLimit = 1.d/60;
 	
 	@Override
 	public Result getAccessToken(FlowData flowData, String user, String psw) {
@@ -43,23 +50,35 @@ public class ApiAOImpl extends BaseAO implements ApiAO {
 				result.setResultCode(ApiResultCodes.ARGS_ERROR);
 				return result;
 			}
-			
-//			UserBean userBean = new UserBean();
-//			userBean.setUser(user);
-//			userBean.setPassword(psw);
+
 			if (!isSuccess(loginCall(user, psw, true))) {
 				result.setResultCode(ApiResultCodes.USER_PSW_ERROR);
 				return result;
 			}
 			
-			// 1分钟内只能生成一次
-			Date now = new Date();
-			ApiAccessTokenDO apiAccessTokenDO = apiAccessTokenDAO.queryByUserLimit1(user);
-			if(apiAccessTokenDO != null && DateUtil.distanceSeconds(apiAccessTokenDO.getGmtCreate(), now) < Constant.Time.MIN) {
+			RateLimiter rateLimiter = accessTokenMap.get(user);
+			if (rateLimiter == null) {
+				rateLimiter = RateLimiter.create(accessTokenCallLimit);
+				rateLimiter.acquire();
+				accessTokenMap.put(user, rateLimiter);
+			} else if (!rateLimiter.tryAcquire()) {
 				result.setResultCode(ApiResultCodes.API_CALL_ERROR);
 				return result;
 			}
 			
+			ApiAccessTokenDO apiAccessTokenDO = apiAccessTokenDAO.queryByUserLimit1(user);
+			if (apiAccessTokenDO != null) {
+				apiCallLimiterMap.remove(apiAccessTokenDO.getAccessToken());
+			}
+			
+			// 1分钟内只能调用一次，采用了上面的guava的rateLimiter实现了
+//			ApiAccessTokenDO apiAccessTokenDO = apiAccessTokenDAO.queryByUserLimit1(user);
+//			if(apiAccessTokenDO != null && DateUtil.distanceSeconds(apiAccessTokenDO.getGmtCreate(), now) < Constant.Time.MIN) {
+//				result.setResultCode(ApiResultCodes.API_CALL_ERROR);
+//				return result;
+//			}
+			
+			Date now = new Date();
 			ApiAccessTokenDO tmp = new ApiAccessTokenDO();
 			tmp.setUser(user);
 			tmp.setPsw(psw);
@@ -86,8 +105,12 @@ public class ApiAOImpl extends BaseAO implements ApiAO {
 			if (!success) {
 				return result;
 			}
+			
+			if (!checkApiCallLimit(result, accessToken, ApiMethodEnum.deviceList)) {
+				return result;
+			}
+			
 			ApiAccessTokenDO apiAccessTokenDO = (ApiAccessTokenDO) result.getModels().get("apiAccessTokenDO");
-
 			// 获取设备列表数据
 			UserBean userBean = new UserBean();
 			userBean.setUser(apiAccessTokenDO.getUser());
@@ -114,6 +137,11 @@ public class ApiAOImpl extends BaseAO implements ApiAO {
 			if (!success) {
 				return result;
 			}
+			
+			if (!checkApiCallLimit(result, accessToken, ApiMethodEnum.inTimeData)) {
+				return result;
+			}
+			
 
 			ApiAccessTokenDO apiAccessTokenDO = (ApiAccessTokenDO) result.getModels().get("apiAccessTokenDO");
 			// 检查当前参数中的snaddr是否为当前用户的设备
@@ -185,6 +213,27 @@ public class ApiAOImpl extends BaseAO implements ApiAO {
 		}
 		
 		result.getModels().put("apiAccessTokenDO", fromDB);
+		return true;
+	}
+	
+	private boolean checkApiCallLimit(Result result, String accessToken, ApiMethodEnum apiMethodEnum) {
+		UserApiCallBean apiCallBean = apiCallLimiterMap.get(accessToken);
+		if (apiCallBean == null) {
+			apiCallBean = new UserApiCallBean();
+			apiCallLimiterMap.put(accessToken, apiCallBean);
+		}
+		RateLimiter tmpRateLimiter = null;
+		if (ApiMethodEnum.deviceList == apiMethodEnum) {
+			tmpRateLimiter = apiCallBean.getDeviceListLimiter();
+		} else if (ApiMethodEnum.inTimeData == apiMethodEnum) {
+			tmpRateLimiter = apiCallBean.getInTimeDataLimiter();
+		}
+
+		if (!tmpRateLimiter.tryAcquire()) {
+			result.setResultCode(ApiResultCodes.API_CALL_ERROR);
+			return false;
+		}
+
 		return true;
 	}
 
