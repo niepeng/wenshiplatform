@@ -49,11 +49,11 @@ public class UserAOImpl extends BaseAO implements UserAO {
 	static final String appCheckVersionJson = "{"+
 											    "\"code\": 0,"+
 											    "\"data\": {"+
-											     "   \"lastversion\": 1,"+
-											     "   \"downurl\": \"http://static.uxiang.com/others/eewebclient-1.4.apk\""+
+											     "   \"lastversion\": 3,"+
+											     "   \"downurl\": \"http://static.yun.eefield.com/wenshiplatformclient-1.3.apk\""+
 											    "}"+
 											"}";
-	
+
 	@Override
 	public Result login(FlowData flowData, UserBean userBean) {
 		Result result = new ResultSupport(false);
