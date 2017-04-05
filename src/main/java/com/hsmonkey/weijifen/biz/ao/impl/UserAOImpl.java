@@ -923,7 +923,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				}
 			}
 
-			result.getModels().put("requsetTime", DateUtil.format(requestTime));
+			result.getModels().put("requsetTime", DateUtil.format(new Date()));
 			result.getModels().put("deviceBeanList", deviceBeanList);
 			result.setSuccess(true);
 		} catch (Exception e) {
