@@ -6,13 +6,20 @@
 	<div class="container-fluid">
 		<div class="row">
 			
+			
 			<div class="" style="margin-left:50px;">
 				
-				<tt style="margin-left:50px;color:red;">$!msg</tt>
+			<div id="ul_score">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#">区域列表</a></li>
+					</ul>
+				</div>
+				
+				<tt style="margin-left:20px;color:red;">$!msg</tt>
 				
 				<div id="main_score">                          
-					<div class="main scoreChange" id = "scoreChange_manager"  >
-						<div style="padding:15px;">
+					<div class="main scoreChange" id = "scoreChange_manager">
+						<div style="padding-left:15px;padding-right:15px;">
 							<table class="table table-hover">
 								<thead class="navbar-inner">
 									<tr>
