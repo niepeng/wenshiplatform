@@ -37,6 +37,10 @@ public interface UserAO {
 	public Result alarmHistoryList(FlowData flowData, AlarmQuery alarmQuery);
 
 	public Result deviceList(FlowData flowData, DeviceQuery deviceQuery);
+
+	public Result doEditArea(FlowData flowData, String oldArea, String newArea);
+
+	public Result areaList(FlowData flowData);
 	
 	public Result viewAddDevice(FlowData flowData);
 

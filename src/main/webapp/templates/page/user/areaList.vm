@@ -1,0 +1,55 @@
+	
+<script type="text/javascript" src="$staticServer/js/weijifen/datepicker/WdatePicker.js"></script>
+
+
+	$widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('checkIndex','2').addToContext('message',$message)
+	<div class="container-fluid">
+		<div class="row">
+			
+			<div class="" style="margin-left:50px;">
+				
+				<tt style="margin-left:50px;color:red;">$!msg</tt>
+				
+				<div id="main_score">                          
+					<div class="main scoreChange" id = "scoreChange_manager"  >
+						<div style="padding:15px;">
+							<table class="table table-hover">
+								<thead class="navbar-inner">
+									<tr>
+										<th style="width:140px;">区域</th>
+										<th style="width:100px;">编辑操作</th>
+									</tr>
+								</thead>
+								<tbody>
+									#foreach($area in $areaList)
+										<form id="reply-form" class="form-horizontal form ng-pristine ng-valid" action="$userModule.setTarget('doEditArea')"  method="post">
+											<tr>
+												<td>
+												<input style="width:300px;float:left;margin-right:20px;" class="form-control" name="area" value="$!area" type="text">
+												<input style="width:300px;float:left;margin-right:20px;" class="form-control" name="oldArea" value="$!area" type="hidden">
+												</td>	
+											   <td><input style="float:left;" class="btn btn-primary" id="submit" name="submit" value="确认修改" type="submit"></td>	
+    									</tr>
+										</form>
+									#end
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+				</div>
+
+				
+
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		
+	</script>
+	<div id="footerForFootId" class="container-fluid footerForFoot" role="footer">
+		$widget.setTemplate('foot')
+	</div>
+
+

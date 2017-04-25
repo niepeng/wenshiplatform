@@ -525,8 +525,73 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		return result;
 	}
 	
-	
 	@Override
+    public Result areaList(FlowData flowData) {
+        Result result = new ResultSupport(false);
+        try {
+            UserBean userBean = getUserBean(flowData);
+            List<String> areaList = getAllArea(userBean);
+            
+            result.getModels().put("userBean", userBean);
+            result.getModels().put("areaList", areaList);
+            result.setSuccess(true);
+
+        } catch (Exception e) {
+            log.error("areaListError", e);
+        }
+        return result;
+    }
+	
+    @Override
+    public Result doEditArea(FlowData flowData, String oldArea, String newArea) {
+        Result result = new ResultSupport(false);
+        try {
+
+            UserBean userBean = getUserBean(flowData);
+
+            if (StringUtil.isBlank(newArea)) {
+                result.setResultCode(new StringResultCode("区域名不能为空"));
+                return result;
+            }
+            newArea = newArea.trim();
+            if (newArea.indexOf("\n") >= 0) {
+                result.setResultCode(new StringResultCode("区域名不能换行"));
+                return result;
+            }
+
+            if (newArea.equals(oldArea)) {
+                result.setResultCode(new StringResultCode("当前区域没有修改"));
+                return result;
+            }
+
+            List<String> areaList = getAllArea(userBean);
+            if (areaList != null) {
+                for (String tmpArea : areaList) {
+                    if (newArea.equals(tmpArea)) {
+                        result.setResultCode(new StringResultCode("该区域名已经存在"));
+                        return result;
+                    }
+                }
+            }
+
+            Map<String, String> tmpMap = new HashMap<String, String>();
+            tmpMap.put("TYPE", "setAreaInfo");
+            String tmpBody = "{\"user\":\"" + userBean.getUser() + "\",\"oldArea\":\"" + oldArea + "\",\"newArea\":\"" + newArea + "\"}";
+            String tmpContent = client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
+            if (!isSuccess(tmpContent)) {
+                result.setResultCode(new StringResultCode("区域名称修改失败请重试"));
+                return result;
+            }
+
+            result.setSuccess(true);
+
+        } catch (Exception e) {
+            log.error("doEditAreaError", e);
+        }
+        return result;
+    }
+
+    @Override
 	public Result viewAddDevice(FlowData flowData) {
 		Result result = new ResultSupport(false);
 		try {
@@ -726,7 +791,6 @@ public class UserAOImpl extends BaseAO implements UserAO {
 
 		} catch (Exception e) {
 			log.error("doEditDeviceError", e);
-			e.printStackTrace();
 		}
 		return result;
 	}

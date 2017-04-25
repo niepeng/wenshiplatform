@@ -209,6 +209,17 @@ public class User extends BaseAction {
 		handleResult(result, flowData, context);
 	}
 	
+
+    public void areaList(FlowData flowData, Context context) {
+        if (!checkUserSessionNeedRedrect(flowData, context)) {
+            return;
+        }
+        String msg = urlDecode(flowData.getParameters().getString("msg"));
+        Result result = userAO.areaList(flowData);
+        context.put("msg", msg);
+        handleResult(result, flowData, context);
+    }
+	
 	public void addDevice(FlowData flowData, Context context) {
 		if (!checkUserSessionNeedRedrect(flowData, context)) {
 			return;
@@ -264,6 +275,25 @@ public class User extends BaseAction {
 		handleResult(result, flowData, context);
 	}
 	
+    public void doEditArea(FlowData flowData, Context context) {
+        if (!checkUserSessionNeedRedrect(flowData, context)) {
+            return;
+        }
+
+        String area = flowData.getParameters().getString("area");
+        String oldArea = flowData.getParameters().getString("oldArea");
+        Result result = userAO.doEditArea(flowData, oldArea, area);
+        if (result.isSuccess()) {
+            flowData.redirectTo("userModule", "areaList").param("msg", urlEncode("操作成功"));
+            return;
+        }
+        String str = "操作失败";
+        if (result.getResultCode() != null) {
+            str = result.getResultCode().getMessage();
+        }
+        flowData.redirectTo("userModule", "areaList").param("msg", urlEncode(str));
+    }
+	
 	public void doEditDevice(FlowData flowData, Context context) {
 		if (!checkUserSessionNeedRedrect(flowData, context)) {
 			return;
@@ -295,6 +325,7 @@ public class User extends BaseAction {
 		}
 		flowData.redirectTo("userModule", "deviceList").param("msg", urlEncode(str));
 	}
+	
 	
 	public void deleteDevice(FlowData flowData, Context context) {
 		if (!checkUserSessionNeedRedrect(flowData, context)) {
