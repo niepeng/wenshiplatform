@@ -963,31 +963,43 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			JSONArray alarmArray = null;
 			AlarmBean alarmBean = null;
 			DeviceBean bean = null;
-			for (int i = 0, size = array.length(); i < size; i++) {
-				json = array.getJSONObject(i);
-				if (json == null) {
-					continue;
-				}
-				bean = new DeviceBean();
-				bean.setSnaddr(JsonUtil.getString(json, "snaddr", null));
-				bean.setDevName(JsonUtil.getString(json, "devName", null));
-				bean.setArea(JsonUtil.getString(json, "area", null));
-				alarmArray = json.getJSONArray("detail");
+			Date lastAlarmTime = requestTime;
+            for (int i = 0, size = array.length(); i < size; i++) {
+                json = array.getJSONObject(i);
+                if (json == null) {
+                    continue;
+                }
+                bean = new DeviceBean();
+                bean.setSnaddr(JsonUtil.getString(json, "snaddr", null));
+                bean.setDevName(JsonUtil.getString(json, "devName", null));
+                bean.setArea(JsonUtil.getString(json, "area", null));
+                alarmArray = json.getJSONArray("detail");
 
-				for (int j = 0, alarmLenth = alarmArray.length(); j < alarmLenth; j++) {
-					alarmBean = JsonUtil.jsonToBean(alarmArray.getJSONObject(j).toString(), AlarmBean.class);
-					if (alarmBean.isBegin()) {
-						// 过滤时间不符合条件的数据
-						if (alarmBean.isDateAfter(requestTime)) {
-							bean.setAlarmBean(alarmBean);
-							deviceBeanList.add(bean);
-						}
-						break;
-					}
-				}
+                for (int j = 0, alarmLenth = alarmArray.length(); j < alarmLenth; j++) {
+                    alarmBean = JsonUtil.jsonToBean(alarmArray.getJSONObject(j).toString(), AlarmBean.class);
+                    if (alarmBean.isBegin()) {
+                        // 过滤时间不符合条件的数据
+                        if (alarmBean.isDateAfter(requestTime)) {
+                            bean.setAlarmBean(alarmBean);
+                            deviceBeanList.add(bean);
+                        }
+                        break;
+                    }
+                }
+            }
+			
+            // 更新最近一次报警时间，返回给客户端
+			if(deviceBeanList != null) {
+			    for(DeviceBean deviceBean : deviceBeanList) {
+			        Date alarmTime = DateUtil.parseNoException(deviceBean.getAlarmBean().getAlarmTime());
+			        if(alarmTime != null && DateUtil.isDateAfter(alarmTime, lastAlarmTime)) {
+			            lastAlarmTime = alarmTime;
+			        }
+			    }
 			}
 
-			result.getModels().put("requsetTime", DateUtil.format(new Date()));
+//			result.getModels().put("requsetTime", DateUtil.format(new Date()));
+			result.getModels().put("requsetTime", DateUtil.format(lastAlarmTime));
 			result.getModels().put("deviceBeanList", deviceBeanList);
 			result.setSuccess(true);
 		} catch (Exception e) {
