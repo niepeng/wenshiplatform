@@ -977,14 +977,13 @@ public class UserAOImpl extends BaseAO implements UserAO {
 
                 for (int j = 0, alarmLenth = alarmArray.length(); j < alarmLenth; j++) {
                     alarmBean = JsonUtil.jsonToBean(alarmArray.getJSONObject(j).toString(), AlarmBean.class);
-                    if (alarmBean.isBegin()) {
+//                    if (alarmBean.isBegin()) {
                         // 过滤时间不符合条件的数据
                         if (alarmBean.isDateAfter(requestTime)) {
                             bean.setAlarmBean(alarmBean);
                             deviceBeanList.add(bean);
                         }
-                        break;
-                    }
+//                    }
                 }
             }
 			
