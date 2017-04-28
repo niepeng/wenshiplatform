@@ -1,2 +1,8 @@
 /target/
 /weijifen.log.dir_IS_UNDEFINED/
+.classpath
+.project
+.settings/
+src/.DS_Store
+.DS_Store
+
