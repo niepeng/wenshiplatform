@@ -84,9 +84,9 @@
 											<div class="form-group">
             									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
         											<tt id="">
-															温度上限:<input type="text" style="width:100px;display:inline;height:25px;" id="maxTemp" name="maxTemp" value="$!deviceBean.deviceExtendBean.maxTemp" class="form-control">℃
-            												&nbsp;&nbsp;&nbsp;温度下限:<input type="text" style="width:100px;display:inline;height:25px;" id="minTemp" name="minTemp" value="$!deviceBean.deviceExtendBean.minTemp" class="form-control">℃
-            												&nbsp;&nbsp;&nbsp;温度回差:<input type="text" style="width:100px;display:inline;height:25px;" id="tempHC" name="tempHC" value="$!deviceBean.deviceExtendBean.tempHC" class="form-control">℃
+															温度报警上限:<input type="text" style="width:100px;display:inline;height:25px;" id="maxTemp" name="maxTemp" value="$!deviceBean.deviceExtendBean.maxTemp" class="form-control">℃
+            												&nbsp;&nbsp;&nbsp;温度报警下限:<input type="text" style="width:100px;display:inline;height:25px;" id="minTemp" name="minTemp" value="$!deviceBean.deviceExtendBean.minTemp" class="form-control">℃
+            												&nbsp;&nbsp;&nbsp;温度回差:<input type="text" style="width:100px;display:inline;height:25px;" id="tempHC" name="tempHC" value="$!deviceBean.deviceExtendBean.tempHC" class="form-control">℃  （温度回差建议采用默认设置。）
                 										<br>
             										</tt>
             									</div>
@@ -95,9 +95,9 @@
 											<div class="form-group">
             									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
         											<tt id="">
-															湿度上限:<input type="text" style="width:100px;display:inline;height:25px;" id="maxHumi" name="maxHumi" value="$!deviceBean.deviceExtendBean.maxHumi" class="form-control">%RH
-            												&nbsp;湿度下限:<input type="text" style="width:100px;display:inline;height:25px;" id="minHumi" name="minHumi" value="$!deviceBean.deviceExtendBean.minHumi" class="form-control">%RH
-            												&nbsp;湿度回差:<input type="text" style="width:100px;display:inline;height:25px;" id="humiHC" name="humiHC" value="$!deviceBean.deviceExtendBean.humiHC" class="form-control">%RH
+															湿度报警上限:<input type="text" style="width:100px;display:inline;height:25px;" id="maxHumi" name="maxHumi" value="$!deviceBean.deviceExtendBean.maxHumi" class="form-control">%RH
+            												&nbsp;湿度报警下限:<input type="text" style="width:100px;display:inline;height:25px;" id="minHumi" name="minHumi" value="$!deviceBean.deviceExtendBean.minHumi" class="form-control">%RH
+            												&nbsp;湿度回差:<input type="text" style="width:100px;display:inline;height:25px;" id="humiHC" name="humiHC" value="$!deviceBean.deviceExtendBean.humiHC" class="form-control">%RH （湿度回差建议采用默认设置。）
                 										<br>
             										</tt>
             									</div>
