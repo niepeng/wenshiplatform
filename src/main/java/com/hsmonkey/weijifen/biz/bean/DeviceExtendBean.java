@@ -32,6 +32,8 @@ public class DeviceExtendBean {
 	
 	
 	// -------------- extend attribute --------------------
+	
+	private String user;
 
 	// -------------- normal method -----------------------
 	
@@ -124,5 +126,15 @@ public class DeviceExtendBean {
 	public void setSnaddr(String snaddr) {
 		this.snaddr = snaddr;
 	}
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+	
+	
 	
 }

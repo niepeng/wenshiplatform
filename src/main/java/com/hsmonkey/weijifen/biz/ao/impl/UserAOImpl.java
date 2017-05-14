@@ -133,8 +133,14 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				result.setSuccess(true);
 				return result;
 			}
-			result.setResultCode(new StringResultCode("修改失败，请先绑定邮箱才能修改密码，稍后再试"));
-
+			int code = getCode(content);
+			String msg = getMessage(content);
+			
+			if(!StringUtil.isBlank(msg)) {
+			    result.setResultCode(new StringResultCode(msg));
+			} else {
+              result.setResultCode(new StringResultCode("修改失败，请先绑定邮箱才能修改密码，稍后再试"));
+			}
 		} catch (Exception e) {
 			log.error("doUpdatePswError", e);
 		}
@@ -178,6 +184,14 @@ public class UserAOImpl extends BaseAO implements UserAO {
 
 					if (o2.getDataBean() == null) {
 						return -1;
+					}
+					
+					if(o1.getDataBean().getAbnormal() == null) {
+					    return -1;
+					}
+					
+					if(o2.getDataBean().getAbnormal() == null) {
+					    return -1;
 					}
 
 					if (o1.getDataBean().getAbnormal().equals(o2.getDataBean().getAbnormal())) {
@@ -236,22 +250,25 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			headerMap.put("TYPE", "getHisData");
 			String body = JsonUtil.fields("snaddr,startTime,endTime,rangeTime", deviceDataBean);
 			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-			JSONObject jsonObject = JsonUtil.getJsonObject(content);
-			JSONArray timeList = JsonUtil.getJsonArray(jsonObject, "timeList");
-			JSONArray humiList = JsonUtil.getJsonArray(jsonObject, "humiList");
-			JSONArray tempList = JsonUtil.getJsonArray(jsonObject, "tempList");
-			if (timeList != null && humiList != null && tempList != null && timeList.length() > 0
-					&& timeList.length() == humiList.length() && timeList.length() == tempList.length()) {
-				List<DeviceDataBean> dataList = CollectionUtils.newArrayList(timeList.length());
-				for (int i = 0, size = timeList.length(); i < size; i++) {
-					DeviceDataBean bean = new DeviceDataBean();
-					bean.setTemp(tempList.getString(i));
-					bean.setHumi(humiList.getString(i));
-					bean.setTime(timeList.getString(i));
-					dataList.add(bean);
-				}
-				result.getModels().put("dataList", dataList);
-			}
+			JSONObject mainJson = JsonUtil.getJsonObject(content);
+            if (isSuccess(content)) {
+                JSONObject jsonObject = JsonUtil.getJSONObject(mainJson, "array");
+                JSONArray timeList = JsonUtil.getJsonArray(jsonObject, "timeList");
+                JSONArray humiList = JsonUtil.getJsonArray(jsonObject, "humiList");
+                JSONArray tempList = JsonUtil.getJsonArray(jsonObject, "tempList");
+                if (timeList != null && humiList != null && tempList != null && timeList.length() > 0 && timeList.length() == humiList.length()
+                    && timeList.length() == tempList.length()) {
+                    List<DeviceDataBean> dataList = CollectionUtils.newArrayList(timeList.length());
+                    for (int i = 0, size = timeList.length(); i < size; i++) {
+                        DeviceDataBean bean = new DeviceDataBean();
+                        bean.setTemp(tempList.getString(i));
+                        bean.setHumi(humiList.getString(i));
+                        bean.setTime(timeList.getString(i));
+                        dataList.add(bean);
+                    }
+                    result.getModels().put("dataList", dataList);
+                }
+            }
 			
 			result.getModels().put("deviceDataBean", deviceDataBean);
 			result.setSuccess(true);
@@ -284,22 +301,26 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			headerMap.put("TYPE", "getHisData");
 			String body = JsonUtil.fields("snaddr,startTime,endTime,rangeTime", deviceDataBean);
 			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-			JSONObject jsonObject = JsonUtil.getJsonObject(content);
-			JSONArray timeList = JsonUtil.getJsonArray(jsonObject, "timeList");
-			JSONArray humiList = JsonUtil.getJsonArray(jsonObject, "humiList");
-			JSONArray tempList = JsonUtil.getJsonArray(jsonObject, "tempList");
-			if (timeList != null && humiList != null && tempList != null && timeList.length() > 0
-					&& timeList.length() == humiList.length() && timeList.length() == tempList.length()) {
-				List<DeviceDataBean> dataList = CollectionUtils.newArrayList(timeList.length());
-				for (int i = 0, size = timeList.length(); i < size; i++) {
-					DeviceDataBean bean = new DeviceDataBean();
-					bean.setTemp(tempList.getString(i));
-					bean.setHumi(humiList.getString(i));
-					bean.setTime(DateUtil.format(DateUtil.parse(timeList.getString(i)), DateUtil.DATE_FMT_MD_AND_HM));
-					dataList.add(bean);
-				}
-				result.getModels().put("dataList", dataList);
-			}
+            if (isSuccess(content)) {
+                JSONObject mainJson = JsonUtil.getJsonObject(content);
+                JSONObject jsonObject = JsonUtil.getJSONObject(mainJson, "array");
+                JSONArray timeList = JsonUtil.getJsonArray(jsonObject, "timeList");
+                JSONArray humiList = JsonUtil.getJsonArray(jsonObject, "humiList");
+                JSONArray tempList = JsonUtil.getJsonArray(jsonObject, "tempList");
+                if (timeList != null && humiList != null && tempList != null && timeList.length() > 0 && timeList.length() == humiList.length()
+                    && timeList.length() == tempList.length()) {
+                    List<DeviceDataBean> dataList = CollectionUtils.newArrayList(timeList.length());
+                    for (int i = 0, size = timeList.length(); i < size; i++) {
+                        DeviceDataBean bean = new DeviceDataBean();
+                        bean.setTemp(tempList.getString(i));
+                        bean.setHumi(humiList.getString(i));
+                        bean.setTime(DateUtil.format(DateUtil.parse(timeList.getString(i)), DateUtil.DATE_FMT_MD_AND_HM));
+                        dataList.add(bean);
+                    }
+                    result.getModels().put("dataList", dataList);
+                }
+            }
+			
 			
 			
 			result.getModels().put("deviceDataBean", deviceDataBean);
@@ -310,42 +331,44 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		}
 		return result;
 	}
-
+	
 	@Override
 	public Result historyDataExport(FlowData flowData, DeviceDataBean deviceDataBean, String exportType) {
 		Result result = new ResultSupport(false);
 		try {
-//			UserBean userBean = getUserBean(flowData);
-			Map<String, String> headerMap = new HashMap<String, String>();
-			headerMap.put("TYPE", "getDevInfo");
-			String body = JsonUtil.fields("snaddr", deviceDataBean);
-			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			UserBean userBean = getUserBean(flowData);
+			String content = getDevInfo(userBean.getUser(), deviceDataBean.getSnaddr());
 			if (!isSuccess(content)) {
 				result.setResultCode(new StringResultCode("当前参数错误"));
 				return result;
 			}
+//			JSONObject jsonObject = JsonUtil.getJsonObject(content);
 			DeviceBean fromDBDeviceBean = JsonUtil.jsonToBean(content, DeviceBean.class);
 			
-			headerMap = new HashMap<String, String>();
+			Map<String, String> headerMap = new HashMap<String, String>();
 			headerMap.put("TYPE", "getHisData");
-			body = JsonUtil.fields("snaddr,startTime,endTime,rangeTime", deviceDataBean);
+			String body = JsonUtil.fields("snaddr,startTime,endTime,rangeTime", deviceDataBean);
 			content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-			JSONObject jsonObject = JsonUtil.getJsonObject(content);
-			JSONArray timeList = JsonUtil.getJsonArray(jsonObject, "timeList");
-			JSONArray humiList = JsonUtil.getJsonArray(jsonObject, "humiList");
-			JSONArray tempList = JsonUtil.getJsonArray(jsonObject, "tempList");
-			if (timeList != null && humiList != null && tempList != null && timeList.length() > 0
-					&& timeList.length() == humiList.length() && timeList.length() == tempList.length()) {
-				List<DeviceDataBean> dataList = CollectionUtils.newArrayList(timeList.length());
-				for (int i = 0, size = timeList.length(); i < size; i++) {
-					DeviceDataBean bean = new DeviceDataBean();
-					bean.setTemp(tempList.getString(i));
-					bean.setHumi(humiList.getString(i));
-					bean.setTime(timeList.getString(i));
-					dataList.add(bean);
-				}
-				fromDBDeviceBean.setDeviceDataBeanList(dataList);
+			JSONObject mainJson = JsonUtil.getJsonObject(content);
+			if(isSuccess(content)) {
+			    JSONObject jsonObject = JsonUtil.getJSONObject(mainJson, "array");
+	            JSONArray timeList = JsonUtil.getJsonArray(jsonObject, "timeList");
+	            JSONArray humiList = JsonUtil.getJsonArray(jsonObject, "humiList");
+	            JSONArray tempList = JsonUtil.getJsonArray(jsonObject, "tempList");
+	            if (timeList != null && humiList != null && tempList != null && timeList.length() > 0
+	                    && timeList.length() == humiList.length() && timeList.length() == tempList.length()) {
+	                List<DeviceDataBean> dataList = CollectionUtils.newArrayList(timeList.length());
+	                for (int i = 0, size = timeList.length(); i < size; i++) {
+	                    DeviceDataBean bean = new DeviceDataBean();
+	                    bean.setTemp(tempList.getString(i));
+	                    bean.setHumi(humiList.getString(i));
+	                    bean.setTime(timeList.getString(i));
+	                    dataList.add(bean);
+	                }
+	                fromDBDeviceBean.setDeviceDataBeanList(dataList);
+	            }
 			}
+			
 			
 			if(fromDBDeviceBean != null) {
 				fromDBDeviceBean.setDataBean(deviceDataBean);
@@ -370,30 +393,34 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			headerMap.put("TYPE", "getAccountErr");
 			String body = JsonUtil.fields("user", userBean);
 			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-			JSONArray array = JsonUtil.getJsonArray(content);
-			JSONObject json = null;
-			DeviceBean bean = null;
-			JSONArray alarmArray = null;
-			AlarmBean alarmBean = null;
-			List<AlarmBean> alarmBeanList = null;
-			for (int i = 0, size = array.length(); i < size; i++) {
-				json = array.getJSONObject(i);
-				if (json == null) {
-					continue;
-				}
-				bean = new DeviceBean();
-				bean.setSnaddr(JsonUtil.getString(json, "snaddr", null));
-				bean.setDevName(JsonUtil.getString(json, "devName", null));
-				bean.setArea(JsonUtil.getString(json, "area", null));
-				alarmArray = json.getJSONArray("detail");
-				alarmBeanList = CollectionUtils.newArrayList();
-				for (int j = 0, alarmLenth = alarmArray.length(); j < alarmLenth; j++) {
-					alarmBean = JsonUtil.jsonToBean(alarmArray.getJSONObject(j).toString(), AlarmBean.class);
-					alarmBeanList.add(alarmBean);
-				}
-				bean.setAlarmBeanList(alarmBeanList);
-				beanList.add(bean);
+			if(isSuccess(content)) {
+			    JSONObject mainJson = JsonUtil.getJsonObject(content);
+			    JSONArray array = JsonUtil.getJsonArray(mainJson, "array");
+	            JSONObject json = null;
+	            DeviceBean bean = null;
+	            JSONArray alarmArray = null;
+	            AlarmBean alarmBean = null;
+	            List<AlarmBean> alarmBeanList = null;
+	            for (int i = 0, size = array.length(); i < size; i++) {
+	                json = array.getJSONObject(i);
+	                if (json == null) {
+	                    continue;
+	                }
+	                bean = new DeviceBean();
+	                bean.setSnaddr(JsonUtil.getString(json, "snaddr", null));
+	                bean.setDevName(JsonUtil.getString(json, "devName", null));
+	                bean.setArea(JsonUtil.getString(json, "area", null));
+	                alarmArray = json.getJSONArray("detail");
+	                alarmBeanList = CollectionUtils.newArrayList();
+	                for (int j = 0, alarmLenth = alarmArray.length(); j < alarmLenth; j++) {
+	                    alarmBean = JsonUtil.jsonToBean(alarmArray.getJSONObject(j).toString(), AlarmBean.class);
+	                    alarmBeanList.add(alarmBean);
+	                }
+	                bean.setAlarmBeanList(alarmBeanList);
+	                beanList.add(bean);
+	            }
 			}
+			
 			
 			result.getModels().put("userBean", userBean);
 			result.getModels().put("beanList", beanList);
@@ -427,7 +454,8 @@ public class UserAOImpl extends BaseAO implements UserAO {
 
 			String body = JsonUtil.fields("snaddr,startTime,endTime", alarmQuery);
 			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-			JSONObject json = JsonUtil.getJsonObject(content);
+	        JSONObject mainJson = JsonUtil.getJsonObject(content);
+			JSONObject json = JsonUtil.getJSONObject(mainJson, "array");
 			DeviceBean bean = null;
 			if (json != null) {
 				bean = new DeviceBean();
@@ -500,11 +528,12 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			}
 			
 			// 获取设备上传时间间隔
-			Map<String, String> headerMap = new HashMap<String, String>();
-			headerMap.put("TYPE", "getDevInfo");
+//			Map<String, String> headerMap = new HashMap<String, String>();
+//			headerMap.put("TYPE", "getDevInfo");
 			for (DeviceBean deviceBean : beanList) {
-				String body = JsonUtil.fields("snaddr", deviceBean);
-				String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			    String content = getDevInfo(userBean.getUser(), deviceBean.getSnaddr());
+//				String body = JsonUtil.fields("snaddr", deviceBean);
+//				String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 				if (!isSuccess(content)) {
 					continue;
 				}
@@ -579,7 +608,11 @@ public class UserAOImpl extends BaseAO implements UserAO {
             String tmpBody = "{\"user\":\"" + userBean.getUser() + "\",\"oldArea\":\"" + oldArea + "\",\"newArea\":\"" + newArea + "\"}";
             String tmpContent = client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
             if (!isSuccess(tmpContent)) {
-                result.setResultCode(new StringResultCode("区域名称修改失败请重试"));
+                String msg = getMessage(tmpContent);
+                if(StringUtil.isBlank(msg)) {
+                    msg = "区域名称修改失败请重试";
+                }
+                result.setResultCode(new StringResultCode(msg));
                 return result;
             }
 
@@ -636,10 +669,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			
 			// 1.设置区域
 			if(!StringUtil.isBlank(deviceBean.getArea())) {
-				Map<String, String> tmpMap = new HashMap<String, String>();
-				tmpMap.put("TYPE", "setDevArea");
-				String tmpBody = JsonUtil.fields("snaddr,area", deviceBean);
-				String tmpContent = client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
+			    String tmpContent = updateDevArea(userBean.getUser(), deviceBean.getSnaddr(), deviceBean.getArea());
 				if(!isSuccess(tmpContent)) {
 					result.setResultCode(new StringResultCode("修改区域失败请重试"));
 					return result;
@@ -693,12 +723,9 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		try {
 			UserBean userBean = getUserBean(flowData);
 			List<String> areaList = getAllArea(userBean);
-			Map<String, String> headerMap = new HashMap<String, String>();
-			headerMap.put("TYPE", "getDevInfo");
 			DeviceBean deviceBean = new DeviceBean();
 			deviceBean.setSnaddr(snaddr);
-			String body = JsonUtil.fields("snaddr", deviceBean);
-			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			String content = getDevInfo(userBean.getUser(), snaddr);
 			if (!isSuccess(content)) {
 				result.setResultCode(new StringResultCode("当前参数错误"));
 				return result;
@@ -728,10 +755,8 @@ public class UserAOImpl extends BaseAO implements UserAO {
 	public Result doEditDevice(FlowData flowData, DeviceBean deviceBean) {
 		Result result = new ResultSupport(false);
 		try {
-			Map<String, String> headerMap = new HashMap<String, String>();
-			headerMap.put("TYPE", "getDevInfo");
-			String body = JsonUtil.fields("snaddr", deviceBean);
-			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+		    UserBean userBean = getUserBean(flowData);
+		    String content = getDevInfo(userBean.getUser(), deviceBean.getSnaddr());
 			if (!isSuccess(content)) {
 				result.setResultCode(new StringResultCode("当前参数错误"));
 				return result;
@@ -740,10 +765,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 
 			// 1.修改区域
 			if(!StringUtil.isBlank(deviceBean.getArea()) && !deviceBean.getArea().equals(fromDBDeviceBean.getArea())) {
-				Map<String, String> tmpMap = new HashMap<String, String>();
-				tmpMap.put("TYPE", "setDevArea");
-				String tmpBody = JsonUtil.fields("snaddr,area", deviceBean);
-				String tmpContent = client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
+			    String tmpContent = updateDevArea(userBean.getUser(), deviceBean.getSnaddr(), deviceBean.getArea());
 				if(!isSuccess(tmpContent)) {
 					result.setResultCode(new StringResultCode("修改区域失败请重试"));
 					return result;
@@ -752,10 +774,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			
 			// 2.修改设备名称
 			if(!StringUtil.isBlank(deviceBean.getDevName()) && !deviceBean.getDevName().equals(fromDBDeviceBean.getDevName())) {
-				Map<String, String> tmpMap = new HashMap<String, String>();
-				tmpMap.put("TYPE", "setDevName");
-				String tmpBody = JsonUtil.fields("snaddr,devName", deviceBean);
-				String tmpContent = client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
+			    String tmpContent = setDevName(userBean.getUser(), deviceBean.getSnaddr(), deviceBean.getDevName());
 				if(!isSuccess(tmpContent)) {
 					result.setResultCode(new StringResultCode("修改设备名称失败请重试"));
 					return result;
@@ -766,7 +785,11 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			if(!StringUtil.isBlank(deviceBean.getDevGap()) && !deviceBean.getDevGap().equals(fromDBDeviceBean.getDevGap())) {
 				Map<String, String> tmpMap = new HashMap<String, String>();
 				tmpMap.put("TYPE", "modifyDeviceGap");
-				String tmpBody = JsonUtil.fields("snaddr,devGap", deviceBean);
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("user", userBean.getUser());
+				map.put("snaddr", deviceBean.getSnaddr());
+				map.put("devGap", deviceBean.getDevGap());
+				String tmpBody = JsonUtil.mapToJson(map);
 				String tmpContent = client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
 				if(!isSuccess(tmpContent)) {
 					result.setResultCode(new StringResultCode("修改设备上传间隔失败请重试"));
@@ -778,8 +801,10 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			DeviceExtendBean deviceExtendBean = getDeviceExtendInfo(deviceBean);
 			if(deviceBean.getDeviceExtendBean().isDataChange(deviceExtendBean)) {
 				Map<String, String> tmpMap = new HashMap<String, String>();
+				deviceBean.setUser(userBean.getUser());
+				deviceBean.getDeviceExtendBean().setUser(deviceBean.getUser());
 				tmpMap.put("TYPE", "modifyTH");
-				String tmpBody = JsonUtil.fields("snaddr,maxTemp,minTemp,maxHumi,minHumi,tempHC,humiHC", deviceBean.getDeviceExtendBean());
+				String tmpBody = JsonUtil.fields("snaddr,user,maxTemp,minTemp,maxHumi,minHumi,tempHC,humiHC", deviceBean.getDeviceExtendBean());
 				String tmpContent = client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
 				if(!isSuccess(tmpContent)) {
 					result.setResultCode(new StringResultCode("修改设备温湿度上下限信息失败请重试"));
@@ -791,11 +816,12 @@ public class UserAOImpl extends BaseAO implements UserAO {
 
 		} catch (Exception e) {
 			log.error("doEditDeviceError", e);
+			e.printStackTrace();
 		}
 		return result;
 	}
 	
-	@Override
+    @Override
 	public Result deleteDevice(FlowData flowData, String snaddr) {
 		Result result = new ResultSupport(false);
 		try {
@@ -803,15 +829,11 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			DeviceBean deviceBean = new DeviceBean();
 			deviceBean.setUser(userBean.getUser());
 			deviceBean.setSnaddr(snaddr);
-
-			Map<String, String> headerMap = new HashMap<String, String>();
-			headerMap.put("TYPE", "getDevInfo");
-			String body = JsonUtil.fields("snaddr", deviceBean);
-			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			String content = getDevInfo(deviceBean.getUser(), deviceBean.getSnaddr());
 			if (isSuccess(content)) {
-				headerMap = new HashMap<String, String>();
+			    Map<String, String> headerMap = new HashMap<String, String>();
 				headerMap.put("TYPE", "delDevice");
-				body = JsonUtil.fields("snaddr,user", deviceBean);
+				String body = JsonUtil.fields("snaddr,user", deviceBean);
 				content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 				if (!isSuccess(content)) {
 					result.setResultCode(new StringResultCode("删除失败，确保拥有权限"));
@@ -915,7 +937,12 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		headerMap.put("TYPE", "getThreshold");
 		String body = JsonUtil.fields("snaddr", deviceBean);
 		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-		return JsonUtil.jsonToBean(content, DeviceExtendBean.class);
+		if(!isSuccess(content)) {
+		   return null; 
+		}
+		JSONObject jsonObject = JsonUtil.getJsonObject(content);
+		JSONObject json = JsonUtil.getJSONObject(jsonObject, "array");
+		return JsonUtil.jsonToBean(json.toString(), DeviceExtendBean.class);
 	}
 	
 
@@ -956,34 +983,35 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			headerMap.put("TYPE", "getAccountErr");
 			String body = JsonUtil.fields("user", userBean);
 			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-			JSONArray array = JsonUtil.getJsonArray(content);
-			List<DeviceBean> deviceBeanList = CollectionUtils.newArrayList(array.length());
-
-			JSONObject json = null;
-			JSONArray alarmArray = null;
-			AlarmBean alarmBean = null;
-			DeviceBean bean = null;
 			Date lastAlarmTime = requestTime;
-            for (int i = 0, size = array.length(); i < size; i++) {
-                json = array.getJSONObject(i);
-                if (json == null) {
-                    continue;
-                }
-                bean = new DeviceBean();
-                bean.setSnaddr(JsonUtil.getString(json, "snaddr", null));
-                bean.setDevName(JsonUtil.getString(json, "devName", null));
-                bean.setArea(JsonUtil.getString(json, "area", null));
-                alarmArray = json.getJSONArray("detail");
+			List<DeviceBean> deviceBeanList = null;
+            if (isSuccess(content)) {
+                JSONObject mainJson = JsonUtil.getJsonObject(content);
+                JSONArray array = JsonUtil.getJsonArray(mainJson, "array");
+                deviceBeanList = CollectionUtils.newArrayList(array.length());
+                JSONObject json = null;
+                JSONArray alarmArray = null;
+                AlarmBean alarmBean = null;
+                DeviceBean bean = null;
+                for (int i = 0, size = array.length(); i < size; i++) {
+                    json = array.getJSONObject(i);
+                    if (json == null) {
+                        continue;
+                    }
+                    bean = new DeviceBean();
+                    bean.setSnaddr(JsonUtil.getString(json, "snaddr", null));
+                    bean.setDevName(JsonUtil.getString(json, "devName", null));
+                    bean.setArea(JsonUtil.getString(json, "area", null));
+                    alarmArray = json.getJSONArray("detail");
 
-                for (int j = 0, alarmLenth = alarmArray.length(); j < alarmLenth; j++) {
-                    alarmBean = JsonUtil.jsonToBean(alarmArray.getJSONObject(j).toString(), AlarmBean.class);
-//                    if (alarmBean.isBegin()) {
+                    for (int j = 0, alarmLenth = alarmArray.length(); j < alarmLenth; j++) {
+                        alarmBean = JsonUtil.jsonToBean(alarmArray.getJSONObject(j).toString(), AlarmBean.class);
                         // 过滤时间不符合条件的数据
                         if (alarmBean.isDateAfter(requestTime)) {
                             bean.setAlarmBean(alarmBean);
                             deviceBeanList.add(bean);
                         }
-//                    }
+                    }
                 }
             }
 			

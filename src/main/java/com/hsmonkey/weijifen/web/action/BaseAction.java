@@ -43,7 +43,11 @@ public class BaseAction {
 	
 //	protected static final String API_URL = "http://42.121.53.218:2500";
 //	protected static final String API_URL = "http://api.eefield.com:2500";
-	protected static final String API_URL = "http://api.eefield.com/";
+
+	// 新的接口地址
+	protected static final String API_URL = "http://api.eefield.com:2501/";
+	// 老的接口地址
+	protected static final String API_URL_OLD = "http://api.eefield.com/";
 	
 	//电子邮件    
 	 private static final String EMAIL_PATTEN = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";    

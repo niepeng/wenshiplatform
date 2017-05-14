@@ -32,6 +32,49 @@ public class BaseAO extends BaseAction {
 		return JsonUtil.getInt(json, "code", -1) == 0;
 	}
 	
+    protected int getCode(String content) {
+        JSONObject json = JsonUtil.getJsonObject(content);
+        return JsonUtil.getInt(json, "code", -1);
+    }
+    
+    protected String getMessage(String content) {
+        JSONObject json = JsonUtil.getJsonObject(content);
+        return JsonUtil.getString(json, "msg", null);
+    }
+	
+	protected String getDevInfo(String user, String snaddr) {
+        Map<String, String> headerMap = new HashMap<String, String>();
+        headerMap.put("TYPE", "getDevInfo");
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("user", user);
+        map.put("snaddr", snaddr);
+        String body = JsonUtil.mapToJson(map);
+        return client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+    }
+	
+	protected String setDevName(String user, String snaddr, String devName) {
+        Map<String, String> tmpMap = new HashMap<String, String>();
+        tmpMap.put("TYPE", "setDevName");
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("user", user);
+        map.put("snaddr", snaddr);
+        map.put("devName", devName);
+        String tmpBody = JsonUtil.mapToJson(map);
+        return client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
+    }
+	
+	protected String updateDevArea(String user, String snaddr, String area) {
+	    Map<String, String> tmpMap = new HashMap<String, String>();
+        tmpMap.put("TYPE", "setDevArea");
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("user", user);
+        map.put("snaddr", snaddr);
+        map.put("area", area);
+        String tmpBody = JsonUtil.mapToJson(map);
+        return client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
+    }
+	
 	protected String loginCall(String user, String psw, boolean isPswAlreadyMd5) {
 		UserBean userBean = new UserBean();
 		userBean.setUser(user);
@@ -57,7 +100,11 @@ public class BaseAO extends BaseAction {
 		headerMap.put("TYPE", "getAllDevice");
 		String body = JsonUtil.fields("user", userBean);
 		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-		JSONArray array = JsonUtil.getJsonArray(content);
+		if(!isSuccess(content)) {
+		    return null;
+		}
+		JSONObject mainJson =  JsonUtil.getJsonObject(content);
+		JSONArray array = JsonUtil.getJsonArray(mainJson, "array");
 		try {
 			if (array != null) {
 				JSONObject jsonObject = null;
@@ -80,7 +127,12 @@ public class BaseAO extends BaseAction {
 		headerMap.put("TYPE", "getAreaInfo");
 		String body = JsonUtil.fields("user", userBean);
 		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-		JSONArray array = JsonUtil.getJsonArray(content);
+		if(!isSuccess(content)) {
+            return null;
+        }
+        JSONObject mainJson =  JsonUtil.getJsonObject(content);
+        JSONArray array = JsonUtil.getJsonArray(mainJson, "array");
+//		JSONArray array = JsonUtil.getJsonArray(content);
 		try {
 			if (array != null) {
 				for (int i = 0, size = array.length(); i < size; i++) {
@@ -112,10 +164,11 @@ public class BaseAO extends BaseAction {
 		 *  "abnormal": "0"
 		 *  }
 		 */
-		JSONObject json = JsonUtil.getJsonObject(content);
-		if(json == null) {
-			return null;
+		JSONObject jsonObject = JsonUtil.getJsonObject(content);
+		if(!isSuccess(content)) {
+		   return null; 
 		}
+		JSONObject json = JsonUtil.getJSONObject(jsonObject, "array");
 		DeviceDataBean dataBean = new DeviceDataBean();
 		dataBean.setAbnormal(JsonUtil.getString(json, "abnormal", null));
 		dataBean.setTime(JsonUtil.getString(json, "time", null));

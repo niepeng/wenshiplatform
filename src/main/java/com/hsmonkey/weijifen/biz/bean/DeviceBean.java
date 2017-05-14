@@ -19,7 +19,7 @@ public class DeviceBean {
 	// ac码
 	private String ac;
 	
-	// 权限,暂不使用
+	// 权限,0：没有权限，1有权限
 	private int authority;
 	
 	// 设备名称

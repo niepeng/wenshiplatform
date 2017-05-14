@@ -35,10 +35,10 @@ public class User extends BaseAction {
 	private UserAO userAO;
 
 	public void login(FlowData flowData, Context context) {
-		if (checkUserSession(flowData, context)) {
-			flowData.redirectTo("userModule", "index");
-			return;
-		}
+//		if (checkUserSession(flowData, context)) {
+//			flowData.redirectTo("userModule", "index");
+//			return;
+//		}
 	}
 
 	@Action(defaultTarget="user/login")
