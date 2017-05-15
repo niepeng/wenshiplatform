@@ -57,6 +57,11 @@ public class DeviceBean {
 		return devName;
 	}
 
+	
+	public boolean hasAuth() {
+	    return authority == 1;
+	}
+	
 	// -------------- setter/getter -----------------------
 
 	
