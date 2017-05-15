@@ -45,7 +45,8 @@ public class BaseAction {
 //	protected static final String API_URL = "http://api.eefield.com:2500";
 
 	// 新的接口地址
-	protected static final String API_URL = "http://api.eefield.com:2501/";
+//	protected static final String API_URL = "http://api.eefield.com:2501/";
+	protected static final String API_URL = "http://api.eefield.com:2500/";
 	// 老的接口地址
 	protected static final String API_URL_OLD = "http://api.eefield.com/";
 	
