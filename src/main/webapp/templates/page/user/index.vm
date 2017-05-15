@@ -173,6 +173,7 @@
 	
 	<script type="text/javascript">
 		 window.setInterval(reloadPage, 5 * 60 * 1000);
+		// window.setInterval(reloadPage, 60 * 1000);
         function reloadPage()
         {
         	document.form11.submit();
