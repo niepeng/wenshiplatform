@@ -59,7 +59,7 @@
                     	
                       </form>
 					  
-					  <div id="container" style="min-width:400px;height:400px"></div>
+					  <div id="container" style="min-width:400px;height:650px"></div>
 
 					  
                           
@@ -165,9 +165,9 @@
         }
 
 	</script>
-	<div class="container-fluid footer" role="footer">
-		$widget.setTemplate('foot')
-	</div>
+	<!--
+	foot
+	-->
 
 	<script>
 	$(function () {
