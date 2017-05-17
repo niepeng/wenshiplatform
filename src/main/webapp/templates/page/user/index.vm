@@ -1,5 +1,14 @@
-	
+`
+<style>
+	.more_text_not_show {
+		float:left;
+    width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+	}
 
+</style>
 
 		$widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('message',$message)
 	<div class="container-fluid">
@@ -111,8 +120,8 @@
 				
 				#foreach($bean in $beanList)
 				 <div class="panel panel-info" style="width:200px;float:left;margin-right:20px;">
-    					<div class="panel-heading">
-    						<tt>${bean.devName}#if("${bean.area}" != "")(${bean.area})#end</tt>
+    					<div class="panel-heading" style="padding-bottom: 25px;">
+    						<div class="more_text_not_show">${bean.devName}#if("${bean.area}" != "")(${bean.area})#end</div>
 							#if($bean.dataBean.isSuccess())
 								<tt style="float:right;" class="circle-success"></tt>
 							#elseif($bean.dataBean.isNotConnection())
