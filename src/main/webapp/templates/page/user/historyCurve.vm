@@ -172,8 +172,12 @@
 	<script>
 	$(function () {
     $('#container').highcharts({
-        chart: {
-            zoomType: 'xy'
+      credits: {
+        enabled: false
+      },
+      chart: {
+            // zoomType: 'xy'
+            zoomType: 'x'
         },
         title: {
             text: '($!devName)温湿度历史曲线数据'
