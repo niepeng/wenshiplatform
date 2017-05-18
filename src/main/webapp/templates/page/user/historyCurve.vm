@@ -180,7 +180,7 @@
             zoomType: 'x'
         },
         title: {
-            text: '($!devName)温湿度历史曲线数据'
+            text: '($!devName)温湿度历史曲线数据<br/>($!deviceDataBean.startTime 至 $!deviceDataBean.endTime)'
         },
         subtitle: {
             text: '成前科技-云平台'
