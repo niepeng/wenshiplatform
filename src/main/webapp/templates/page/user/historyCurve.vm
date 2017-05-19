@@ -184,7 +184,7 @@
           text: '温湿度历史曲线<br/>$currentBean.area -- $!devName($currentBean.snaddr)<br/>'
         },
         subtitle: {
-            text: '时间间隔：$!{deviceDataBean.rangeTime}分钟 时间段：$!deviceDataBean.startTime - $!deviceDataBean.endTime'
+            text: '时间间隔：$!{deviceDataBean.rangeTime}分钟 <br/> $!deviceDataBean.startTime - $!deviceDataBean.endTime'
         },
         xAxis: [{
             //categories: ['一月', '二月', '三月', '四月', '五月', '六月',
