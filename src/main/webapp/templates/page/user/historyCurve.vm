@@ -187,7 +187,7 @@
             text: '时间间隔：$!{deviceDataBean.rangeTime}分钟 时间段:$!deviceDataBean.startTime - $!deviceDataBean.endTime'
         },
 
-
+			  // 导出图片设置大小
         exporting: {
 					sourceWidth: 1000,
 					sourceHeight: 600,
