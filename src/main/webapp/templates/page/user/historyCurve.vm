@@ -35,8 +35,9 @@
                                         <div class="col-lg-10 col-sm-10 col-xs-12">
 											
 											<select name="snaddr" style="padding-right:10px;float:left;height:35px;margin-right:20px;">
+
 												#foreach($bean in $beanList)
-												 <option value="$!bean.snaddr" #if($!deviceDataBean.snaddr == $bean.snaddr) #set($devName = $bean.devName) selected #end>$!bean.devName</option>
+												 <option value="$!bean.snaddr" #if($!deviceDataBean.snaddr == $bean.snaddr) #set($devName = $bean.devName) #set($currentBean = $bean ) selected #end>$!bean.devName</option>
 												#end
 											</select>
 											<select name="rangeTime" id="rangeTime" style="padding-right:10px;float:left;height:35px;margin-right:20px;">
@@ -180,10 +181,10 @@
             zoomType: 'x'
         },
         title: {
-            text: '($!devName)温湿度历史曲线数据<br/>($!deviceDataBean.startTime 至 $!deviceDataBean.endTime)'
+          text: '温湿度历史曲线<br/>$currentBean.area -- $!devName($currentBean.snaddr)<br/>'
         },
         subtitle: {
-            text: '成前科技-云平台'
+            text: '时间间隔：$!{deviceDataBean.rangeTime}分钟 时间段：$!deviceDataBean.startTime - $!deviceDataBean.endTime'
         },
         xAxis: [{
             //categories: ['一月', '二月', '三月', '四月', '五月', '六月',
