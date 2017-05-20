@@ -101,7 +101,7 @@ public class BaseAO extends BaseAction {
 		String body = JsonUtil.fields("user", userBean);
 		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 		if(!isSuccess(content)) {
-		    return null;
+		    return result;
 		}
 		JSONObject mainJson =  JsonUtil.getJsonObject(content);
 		JSONArray array = JsonUtil.getJsonArray(mainJson, "array");

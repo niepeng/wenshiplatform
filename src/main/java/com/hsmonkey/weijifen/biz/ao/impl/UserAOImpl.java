@@ -156,6 +156,15 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			List<DeviceBean> beanList = getAllDevice(userBean);
 			List<String> areaList = getAllArea(userBean);
 
+			if(CollectionUtils.isEmpty(beanList)) {
+				result.getModels().put("beanList", beanList);
+				result.getModels().put("userBean", userBean);
+				result.getModels().put("areaList", areaList);
+				result.getModels().put("area", area);
+				result.setSuccess(true);
+				return result;
+			}
+
 			if(!CollectionUtils.isEmpty(beanList) && !CollectionUtils.isEmpty(areaList) && !StringUtil.isBlank(area)) {
 				for (int i = 0; i < beanList.size();) {
 					if (area.equals(beanList.get(i).getArea())) {
