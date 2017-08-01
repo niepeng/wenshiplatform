@@ -179,7 +179,11 @@ public class BaseAO extends BaseAction {
 		JSONObject tempJson = JsonUtil.getJSONObject(json, "temp");
 		dataBean.setTemp(JsonUtil.getString(tempJson, "value", null));
 		dataBean.setTempStatus(ChangeUtil.str2int(JsonUtil.getString(tempJson, "status", null)));
-		
+
+		JSONObject pressJson = JsonUtil.getJSONObject(json, "press");
+		dataBean.setPress(JsonUtil.getString(pressJson, "value", null));
+		dataBean.setPressStatus(ChangeUtil.str2int(JsonUtil.getString(pressJson, "status", null)));
+
 		return dataBean;
 	}
 

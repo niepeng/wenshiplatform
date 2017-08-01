@@ -18,13 +18,23 @@ public class Device extends BaseAction {
 	
 	private ApiAO apiAO;
 
+	// 设备列表
 	public void list(FlowData flowData, Context context) {
 		String accessToken = flowData.getParameters().getString("accessToken");
 		Result result = apiAO.getDeviceList(flowData, accessToken);
 		handleApiResult(result, flowData, context);
 	}
-	
+
+	// 实时数据
 	public void intimeData(FlowData flowData, Context context) {
+		String accessToken = flowData.getParameters().getString("accessToken");
+		String snaddrs = flowData.getParameters().getString("snaddrs");
+		Result result = apiAO.intimeData(flowData, accessToken, snaddrs);
+		handleApiResult(result, flowData, context);
+	}
+
+	// 实时数据包含大气压接口
+	public void intimeDataHasPress(FlowData flowData, Context context) {
 		String accessToken = flowData.getParameters().getString("accessToken");
 		String snaddrs = flowData.getParameters().getString("snaddrs");
 		Result result = apiAO.intimeData(flowData, accessToken, snaddrs);

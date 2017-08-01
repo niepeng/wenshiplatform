@@ -22,7 +22,13 @@ public class DeviceDataBean {
 	
 	// -1为低于阈值下限，0为正常处于阈值内，1超出最高阈值
 	private int tempStatus;
-	
+
+	// 大气压
+	private String press;
+
+	// 大气压的状态
+	private int pressStatus;
+
 	// 开关量
 	private String in1;
 	
@@ -143,5 +149,20 @@ public class DeviceDataBean {
 	public void setRangeTime(String rangeTime) {
 		this.rangeTime = rangeTime;
 	}
-	
+
+	public String getPress() {
+		return press;
+	}
+
+	public void setPress(String press) {
+		this.press = press;
+	}
+
+	public int getPressStatus() {
+		return pressStatus;
+	}
+
+	public void setPressStatus(int pressStatus) {
+		this.pressStatus = pressStatus;
+	}
 }
