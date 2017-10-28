@@ -33,6 +33,9 @@ public class DeviceBean {
 	
 	// 曲线,固定暂时没有使用
 	private String curve = "allLast";
+
+	// 0表示关闭实时开关蜂鸣器报警，1表示打开实时开关蜂鸣器报警
+	private String beepStatus;
 	
 	// -------------- extend attribute --------------------
 	
@@ -47,6 +50,8 @@ public class DeviceBean {
 	private AlarmBean alarmBean;
 	
 	private String user;
+
+	private String newUser;
 	
 	// -------------- normal method -----------------------
 	
@@ -169,5 +174,20 @@ public class DeviceBean {
 	public void setAlarmBean(AlarmBean alarmBean) {
 		this.alarmBean = alarmBean;
 	}
-	
+
+	public String getNewUser() {
+		return newUser;
+	}
+
+	public void setNewUser(String newUser) {
+		this.newUser = newUser;
+	}
+
+	public String getBeepStatus() {
+		return beepStatus;
+	}
+
+	public void setBeepStatus(String beepStatus) {
+		this.beepStatus = beepStatus;
+	}
 }

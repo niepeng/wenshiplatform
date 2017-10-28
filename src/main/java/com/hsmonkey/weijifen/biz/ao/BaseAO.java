@@ -1,5 +1,6 @@
 package com.hsmonkey.weijifen.biz.ao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +75,59 @@ public class BaseAO extends BaseAction {
         String tmpBody = JsonUtil.mapToJson(map);
         return client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
     }
-	
+
+	// 获取账号中的手机列表
+	public List<String> getAccountMobileList(String user) {
+		List<String> list = new ArrayList<>();
+		Map<String, String> headerMap = new HashMap<String, String>();
+		headerMap.put("TYPE", "getAccountMobileList");
+		DeviceBean bean = new DeviceBean();
+		bean.setUser(user);
+		String body = JsonUtil.fields("user", bean);
+		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+		if (!isSuccess(content)) {
+			return list;
+		}
+		JSONObject json = JsonUtil.getJsonObject(content);
+		JSONArray jsonArray = JsonUtil.getJsonArray(json, "mobileList");
+		try {
+			if (jsonArray != null && jsonArray.length() > 0) {
+				for (int i = 0, size = jsonArray.length(); i < size; i++) {
+					list.add(jsonArray.getString(i));
+				}
+			}
+		} catch (Exception e) {
+		}
+		return list;
+	}
+
+	// 获取设备关联的接收短信报警的手机号
+	public List<String> deviceSmsPhones(String snaddr, String user) {
+		List<String> list = new ArrayList<>();
+		Map<String, String> headerMap = new HashMap<String, String>();
+		headerMap.put("TYPE", "getDeviceMobileList");
+		DeviceBean bean = new DeviceBean();
+		bean.setSnaddr(snaddr);
+		bean.setUser(user);
+		String body = JsonUtil.fields("snaddr,user", bean);
+		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+		if (!isSuccess(content)) {
+			return list;
+		}
+		JSONObject json = JsonUtil.getJsonObject(content);
+		JSONArray jsonArray = JsonUtil.getJsonArray(json, "deviceMobileList");
+		try {
+			if (jsonArray != null && jsonArray.length() > 0) {
+				for (int i = 0, size = jsonArray.length(); i < size; i++) {
+					list.add(jsonArray.getString(i));
+				}
+			}
+		} catch (Exception e) {
+		}
+		return list;
+	}
+
+
 	protected String loginCall(String user, String psw, boolean isPswAlreadyMd5) {
 		UserBean userBean = new UserBean();
 		userBean.setUser(user);

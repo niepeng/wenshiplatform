@@ -22,12 +22,14 @@
 					<ul>    
                         <li><a href="$userModule.setTarget('deviceList')">设备管理</a></li>    
                         <li><a href="$userModule.setTarget('areaList')">区域管理</a></li>    
-                    </ul>  
+                        <li><a href="$userModule.setTarget('alarmManage')">报警设置</a></li>
+                    </ul>
 				</li>
 				<li #if($checkIndex == 3) class="active" #end><a href="$userModule.setTarget('bindMail')">账户管理</a>
 					<ul>    
-                        <li><a href="$userModule.setTarget('bindMail')">绑定邮箱</a></li>    
-                        <li><a href="$userModule.setTarget('updatePsw')">修改密码</a></li>    
+                        <li><a href="$userModule.setTarget('showUserDetail')">个人账户</a></li>
+                        <li><a href="$userModule.setTarget('bindMail')">绑定邮箱</a></li>
+                        <li><a href="$userModule.setTarget('updatePsw')">修改密码</a></li>
                         <li><a href="$userModule.setTarget('loginOut')" onclick="javascript:return confirm('确定要退出吗？');">退出</a></li>    
                     </ul>  
 				</li>
@@ -48,7 +50,7 @@
 #if($!message)
 <div class="panel panel-default" style = "text-align:center">
     	<div class="panel-heading clearfix">
-    			<label class="checkbox-inline" style="padding-top:0">$!message</label> 
+    			<label class="checkbox-inline" style="padding-top:0">$!message</label>
     				<span class="pull-right"></span>
     		   </div>
 </div>

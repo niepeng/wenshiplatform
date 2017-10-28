@@ -1,0 +1,99 @@
+
+<script type="text/javascript" src="$staticServer/js/weijifen/datepicker/WdatePicker.js"></script>
+
+
+$widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('checkIndex','3').addToContext('message',$message)
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="" style="margin-left:50px;">
+
+      <div id="ul_score">
+        <ul class="nav nav-tabs">
+          <li  class="active"><a href="#">个人信息</a></li>
+        </ul>
+      </div>
+
+
+      <div id="main_score">
+
+        <form id="reply-form" class="form-horizontal form ng-pristine ng-valid" action="" method="post">
+
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  &nbsp;&nbsp;
+                  <tt style="color:red;">$!msg</tt>
+                </div>
+
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <div class="form-group">
+                      <div class="col-sm-6 col-md-8 col-xs-12">
+
+                        <span class="help-block"></span>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+                        <tt id="">
+                          用户: ${userBean.user}
+                          <br>
+                        </tt>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+                        <tt id="">
+                          账户余额: ${money} 元
+                          <br>
+                        </tt>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+                        <tt id="">
+                          剩余短信条数: ${remain} 条
+                          <br>
+                        </tt>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+                        <tt id="">
+                          已发短信条数: ${count} 条
+                          <br>
+                        </tt>
+                      </div>
+                    </div>
+
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+
+        </form>
+
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+</script>
+<div id="footerForFootId" class="container-fluid footer" role="footer">
+  $widget.setTemplate('foot')
+</div>
+
+

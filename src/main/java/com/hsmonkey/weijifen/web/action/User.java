@@ -274,7 +274,144 @@ public class User extends BaseAction {
 		Result result = userAO.viewEditDevice(flowData, snaddr);
 		handleResult(result, flowData, context);
 	}
-	
+
+	public void permissionDevice(FlowData flowData, Context context) {
+		if (!checkUserSessionNeedRedrect(flowData, context)) {
+			return;
+		}
+		String snaddr = flowData.getParameters().getString("snaddr");
+		Result result = userAO.viewPermissionDevice(flowData, snaddr);
+		handleResult(result, flowData, context);
+	}
+
+	public void alarmDevice(FlowData flowData, Context context) {
+		if (!checkUserSessionNeedRedrect(flowData, context)) {
+			return;
+		}
+		String snaddr = flowData.getParameters().getString("snaddr");
+		Result result = userAO.viewAlarmDevice(flowData, snaddr);
+		handleResult(result, flowData, context);
+	}
+
+	public void doAlarmDevice(FlowData flowData, Context context) {
+		if (!checkUserSessionNeedRedrect(flowData, context)) {
+			return;
+		}
+		String snaddr = flowData.getParameters().getString("snaddr");
+		String[] smsPhones = flowData.getParameters().getStringArray("smsPhones");
+		int hummer = flowData.getParameters().getInt("hummer");
+		Result result = userAO.doAlarmDevice(flowData, snaddr, smsPhones, hummer == 1 ? true : false);
+		if (result.isSuccess()) {
+			flowData.redirectTo("userModule", "deviceList").param("msg", urlEncode("操作成功"));
+			return;
+		}
+
+		String str = "操作失败";
+		if (result.getResultCode() != null) {
+			str = result.getResultCode().getMessage();
+		}
+		flowData.redirectTo("userModule", "deviceList").param("msg", urlEncode(str));
+	}
+
+	public void alarmManage(FlowData flowData, Context context) {
+		if (!checkUserSessionNeedRedrect(flowData, context)) {
+			return;
+		}
+		String msg = urlDecode(flowData.getParameters().getString("msg"));
+		String alarmPhoneMsg = urlDecode(flowData.getParameters().getString("alarmPhoneMsg"));
+		String alarmTotalMenuMsg = urlDecode(flowData.getParameters().getString("alarmTotalMenuMsg"));
+		String detailAlarmMsg = urlDecode(flowData.getParameters().getString("detailAlarmMsg"));
+
+		Result result = userAO.alarmManage(flowData);
+		context.put("msg", msg);
+		context.put("alarmPhoneMsg", alarmPhoneMsg);
+		context.put("alarmTotalMenuMsg", alarmTotalMenuMsg);
+		context.put("detailAlarmMsg", detailAlarmMsg);
+		handleResult(result, flowData, context);
+	}
+
+	public void doAddAlarmPhone(FlowData flowData, Context context) {
+		String phone = flowData.getParameters().getString("phone");
+		Result result = userAO.doAddAlarmPhone(flowData, phone);
+		if (result.isSuccess()) {
+			flowData.redirectTo("userModule", "alarmManage").param("alarmPhoneMsg", urlEncode("操作成功"));
+			return;
+		}
+
+		String str = "操作失败";
+		if (result.getResultCode() != null) {
+			str = result.getResultCode().getMessage();
+		}
+		flowData.redirectTo("userModule", "alarmManage").param("alarmPhoneMsg", urlEncode(str));
+	}
+
+
+	public void deleteAlarmPhone(FlowData flowData, Context context) {
+		String phone = flowData.getParameters().getString("phone");
+		Result result = userAO.deleteAlarmPhone(flowData, phone);
+		if (result.isSuccess()) {
+			flowData.redirectTo("userModule", "alarmManage").param("alarmPhoneMsg", urlEncode("操作成功"));
+			return;
+		}
+
+		String str = "操作失败";
+		if (result.getResultCode() != null) {
+			str = result.getResultCode().getMessage();
+		}
+		flowData.redirectTo("userModule", "alarmManage").param("alarmPhoneMsg", urlEncode(str));
+	}
+
+	public void optAlarmTotalMenu(FlowData flowData, Context context) {
+		int open = flowData.getParameters().getInt("alarmTotal");
+		Result result = userAO.optAlarmTotalMenu(flowData, open == 1 ? true : false);
+		if (result.isSuccess()) {
+			flowData.redirectTo("userModule", "alarmManage").param("alarmTotalMenuMsg", urlEncode("操作成功"));
+			return;
+		}
+
+		String str = "操作失败";
+		if (result.getResultCode() != null) {
+			str = result.getResultCode().getMessage();
+		}
+		flowData.redirectTo("userModule", "alarmManage").param("alarmTotalMenuMsg", urlEncode(str));
+	}
+
+	public void optDetailAlarm(FlowData flowData, Context context) {
+		Result result = userAO.optDetailAlarm(flowData);
+		if (result.isSuccess()) {
+			flowData.redirectTo("userModule", "alarmManage").param("detailAlarmMsg", urlEncode("操作成功"));
+			return;
+		}
+
+		String str = "操作失败";
+		if (result.getResultCode() != null) {
+			str = result.getResultCode().getMessage();
+		}
+		flowData.redirectTo("userModule", "alarmManage").param("detailAlarmMsg", urlEncode(str));
+	}
+
+
+	public void doOptPermissionDevice(FlowData flowData, Context context) {
+		if (!checkUserSessionNeedRedrect(flowData, context)) {
+			return;
+		}
+
+		String snaddr = flowData.getParameters().getString("snaddr");
+		String newUser = flowData.getParameters().getString("newUser");
+		Result result = userAO.doOptPermissionDevice(flowData, snaddr, newUser);
+		if (result.isSuccess()) {
+			flowData.redirectTo("userModule", "deviceList").param("msg", urlEncode("操作成功"));
+			return;
+		}
+
+		String str = "操作失败";
+		if (result.getResultCode() != null) {
+			str = result.getResultCode().getMessage();
+		}
+		flowData.redirectTo("userModule", "deviceList").param("msg", urlEncode(str));
+	}
+
+
     public void doEditArea(FlowData flowData, Context context) {
         if (!checkUserSessionNeedRedrect(flowData, context)) {
             return;
@@ -414,6 +551,15 @@ public class User extends BaseAction {
 		String user = flowData.getParameters().getString("user");
 		Result result = userAO.jsonRecentlyAlarmList(flowData, user, requestTime);
 		handleJsonResult(result, flowData, context);
+	}
+
+	public void showUserDetail(FlowData flowData, Context context) {
+		if (!checkUserSessionNeedRedrect(flowData, context)) {
+			return;
+		}
+
+		Result result = userAO.showUserDetail(flowData);
+		handleResult(result, flowData, context);
 	}
 	
 	public void setUserAO(UserAO userAO) {

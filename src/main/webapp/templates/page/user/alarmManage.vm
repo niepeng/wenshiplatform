@@ -1,0 +1,260 @@
+
+
+
+$widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('checkIndex','3').addToContext('message',$message)
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="" style="margin-left:50px;">
+
+      <div id="ul_score">
+        <ul class="nav nav-tabs">
+          <li  class="active"><a href="#">报警管理</a></li>
+        </ul>
+      </div>
+
+
+      <div id="main_score1">
+        <form id="reply-form" class="form-horizontal form ng-pristine ng-valid" action="$userModule.setTarget('doAddAlarmPhone')" onsubmit="javascript:return checkAlarmPhoneForm();" method="post">
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  &nbsp;&nbsp;报警号码管理   &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                  <tt style="color:red;">$!alarmPhoneMsg</tt>
+                </div>
+
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <div class="form-group">
+                      <div class="col-sm-6 col-md-8 col-xs-12">
+                        <span class="help-block"></span>
+                      </div>
+                    </div>
+
+
+                      <div class="form-group">
+                        <div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+                          <tt id="">
+                            添加手机号码: <input type="text" style="width:250px;display:inline;height:30px;" id="phone" name="phone" class="form-control">
+                            <br>
+                          </tt>
+                        </div>
+                      </div>
+
+
+                    <div class="form-group">
+                      <div class="col-sm-12" style="padding-left:50px;">
+                        <input name="submit" type="submit" value="添加" class="btn btn-primary col-lg-1">
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div class="col-sm-12" style="padding-left:50px;">
+                        <table class="table table-hover">
+                          <thead class="navbar-inner">
+                          <tr>
+                            <th style="width:140px;">号码</th>
+                            <th style="width:100px;">操作</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          #foreach($tmpPhone in $phoneList)
+                          <tr>
+                            <td>
+                              $tmpPhone
+                            </td>
+##                            <td><input style="float:left;" class="btn btn-primary" id="submit" name="submit" value="确认修改" type="submit"></td>
+                            <td><a href="$userModule.setTarget('deleteAlarmPhone').param('phone',$tmpPhone)" onclick="return confirm('确定要去掉 $tmpPhone 号码?');">删除</a></td>
+                          </tr>
+                          #end
+
+                          </tbody>
+                        </table>
+
+                      </div>
+                    </div>
+
+
+
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+
+
+      <div id="main_score2">
+        <form id="reply-form" class="form-horizontal form ng-pristine ng-valid" action="$userModule.setTarget('optAlarmTotalMenu')" method="post">
+          <input type="hidden" name="bindMailValue" id="bindMailValue" value="$!userBean.mail" />
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  &nbsp;&nbsp;报警总开关管理   &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                  <tt style="color:red;">$!alarmTotalMenuMsg</tt>
+                </div>
+
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <div class="form-group">
+                      <div class="col-sm-6 col-md-8 col-xs-12">
+                        <span class="help-block"></span>
+                      </div>
+                    </div>
+
+
+                    <div class="form-group">
+                      <div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+                        <tt id="">
+                          报警总开关:
+                          <input type="radio" name="alarmTotal" #if("$userBean.allAlarmStatus" == "0") checked #end value="0">关闭 &nbsp;
+                          <input type="radio" name="alarmTotal" #if("$userBean.allAlarmStatus" == "1") checked #end value="1">打开  &nbsp; &nbsp;  (其中包括:短信，邮件，语音，推送)
+                          <br>
+                        </tt>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div class="col-sm-12" style="padding-left:50px;">
+                        <input name="submit" type="submit" value="保存" class="btn btn-primary col-lg-1">
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+    #if("$userBean.allAlarmStatus" == "1")
+      <div id="main_score3">
+        <form id="reply-form" class="form-horizontal form ng-pristine ng-valid" action="$userModule.setTarget('optDetailAlarm')" method="post">
+          <input type="hidden" name="bindMailValue" id="bindMailValue" value="$!userBean.mail" />
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  &nbsp;&nbsp;报警开关管理   &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                  <tt style="color:red;">$!detailAlarmMsg</tt>
+                </div>
+
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <div class="form-group">
+                      <div class="col-sm-6 col-md-8 col-xs-12">
+                        <span class="help-block"></span>
+                      </div>
+                    </div>
+
+
+                    <div class="form-group">
+                      <div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+                        <tt id="">
+                          在线离线报警: <br/>
+                          &nbsp; &nbsp; App推送:
+                                    <input type="radio" name="state_push" #if("$userBean.state_push" == "0") checked #end value="0">关闭 &nbsp;
+                                    <input type="radio" name="state_push" #if("$userBean.state_push" == "1") checked #end value="1">打开  &nbsp; &nbsp;
+                          <br>
+
+                        </tt>
+                        <tt id="">
+                          &nbsp; &nbsp;  短信通知:
+                                    <input type="radio" name="state_msm" #if("$userBean.state_msm" == "0") checked #end value="0">关闭 &nbsp;
+                                    <input type="radio" name="state_msm" #if("$userBean.state_msm" == "1") checked #end value="1">打开  &nbsp; &nbsp;
+                          <br>
+                        </tt>
+                        <tt id="">
+                          &nbsp; &nbsp;  电话通知:
+                                    <input type="radio" name="state_call" #if("$userBean.state_call" == "0") checked #end value="0">关闭 &nbsp;
+                                    <input type="radio" name="state_call" #if("$userBean.state_call" == "1") checked #end value="1">打开  &nbsp; &nbsp;
+                          <br>
+                        </tt>
+                        <tt id="">
+                          &nbsp; &nbsp;  邮件通知:
+                                    <input type="radio" name="state_mail" #if("$userBean.state_mail" == "0") checked #end value="0">关闭 &nbsp;
+                                    <input type="radio" name="state_mail" #if("$userBean.state_mail" == "1") checked #end value="1">打开  &nbsp; &nbsp;
+                          <br>
+                        </tt>
+
+
+
+                        <tt id=""><br/><br/>
+                          数据报警: <br/>
+                          &nbsp; &nbsp; App推送:
+                          <input type="radio" name="data_push" #if("$userBean.data_push" == "0") checked #end value="0">关闭 &nbsp;
+                          <input type="radio" name="data_push" #if("$userBean.data_push" == "1") checked #end value="1">打开  &nbsp; &nbsp;
+                          <br>
+
+                        </tt>
+                        <tt id="">
+                          &nbsp; &nbsp;  短信通知:
+                          <input type="radio" name="data_msm" #if("$userBean.data_msm" == "0") checked #end value="0">关闭 &nbsp;
+                          <input type="radio" name="data_msm" #if("$userBean.data_msm" == "1") checked #end value="1">打开  &nbsp; &nbsp;
+                          <br>
+                        </tt>
+                        <tt id="">
+                          &nbsp; &nbsp;  电话通知:
+                          <input type="radio" name="data_call" #if("$userBean.data_call" == "0") checked #end value="0">关闭 &nbsp;
+                          <input type="radio" name="data_call" #if("$userBean.data_call" == "1") checked #end value="1">打开  &nbsp; &nbsp;
+                          <br>
+                        </tt>
+                        <tt id="">
+                          &nbsp; &nbsp;  邮件通知:
+                          <input type="radio" name="data_mail" #if("$userBean.data_mail" == "0") checked #end value="0">关闭 &nbsp;
+                          <input type="radio" name="data_mail" #if("$userBean.data_mail" == "1") checked #end value="1">打开  &nbsp; &nbsp;
+                          <br>
+                        </tt>
+
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div class="col-sm-12" style="padding-left:50px;">
+                        <input name="submit" type="submit" value="保存" class="btn btn-primary col-lg-1">
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+    #end
+
+
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+
+  function checkAlarmPhoneForm() {
+    // var maxTempValue = parseFloat(document.getElementById("maxTemp").value).toFixed(2);
+    var newUserValue = document.getElementById("phone").value
+
+    if(newUserValue == '') {
+      alert("请输入手机号码");
+      return false;
+    }
+
+    return true;
+  }
+
+</script>
+<div id="footerForFootId" class="container-fluid footerForFoot" role="footer">
+  $widget.setTemplate('foot')
+</div>
+
+

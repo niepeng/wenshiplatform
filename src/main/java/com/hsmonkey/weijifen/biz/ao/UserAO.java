@@ -47,11 +47,22 @@ public interface UserAO {
 	public Result addDevice(FlowData flowData, DeviceBean deviceBean);
 
 	public Result viewEditDevice(FlowData flowData, String snaddr);
-
 	public Result doEditDevice(FlowData flowData, DeviceBean deviceBean);
-
 	public Result deleteDevice(FlowData flowData, String snaddr);
-	
+
+	public Result viewPermissionDevice(FlowData flowData, String snaddr);
+	public Result doOptPermissionDevice(FlowData flowData, String snaddr, String newUser);
+
+	public Result viewAlarmDevice(FlowData flowData, String snaddr);
+	public Result doAlarmDevice(FlowData flowData, String snaddr, String[] smsPhones,  boolean open);
+
+	public Result alarmManage(FlowData flowData);
+	public Result doAddAlarmPhone(FlowData flowData, String phone);
+	public Result deleteAlarmPhone(FlowData flowData, String phone);
+	public Result optAlarmTotalMenu(FlowData flowData, boolean open);
+	public Result optDetailAlarm(FlowData flowData);
+
+
 	public Result showBindMail(FlowData flowData);
 
 	public Result bindMail(FlowData flowData, String mail);
@@ -59,7 +70,9 @@ public interface UserAO {
 	public Result doFindPsw(FlowData flowData, String user);
 
 	public Result version(FlowData flowData);
-	
+
+	public Result showUserDetail(FlowData flowData);
+
 	/**
 	 * 获取最近报警的信息
 	 * @param flowData

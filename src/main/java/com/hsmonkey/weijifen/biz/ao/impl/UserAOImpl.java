@@ -1,6 +1,9 @@
 package com.hsmonkey.weijifen.biz.ao.impl;
 
+import com.hsmonkey.weijifen.biz.bean.MobileDeviceBean;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -10,12 +13,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import wint.help.biz.result.Result;
 import wint.help.biz.result.ResultSupport;
 import wint.help.biz.result.StringResultCode;
 import wint.help.codec.MD5;
+import wint.lang.utils.CollectionUtil;
 import wint.lang.utils.FileUtil;
 import wint.lang.utils.StringUtil;
 import wint.mvc.flow.FlowData;
@@ -857,6 +862,312 @@ public class UserAOImpl extends BaseAO implements UserAO {
 	}
 
 	@Override
+	public Result viewPermissionDevice(FlowData flowData, String snaddr) {
+		Result result = viewEditDevice(flowData, snaddr);
+		if (result.isSuccess()) {
+			DeviceBean deviceBean = (DeviceBean) result.getModels().get("deviceBean");
+			if (!deviceBean.hasAuth()) {
+				result.setSuccess(false);
+				result.setResultCode(new StringResultCode("当前没有权限"));
+				return result;
+			}
+			return result;
+		}
+		return result;
+	}
+
+	@Override
+	public Result doOptPermissionDevice(FlowData flowData, String snaddr, String newUser) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = getUserBean(flowData);
+			DeviceBean deviceBean = new DeviceBean();
+			deviceBean.setUser(userBean.getUser());
+			deviceBean.setSnaddr(snaddr);
+			deviceBean.setNewUser(newUser);
+			String content = getDevInfo(deviceBean.getUser(), deviceBean.getSnaddr());
+			if (isSuccess(content)) {
+				Map<String, String> headerMap = new HashMap<String, String>();
+				headerMap.put("TYPE", "handOverAuthority");
+				String body = JsonUtil.fields("snaddr,user,newUser", deviceBean);
+				content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+				if (!isSuccess(content)) {
+					result.setResultCode(new StringResultCode("操作失败，确保拥有权限"));
+					return result;
+				}
+			} else {
+				result.setResultCode(new StringResultCode("操作失败，确保拥有权限"));
+				return result;
+			}
+			result.setSuccess(true);
+		} catch (Exception e) {
+			log.error("doOptPermissionDeviceError", e);
+		}
+		return result;
+	}
+
+	@Override
+	public Result viewAlarmDevice(FlowData flowData, String snaddr) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = getUserBean(flowData);
+			String content = getDevInfo(userBean.getUser(), snaddr);
+			if (!isSuccess(content)) {
+				return result;
+			}
+			DeviceBean deviceBean = JsonUtil.jsonToBean(content, DeviceBean.class);
+			List<String> accountMobileList = getAccountMobileList(userBean.getUser());
+			List<String> deviceSmsPhoneList = deviceSmsPhones(snaddr, userBean.getUser());
+			result.getModels().put("accountMobileList", accountMobileList);
+			result.getModels().put("deviceSmsPhoneList", deviceSmsPhoneList);
+			result.getModels().put("userBean", userBean);
+			result.getModels().put("deviceBean", deviceBean);
+			result.getModels().put("snaddr", snaddr);
+			result.setSuccess(true);
+		} catch (Exception e) {
+			log.error("viewAlarmDeviceError", e);
+		}
+		return result;
+	}
+
+	@Override
+	public Result doAlarmDevice(FlowData flowData, String snaddr, String[] smsPhones, boolean open) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = getUserBean(flowData);
+			String content = getDevInfo(userBean.getUser(), snaddr);
+			if (!isSuccess(content)) {
+				return result;
+			}
+			DeviceBean deviceBean = JsonUtil.jsonToBean(content, DeviceBean.class);
+			deviceBean.setUser(userBean.getUser());
+			deviceBean.setSnaddr(snaddr);
+			List<String> snaddrs = new ArrayList<>();
+			snaddrs.add(snaddr);
+
+			// 需要取消绑定的手机号列表
+			List<String> cannelSmsPhoneList = new ArrayList<>();
+			// 添加绑定的手机号列表
+			List<String> addSmsPhoneList = new ArrayList<>();
+
+			List<String> deviceSmsPhoneList = deviceSmsPhones(snaddr, userBean.getUser());
+			List<String> newDevSmsPhoneList = new ArrayList<>();
+			if(smsPhones != null) {
+				for(String tmp : smsPhones) {
+					newDevSmsPhoneList.add(tmp);
+				}
+			}
+			if (deviceSmsPhoneList == null || deviceSmsPhoneList.size() == 0) {
+				addSmsPhoneList = newDevSmsPhoneList;
+			} else {
+				for (String oldSmsPhone : deviceSmsPhoneList) {
+					boolean has = false;
+					for (String newSmsPhone : newDevSmsPhoneList) {
+						if (oldSmsPhone.equals(newSmsPhone)) {
+							has = true;
+							break;
+						}
+					}
+					if (!has) {
+						cannelSmsPhoneList.add(oldSmsPhone);
+						continue;
+					}
+
+					newDevSmsPhoneList.remove(oldSmsPhone);
+
+				}
+				addSmsPhoneList = newDevSmsPhoneList;
+			}
+
+			String cannelContent = null;
+			String newContent = null;
+
+			if (cannelSmsPhoneList != null && cannelSmsPhoneList.size() > 0) {
+				MobileDeviceBean bean = new MobileDeviceBean();
+				bean.setUser(userBean.getUser());
+				bean.setSnaddr(snaddrs);
+				bean.setDeviceMobileList(cannelSmsPhoneList);
+				Map<String, String> headerMap = new HashMap<String, String>();
+				headerMap.put("TYPE", "delMobileToDevice");
+				String body = JsonUtil.fields("user,snaddr,deviceMobileList", bean);
+				cannelContent = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+
+			}
+
+			if (newDevSmsPhoneList != null && newDevSmsPhoneList.size() > 0) {
+				MobileDeviceBean bean = new MobileDeviceBean();
+				bean.setUser(userBean.getUser());
+				bean.setSnaddr(snaddrs);
+				bean.setDeviceMobileList(newDevSmsPhoneList);
+				Map<String, String> headerMap = new HashMap<String, String>();
+				headerMap.put("TYPE", "addMobileToDevice");
+				String body = JsonUtil.fields("user,snaddr,deviceMobileList", bean);
+				newContent = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			}
+
+
+			// 设置蜂鸣器开关报警
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "setRealAlarm");
+			if(open) {
+				deviceBean.setBeepStatus("1");
+			} else {
+				deviceBean.setBeepStatus("0");
+
+			}
+			String body = JsonUtil.fields("user,snaddr,beepStatus", deviceBean);
+			String hummerContent = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			log.error("hummerContentResult->" + hummerContent);
+			if (
+					((!CollectionUtil.isEmpty(cannelSmsPhoneList) && isSuccess(cannelContent)) || CollectionUtil.isEmpty(cannelSmsPhoneList))
+					&& (!CollectionUtil.isEmpty(newDevSmsPhoneList) && isSuccess(newContent) || CollectionUtil.isEmpty(newDevSmsPhoneList))
+					) {
+				result.setSuccess(true);
+			}
+
+
+		} catch (Exception e) {
+			log.error("doAlarmDeviceError", e);
+		}
+		return result;
+	}
+
+
+	@Override
+	public Result alarmManage(FlowData flowData) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = getUserBean(flowData);
+
+			List<String> phoneList = getAccountMobileList(userBean.getUser());
+
+			// 获取报警总开关
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "getAllAlarmStatus");
+			String body = JsonUtil.fields("user", userBean);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			if (isSuccess(content)) {
+				JSONObject json = JsonUtil.getJsonObject(content);
+				userBean.setAllAlarmStatus(JsonUtil.getString(json, "allAlarmStatus", null));
+				JSONArray array = JsonUtil.getJsonArray(json, "alarmChannel");
+				List<String> alarmChannelList = new ArrayList<>();
+				if(array != null) {
+					for(int i = 0; i < array.length(); i++ ) {
+						alarmChannelList.add(array.getString(i));
+					}
+				}
+				userBean.setState_push(alarmChannelList.contains("state_push") ? "1" : "0");
+				userBean.setState_msm(alarmChannelList.contains("state_msm") ? "1" : "0");
+				userBean.setState_call(alarmChannelList.contains("state_call") ? "1" : "0");
+				userBean.setState_mail(alarmChannelList.contains("state_mail") ? "1" : "0");
+
+				userBean.setData_push(alarmChannelList.contains("data_push") ? "1" : "0");
+				userBean.setData_msm(alarmChannelList.contains("data_msm") ? "1" : "0");
+				userBean.setData_call(alarmChannelList.contains("data_call") ? "1" : "0");
+				userBean.setData_mail(alarmChannelList.contains("data_mail") ? "1" : "0");
+			}
+
+			result.getModels().put("phoneList", phoneList);
+			result.getModels().put("userBean", userBean);
+			result.setSuccess(true);
+
+		} catch (Exception e) {
+			log.error("alarmManageError", e);
+		}
+		return result;
+	}
+
+
+
+	@Override
+	public Result doAddAlarmPhone(FlowData flowData, String phone) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = getUserBean(flowData);
+			userBean.setMobile(phone);
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "addMobileToAccount");
+			String body = JsonUtil.fields("user, mobile", userBean);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			if (isSuccess(content)) {
+				result.setSuccess(true);
+			}
+			result.getModels().put("userBean", userBean);
+
+		} catch (Exception e) {
+			log.error("doAddAlarmPhoneError", e);
+		}
+		return result;
+	}
+
+	@Override
+	public Result deleteAlarmPhone(FlowData flowData, String phone) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = getUserBean(flowData);
+			userBean.setMobile(phone);
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "delMobileToAccount");
+			String body = JsonUtil.fields("user, mobile", userBean);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			if (isSuccess(content)) {
+				result.setSuccess(true);
+			}
+			result.getModels().put("userBean", userBean);
+		} catch (Exception e) {
+			log.error("deleteAlarmPhoneError", e);
+		}
+		return result;
+	}
+
+
+	@Override
+	public Result optAlarmTotalMenu(FlowData flowData, boolean open) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = getUserBean(flowData);
+			userBean.setAllAlarmStatus( open ? "1" : "0");
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "switchAllAlarm");
+			String body = JsonUtil.fields("user, allAlarmStatus", userBean);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			if (isSuccess(content)) {
+				result.setSuccess(true);
+			}
+			result.getModels().put("userBean", userBean);
+
+		} catch (Exception e) {
+			log.error("viewAlarmTotalMenuError", e);
+		}
+		return result;
+	}
+
+	@Override
+	public Result optDetailAlarm(FlowData flowData) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = getUserBean(flowData);
+
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "switchAlarmChannel");
+			String[] channels = {"state_push", "state_msm", "state_call", "state_mail", "data_push", "data_msm", "data_call", "data_mail"};
+
+			for (String channel : channels) {
+				userBean.setChannel(channel);
+				userBean.setAlarmStatus(flowData.getParameters().getString(channel));
+				String body = JsonUtil.fields("user, channel, alarmStatus", userBean);
+				String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+				log.error("optDetailAlarmChannel->" + channels + ",result=" + content);
+			}
+
+			result.setSuccess(true);
+		} catch (Exception e) {
+			log.error("optDetailAlarmError", e);
+		}
+		return result;
+	}
+
+	@Override
 	public Result showBindMail(FlowData flowData) {
 		Result result = new ResultSupport(false);
 		try {
@@ -981,7 +1292,34 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		result.getModels().put("content", content);
 		return result;
 	}
-	
+
+	@Override
+	public Result showUserDetail(FlowData flowData) {
+		Result result = new ResultSupport(true);
+		try {
+			UserBean userBean = getUserBean(flowData);
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "getAlarmAccountInfo");
+			String body = JsonUtil.fields("user", userBean);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+
+			// {"msg_remain": 4.0, "msg_count": 396, "code": 0, "credit_money": 0.4}
+			// 剩余短信条数          已发短信条数                    账户余额
+			JSONObject json = JsonUtil.getJsonObject(content);
+			int remain = JsonUtil.getInt(json, "msg_remain", 0);
+			int count = JsonUtil.getInt(json, "msg_count", 0);
+			double money = JsonUtil.getDouble(json, "credit_money", 0.d);
+
+			result.getModels().put("userBean", userBean);
+			result.getModels().put("remain", remain);
+			result.getModels().put("count", count);
+			result.getModels().put("money", money);
+		} catch (Exception e) {
+			log.error("showUserDetailError", e);
+		}
+		return result;
+	}
+
 	@Override
 	public Result jsonRecentlyAlarmList(FlowData flowData, String user, Date requestTime) {
 		Result result = new ResultSupport(false);

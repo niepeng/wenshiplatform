@@ -59,6 +59,7 @@
 									<tr>
 										<th style="width:140px;">区域</th>
 										<th style="width:200px;">设备名</th>
+										<th style="width:150px;">SN</th>
 										<th style="width:80px;">上传间隔</th>
 										<th style="width:80px;">温度报警上限</th>
 										<th style="width:80px;">温度报警下限</th>
@@ -74,7 +75,8 @@
     									<tr>
     										<td>#if("$!deviceBean.area" != "") $!deviceBean.area #else -- #end</td>	
     										<td>$!deviceBean.devName</td>	
-    										<td>$!{deviceBean.devGap}秒</td>	
+    										<td>$!deviceBean.snaddr</td>
+    										<td>$!{deviceBean.devGap}秒</td>
     										<td>$!{deviceBean.deviceExtendBean.maxTemp}℃</td>	
     										<td>$!{deviceBean.deviceExtendBean.minTemp}℃</td>	
     										<td>$!{deviceBean.deviceExtendBean.tempHC}℃</td>	
@@ -84,6 +86,10 @@
     										<td>
 												#if($deviceBean.hasAuth())
 													<a href="$userModule.setTarget('editDevice').param('snaddr',$deviceBean.snaddr)">编辑</a>&nbsp;
+													#if($!deviceBean.hasAuth())
+                            <a href="$userModule.setTarget('permissionDevice').param('snaddr',$deviceBean.snaddr)">权限管理</a>&nbsp;
+													#end
+													<a href="$userModule.setTarget('alarmDevice').param('snaddr',$deviceBean.snaddr)">报警管理</a>&nbsp;
 												#else
 													<a href="javascript:void;" onclick="javascript:alert('您暂无权限编辑');">编辑</a>&nbsp;
 												

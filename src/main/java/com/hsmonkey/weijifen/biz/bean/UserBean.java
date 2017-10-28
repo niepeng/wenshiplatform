@@ -21,6 +21,43 @@ public class UserBean {
 	private String newPsw;
 	
 	private String newPsw2;
+
+	private String mobile;
+
+	// 报警总开关
+	private String allAlarmStatus;
+
+	private String channel;
+
+	private String alarmStatus;
+
+	// App推送 的 离线报警
+	private String state_push;
+
+	// 短信通知 的 离线报警
+	private String state_msm;
+
+	// 电话通知 的 离线报警
+	private String state_call;
+
+	// 邮件通知 的 离线报警
+	private String state_mail;
+
+
+	// App推送 的 数据异常报警
+  private String data_push;
+
+	// 短信通知 的 数据异常报警
+	private String data_msm;
+
+	// 电话通知 的 数据异常报警
+	private String data_call;
+
+	// 邮件通知 的 数据异常报警
+	private String data_mail;
+
+
+
 	
 	// -------------- normal method -----------------------
 
@@ -66,5 +103,100 @@ public class UserBean {
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
-	
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getAllAlarmStatus() {
+		return allAlarmStatus;
+	}
+
+	public void setAllAlarmStatus(String allAlarmStatus) {
+		this.allAlarmStatus = allAlarmStatus;
+	}
+
+	public String getData_mail() {
+		return data_mail;
+	}
+
+	public void setData_mail(String data_mail) {
+		this.data_mail = data_mail;
+	}
+
+	public String getAlarmStatus() {
+		return alarmStatus;
+	}
+
+	public void setAlarmStatus(String alarmStatus) {
+		this.alarmStatus = alarmStatus;
+	}
+
+	public String getState_push() {
+		return state_push;
+	}
+
+	public void setState_push(String state_push) {
+		this.state_push = state_push;
+	}
+
+	public String getState_msm() {
+		return state_msm;
+	}
+
+	public void setState_msm(String state_msm) {
+		this.state_msm = state_msm;
+	}
+
+	public String getState_call() {
+		return state_call;
+	}
+
+	public void setState_call(String state_call) {
+		this.state_call = state_call;
+	}
+
+	public String getState_mail() {
+		return state_mail;
+	}
+
+	public void setState_mail(String state_mail) {
+		this.state_mail = state_mail;
+	}
+
+	public String getData_push() {
+		return data_push;
+	}
+
+	public void setData_push(String data_push) {
+		this.data_push = data_push;
+	}
+
+	public String getData_msm() {
+		return data_msm;
+	}
+
+	public void setData_msm(String data_msm) {
+		this.data_msm = data_msm;
+	}
+
+	public String getData_call() {
+		return data_call;
+	}
+
+	public void setData_call(String data_call) {
+		this.data_call = data_call;
+	}
+
+	public String getChannel() {
+		return channel;
+	}
+
+	public void setChannel(String channel) {
+		this.channel = channel;
+	}
 }

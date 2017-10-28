@@ -1,0 +1,100 @@
+
+<script type="text/javascript" src="$staticServer/js/weijifen/datepicker/WdatePicker.js"></script>
+
+
+$widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('checkIndex','2').addToContext('message',$message)
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="" style="margin-left:50px;">
+
+      <div id="ul_score">
+        <ul class="nav nav-tabs">
+          <li  class="active"><a href="#">权限管理</a></li>
+        </ul>
+      </div>
+
+
+      <div id="main_score">
+
+        <form id="reply-form" class="form-horizontal form ng-pristine ng-valid" action="$userModule.setTarget('doOptPermissionDevice')" onsubmit="javascript:return checkForm();" method="post">
+          <input type="hidden" name="snaddr" value="$deviceBean.snaddr" />
+
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <a href="$userModule.setTarget('deviceList')">返回设备列表</a>  &nbsp;&nbsp;
+                  <tt style="color:red;">$!msg</tt>
+                </div>
+
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <div class="form-group">
+                      <div class="col-sm-6 col-md-8 col-xs-12">
+                        <span class="help-block"></span>
+                      </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                      <div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+                        <tt id="">
+                          当前管理员账号:&nbsp; $!{userBean.user} <br/>操作的设备名称:&nbsp; $!deviceBean.devName
+                          <br>
+                        </tt>
+                      </div>
+                    </div>
+
+
+                    <div class="form-group">
+                      <div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+                        <tt id="">
+                          权限转至账号:&nbsp; <input type="text" style="width:250px;display:inline;height:30px;" id="newUser" name="newUser" value="" class="form-control">&nbsp; 这里可以做权限转移
+                          <br>
+                        </tt>
+                      </div>
+                    </div>
+
+
+
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-12">
+              <input name="submit" type="submit" value="保存" class="btn btn-primary col-lg-1">
+            </div>
+          </div>
+        </form>
+
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  function checkForm() {
+    // var maxTempValue = parseFloat(document.getElementById("maxTemp").value).toFixed(2);
+    var newUserValue = document.getElementById("newUser").value
+
+    if(newUserValue == '') {
+      alert("请输入账号");
+      return false;
+    }
+
+    return true;
+  }
+</script>
+<div id="footerForFootId" class="container-fluid footerForFoot" role="footer">
+  $widget.setTemplate('foot')
+</div>
+
+

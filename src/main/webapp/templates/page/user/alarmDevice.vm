@@ -1,0 +1,113 @@
+
+<script type="text/javascript" src="$staticServer/js/weijifen/datepicker/WdatePicker.js"></script>
+
+
+$widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('checkIndex','2').addToContext('message',$message)
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="" style="margin-left:50px;">
+
+      <div id="ul_score">
+        <ul class="nav nav-tabs">
+          <li  class="active"><a href="#">报警管理</a></li>
+        </ul>
+      </div>
+
+
+      <div id="main_score">
+
+        <form id="reply-form" class="form-horizontal form ng-pristine ng-valid" action="$userModule.setTarget('doAlarmDevice')" onsubmit="javascript:return checkForm();" method="post">
+          <input type="hidden" name="snaddr" value="$snaddr" />
+
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <a href="$userModule.setTarget('deviceList')">返回设备列表</a>  &nbsp;&nbsp;
+                  <tt style="color:red;">$!msg</tt>
+                </div>
+
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <div class="form-group">
+                      <div class="col-sm-6 col-md-8 col-xs-12">
+                        <span class="help-block"></span>
+                      </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                      <div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+                        <tt id="">
+                          当前管理员账号:&nbsp; $!{userBean.user} <br/>操作的设备:&nbsp; $!snaddr
+                          <br>
+                        </tt>
+                      </div>
+                    </div>
+
+
+                    <div class="form-group">
+                      <div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+                        短信报警关联手机:
+                        #foreach($phone in $accountMobileList)
+
+                          <input type="checkbox" name="smsPhones"
+                            #foreach($smsPhone in $deviceSmsPhoneList)
+                              #if("$phone" == "$smsPhone")
+                                checked
+                              #end
+                            #end
+                                 value="$phone">$phone &nbsp; &nbsp;
+                        #end
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+                        蜂鸣器开关:
+                        <input type="radio" name="hummer" #if("$deviceBean.beepStatus" == "0") checked #end value="0"/>关闭 &nbsp; &nbsp;
+                        <input type="radio" name="hummer" #if("$deviceBean.beepStatus" == "1") checked #end value="1"/>打开 &nbsp; &nbsp;
+                      </div>
+                    </div>
+
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-12">
+              <input name="submit" type="submit" value="保存" class="btn btn-primary col-lg-1">
+            </div>
+          </div>
+        </form>
+
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  function checkForm() {
+    // var maxTempValue = parseFloat(document.getElementById("maxTemp").value).toFixed(2);
+//    var newUserValue = document.getElementById("newUser").value
+//
+//    if(newUserValue == '') {
+//      alert("请输入账号");
+//      return false;
+//    }
+
+    return true;
+  }
+</script>
+<div id="footerForFootId" class="container-fluid footerForFoot" role="footer">
+  $widget.setTemplate('foot')
+</div>
+
+
