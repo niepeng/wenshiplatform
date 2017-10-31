@@ -78,7 +78,7 @@ public class BaseAO extends BaseAction {
 
 	// 获取账号中的手机列表
 	public List<String> getAccountMobileList(String user) {
-		List<String> list = new ArrayList<>();
+		List<String> list = new ArrayList<String>();
 		Map<String, String> headerMap = new HashMap<String, String>();
 		headerMap.put("TYPE", "getAccountMobileList");
 		DeviceBean bean = new DeviceBean();
@@ -103,7 +103,7 @@ public class BaseAO extends BaseAction {
 
 	// 获取设备关联的接收短信报警的手机号
 	public List<String> deviceSmsPhones(String snaddr, String user) {
-		List<String> list = new ArrayList<>();
+		List<String> list = new ArrayList<String>();
 		Map<String, String> headerMap = new HashMap<String, String>();
 		headerMap.put("TYPE", "getDeviceMobileList");
 		DeviceBean bean = new DeviceBean();

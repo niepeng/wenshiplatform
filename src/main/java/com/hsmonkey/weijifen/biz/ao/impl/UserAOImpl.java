@@ -942,16 +942,16 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			DeviceBean deviceBean = JsonUtil.jsonToBean(content, DeviceBean.class);
 			deviceBean.setUser(userBean.getUser());
 			deviceBean.setSnaddr(snaddr);
-			List<String> snaddrs = new ArrayList<>();
+			List<String> snaddrs = new ArrayList<String>();
 			snaddrs.add(snaddr);
 
 			// 需要取消绑定的手机号列表
-			List<String> cannelSmsPhoneList = new ArrayList<>();
+			List<String> cannelSmsPhoneList = new ArrayList<String>();
 			// 添加绑定的手机号列表
-			List<String> addSmsPhoneList = new ArrayList<>();
+			List<String> addSmsPhoneList = new ArrayList<String>();
 
 			List<String> deviceSmsPhoneList = deviceSmsPhones(snaddr, userBean.getUser());
-			List<String> newDevSmsPhoneList = new ArrayList<>();
+			List<String> newDevSmsPhoneList = new ArrayList<String>();
 			if(smsPhones != null) {
 				for(String tmp : smsPhones) {
 					newDevSmsPhoneList.add(tmp);
@@ -1050,7 +1050,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				JSONObject json = JsonUtil.getJsonObject(content);
 				userBean.setAllAlarmStatus(JsonUtil.getString(json, "allAlarmStatus", null));
 				JSONArray array = JsonUtil.getJsonArray(json, "alarmChannel");
-				List<String> alarmChannelList = new ArrayList<>();
+				List<String> alarmChannelList = new ArrayList<String>();
 				if(array != null) {
 					for(int i = 0; i < array.length(); i++ ) {
 						alarmChannelList.add(array.getString(i));
