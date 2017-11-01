@@ -98,7 +98,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		Result result = new ResultSupport(false);
 		try {
 			UserBean fromSessionUser = getUserBean(flowData);
-			
+			userBean.setUser(fromSessionUser.getUser());
 			if(StringUtil.isBlank(userBean.getPassword())) {
 				result.setResultCode(new StringResultCode("原密码不能为空"));
 				return result;
@@ -737,18 +737,15 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		try {
 			UserBean userBean = getUserBean(flowData);
 			List<String> areaList = getAllArea(userBean);
-			DeviceBean deviceBean = new DeviceBean();
-			deviceBean.setSnaddr(snaddr);
 			String content = getDevInfo(userBean.getUser(), snaddr);
 			if (!isSuccess(content)) {
 				result.setResultCode(new StringResultCode("当前参数错误"));
 				return result;
 			}
 			JSONObject json = JsonUtil.getJsonObject(content);
-			deviceBean.setDevName(JsonUtil.getString(json, "devName", null));
-			deviceBean.setArea(JsonUtil.getString(json, "area", null));
-			deviceBean.setDevGap(JsonUtil.getString(json, "devGap", null));
-			
+			DeviceBean deviceBean = JsonUtil.jsonToBean(content, DeviceBean.class);
+			deviceBean.setSnaddr(snaddr);
+
 			// 获取设备的详细信息
 			deviceBean.setDeviceExtendBean(getDeviceExtendInfo(deviceBean));
 						

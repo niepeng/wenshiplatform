@@ -57,9 +57,9 @@
 							<table class="table table-hover">
 								<thead class="navbar-inner">
 									<tr>
-										<th style="width:140px;">区域</th>
-										<th style="width:200px;">设备名</th>
-										<th style="width:150px;">SN</th>
+										<th style="width:100px;">区域</th>
+										<th style="width:120px;">设备名</th>
+										<th style="width:100px;">SN</th>
 										<th style="width:80px;">上传间隔</th>
 										<th style="width:80px;">温度报警上限</th>
 										<th style="width:80px;">温度报警下限</th>
@@ -67,7 +67,7 @@
 										<th style="width:80px;">湿度报警上限</th>
 										<th style="width:80px;">湿度报警下限</th>
 										<th style="width:80px;">湿度回差</th>
-										<th style="width:100px;">操作</th>
+										<th style="width:220px;">操作</th>
 									</tr>
 								</thead>
 								<tbody>

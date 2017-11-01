@@ -1,6 +1,4 @@
 
-
-
 $widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('checkIndex','3').addToContext('message',$message)
 <div class="container-fluid">
   <div class="row">
@@ -112,7 +110,7 @@ $widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('chec
                       <div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
                         <tt id="">
                           报警总开关:
-                          <input type="radio" name="alarmTotal" #if("$userBean.allAlarmStatus" == "0") checked #end value="0">关闭 &nbsp;
+                          <input type="radio" name="alarmTotal" #if("$userBean.allAlarmStatus" == "0") checked #end value="0">关闭 &nbsp; &nbsp; &nbsp;
                           <input type="radio" name="alarmTotal" #if("$userBean.allAlarmStatus" == "1") checked #end value="1">打开  &nbsp; &nbsp;  (其中包括:短信，邮件，语音，推送)
                           <br>
                         </tt>
@@ -157,59 +155,59 @@ $widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('chec
                     <div class="form-group">
                       <div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
                         <tt id="">
-                          在线离线报警: <br/>
+                          在线离线报警: <br/><br/>
                           &nbsp; &nbsp; App推送:
-                                    <input type="radio" name="state_push" #if("$userBean.state_push" == "0") checked #end value="0">关闭 &nbsp;
+                                    <input type="radio" name="state_push" #if("$userBean.state_push" == "0") checked #end value="0">关闭 &nbsp; &nbsp; &nbsp;
                                     <input type="radio" name="state_push" #if("$userBean.state_push" == "1") checked #end value="1">打开  &nbsp; &nbsp;
-                          <br>
+                          <br><br>
 
                         </tt>
                         <tt id="">
                           &nbsp; &nbsp;  短信通知:
-                                    <input type="radio" name="state_msm" #if("$userBean.state_msm" == "0") checked #end value="0">关闭 &nbsp;
+                                    <input class="app_other" type="radio" name="state_msm" #if("$userBean.state_msm" == "0") checked #end value="0">关闭 &nbsp; &nbsp; &nbsp;
                                     <input type="radio" name="state_msm" #if("$userBean.state_msm" == "1") checked #end value="1">打开  &nbsp; &nbsp;
-                          <br>
+                          <br><br>
                         </tt>
                         <tt id="">
                           &nbsp; &nbsp;  电话通知:
-                                    <input type="radio" name="state_call" #if("$userBean.state_call" == "0") checked #end value="0">关闭 &nbsp;
+                                    <input class="app_other" type="radio" name="state_call" #if("$userBean.state_call" == "0") checked #end value="0">关闭 &nbsp; &nbsp; &nbsp;
                                     <input type="radio" name="state_call" #if("$userBean.state_call" == "1") checked #end value="1">打开  &nbsp; &nbsp;
-                          <br>
+                          <br><br>
                         </tt>
                         <tt id="">
                           &nbsp; &nbsp;  邮件通知:
-                                    <input type="radio" name="state_mail" #if("$userBean.state_mail" == "0") checked #end value="0">关闭 &nbsp;
+                                    <input class="app_other" type="radio" name="state_mail" #if("$userBean.state_mail" == "0") checked #end value="0">关闭 &nbsp; &nbsp; &nbsp;
                                     <input type="radio" name="state_mail" #if("$userBean.state_mail" == "1") checked #end value="1">打开  &nbsp; &nbsp;
-                          <br>
+                          <br><br>
                         </tt>
 
 
 
                         <tt id=""><br/><br/>
-                          数据报警: <br/>
+                          数据报警: <br/><br/>
                           &nbsp; &nbsp; App推送:
-                          <input type="radio" name="data_push" #if("$userBean.data_push" == "0") checked #end value="0">关闭 &nbsp;
+                          <input type="radio" name="data_push" #if("$userBean.data_push" == "0") checked #end value="0">关闭 &nbsp; &nbsp; &nbsp;
                           <input type="radio" name="data_push" #if("$userBean.data_push" == "1") checked #end value="1">打开  &nbsp; &nbsp;
-                          <br>
+                          <br><br>
 
                         </tt>
                         <tt id="">
                           &nbsp; &nbsp;  短信通知:
-                          <input type="radio" name="data_msm" #if("$userBean.data_msm" == "0") checked #end value="0">关闭 &nbsp;
+                          <input type="radio" name="data_msm" #if("$userBean.data_msm" == "0") checked #end value="0">关闭 &nbsp; &nbsp; &nbsp;
                           <input type="radio" name="data_msm" #if("$userBean.data_msm" == "1") checked #end value="1">打开  &nbsp; &nbsp;
-                          <br>
+                          <br><br>
                         </tt>
                         <tt id="">
                           &nbsp; &nbsp;  电话通知:
-                          <input type="radio" name="data_call" #if("$userBean.data_call" == "0") checked #end value="0">关闭 &nbsp;
+                          <input type="radio" name="data_call" #if("$userBean.data_call" == "0") checked #end value="0">关闭 &nbsp; &nbsp; &nbsp;
                           <input type="radio" name="data_call" #if("$userBean.data_call" == "1") checked #end value="1">打开  &nbsp; &nbsp;
-                          <br>
+                          <br><br>
                         </tt>
                         <tt id="">
                           &nbsp; &nbsp;  邮件通知:
-                          <input type="radio" name="data_mail" #if("$userBean.data_mail" == "0") checked #end value="0">关闭 &nbsp;
+                          <input type="radio" name="data_mail" #if("$userBean.data_mail" == "0") checked #end value="0">关闭 &nbsp; &nbsp; &nbsp;
                           <input type="radio" name="data_mail" #if("$userBean.data_mail" == "1") checked #end value="1">打开  &nbsp; &nbsp;
-                          <br>
+                          <br><br>
                         </tt>
 
                       </div>
