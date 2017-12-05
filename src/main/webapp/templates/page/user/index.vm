@@ -164,8 +164,12 @@
     							
     						</div>	
     						<div class="clearfix wenshifont-small">
-    							$!{bean.dataBean.time}
-    						</div>	
+									#if($bean.dataBean.isSuccess())
+										$!{bean.dataBean.time}
+									#else
+										&nbsp;
+									#end
+    						</div>
     					</div>
     				</div>
 				#end	
