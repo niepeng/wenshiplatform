@@ -140,11 +140,11 @@
     								#elseif($bean.dataBean.tempStatus < 0)
 										<tt style="color:blue;">${bean.dataBean.temp}℃</tt>
     									<tt style="float:right;color:blue;">↓</tt>
-									#else
+									  #else
 										<tt>${bean.dataBean.temp}℃</tt>
     								#end	
 								#else
-									<tt>离线</tt>
+									<tt>设备离线</tt>
 								#end
     						</div>	
     						<div>
@@ -159,7 +159,7 @@
 										<tt>${bean.dataBean.humi}%</tt>
 									#end
 								#else
-									<tt>离线</tt>
+									<tt>设备离线</tt>
 								#end
     							
     						</div>	
