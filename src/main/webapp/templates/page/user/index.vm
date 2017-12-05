@@ -144,7 +144,7 @@
 										<tt>${bean.dataBean.temp}℃</tt>
     								#end	
 								#else
-									<tt>--</tt>
+									<tt>离线</tt>
 								#end
     						</div>	
     						<div>
@@ -159,12 +159,12 @@
 										<tt>${bean.dataBean.humi}%</tt>
 									#end
 								#else
-									<tt>--</tt>
+									<tt>离线</tt>
 								#end
     							
     						</div>	
     						<div class="clearfix wenshifont-small">
-    							${bean.dataBean.time}
+    							$!{bean.dataBean.time}
     						</div>	
     					</div>
     				</div>
