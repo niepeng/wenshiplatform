@@ -1,5 +1,6 @@
 package com.hsmonkey.weijifen.biz.ao.impl;
 
+import com.hsmonkey.weijifen.biz.bean.AdminBean;
 import com.hsmonkey.weijifen.biz.bean.MobileDeviceBean;
 import java.io.File;
 import java.util.ArrayList;
@@ -78,7 +79,33 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		}
 		return result;
 	}
-	
+
+	@Override
+	public Result register(FlowData flowData, AdminBean userBean) {
+		Result result = new ResultSupport(false);
+		try {
+
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "register");
+			Map<String, Object> argsMap = new HashMap<String, Object>();
+			argsMap.put("user", userBean.getUserName());
+			argsMap.put("password", MD5.encrypt(userBean.getNewPsw()));
+			argsMap.put("name", userBean.getNick());
+			argsMap.put("phone", userBean.getPhone());
+			String body = JsonUtil.mapToJson(argsMap);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			JSONObject json = JsonUtil.getJsonObject(content);
+			String msg = JsonUtil.getString(json, "msg", "");
+			result.setSuccess(isSuccess(content));
+			if(!result.isSuccess()) {
+				result.setResultCode(new StringResultCode(msg));
+			}
+		} catch (Exception e) {
+			log.error("registerError", e);
+		}
+		return result;
+	}
+
 	@Override
 	public Result viewUpdatePsw(FlowData flowData) {
 		Result result = new ResultSupport(false);

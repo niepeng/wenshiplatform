@@ -1,5 +1,6 @@
 package com.hsmonkey.weijifen.biz.ao;
 
+import com.hsmonkey.weijifen.biz.bean.AdminBean;
 import java.util.Date;
 
 import wint.help.biz.result.Result;
@@ -21,6 +22,8 @@ import com.hsmonkey.weijifen.biz.query.DeviceQuery;
 public interface UserAO {
 
 	public Result login(FlowData flowData, UserBean userBean);
+
+	public Result register(FlowData flowData, AdminBean userBean);
 
 	public Result viewUpdatePsw(FlowData flowData);
 

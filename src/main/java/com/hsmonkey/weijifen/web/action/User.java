@@ -35,10 +35,8 @@ public class User extends BaseAction {
 	private UserAO userAO;
 
 	public void login(FlowData flowData, Context context) {
-//		if (checkUserSession(flowData, context)) {
-//			flowData.redirectTo("userModule", "index");
-//			return;
-//		}
+			String msg = urlDecode(flowData.getParameters().getString("msg"));
+			context.put("msg", msg);
 	}
 
 	@Action(defaultTarget="user/login")
@@ -59,7 +57,25 @@ public class User extends BaseAction {
 		}
 		result2Context(result, context);
 	}
-	
+
+	@Action(defaultTarget="user/register")
+	public void doRegister(FlowData flowData, Context context) {
+		AdminBean bean = new AdminBean();
+		bean.setUserName(flowData.getParameters().getString("userName"));
+		bean.setNewPsw(flowData.getParameters().getString("newPsw"));
+		bean.setNick(flowData.getParameters().getString("nick"));
+		bean.setPhone(flowData.getParameters().getString("phone"));
+
+		Result result = userAO.register(flowData, bean);
+		if (result.isSuccess()) {
+			flowData.redirectTo("userModule", "login").param("msg", urlEncode("注册成功"));
+			return;
+		}
+		result2Context(result, context);
+	}
+
+
+
 	public void updatePsw(FlowData flowData, Context context) {
 		if (!checkUserSessionNeedRedrect(flowData, context)) {
 			return;
