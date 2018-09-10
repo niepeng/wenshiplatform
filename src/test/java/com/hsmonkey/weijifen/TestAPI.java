@@ -1,91 +1,103 @@
-package com.hsmonkey.weijifen;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import wint.help.codec.MD5;
-
-import com.hsmonkey.weijifen.biz.bean.DeviceBean;
-import com.hsmonkey.weijifen.biz.bean.UserBean;
-import com.hsmonkey.weijifen.common.http.HttpClient;
-import com.hsmonkey.weijifen.util.JsonUtil;
-
-/**
- * <p>标题: </p>
- * <p>描述: </p>
- * <p>版权: lsb</p>
- * <p>创建时间: 2017年2月21日  下午10:13:42</p>
- * <p>作者：niepeng</p>
- */
-public class TestAPI {
-	
-//	protected static final String API_URL = "http://42.121.53.218:2500";
-//	protected static final String API_URL = "http://api.eefield.com:2500";
-	protected static final String API_URL = "http://api.eefield.com/";
-	protected static HttpClient client = new HttpClient(false);
-
-	public static void main(String[] args) {
-		String psw = "123456";
-		System.out.println(MD5.encrypt(psw));
-	}
-	
-	public static void main2(String[] args) {
-		String snaddr = "W2000901";
-		String user = "xsf";
-		String ac = "5d68371a";
-//		getDevice(user, snaddr);
-//		String content = client.subGet("http://yun.eefield.com/user/login.htm", "utf-8");
+//package com.hsmonkey.weijifen;
+//
+//import java.util.ArrayList;
+//import java.util.HashMap;
+//import java.util.List;
+//import java.util.Map;
+//
+//import org.json.JSONException;
+//import org.json.JSONObject;
+//import wint.help.codec.MD5;
+//
+//import com.hsmonkey.weijifen.biz.bean.DeviceBean;
+//import com.hsmonkey.weijifen.biz.bean.UserBean;
+//import com.hsmonkey.weijifen.common.http.HttpClient;
+//import com.hsmonkey.weijifen.util.JsonUtil;
+//
+///**
+// * <p>标题: </p>
+// * <p>描述: </p>
+// * <p>版权: lsb</p>
+// * <p>创建时间: 2017年2月21日  下午10:13:42</p>
+// * <p>作者：niepeng</p>
+// */
+//public class TestAPI {
+//
+////	protected static final String API_URL = "http://42.121.53.218:2500";
+////	protected static final String API_URL = "http://api.eefield.com:2500";
+//	protected static final String API_URL = "http://api.eefield.com/";
+//	protected static HttpClient client = new HttpClient(false);
+//
+//	public static void main(String[] args) throws JSONException {
+////		String psw = "123456";
+////		System.out.println(MD5.encrypt(psw));
+//
+//		JSONObject jsonObj = new JSONObject();
+//		List<String> list = new ArrayList<String>(1);
+//		list.add("abc");
+//		jsonObj.put("calendarEvents", list);
+//		System.out.println(jsonObj.toString());
+//
+//
+//	}
+//
+//	public static void main2(String[] args) {
+//		String snaddr = "W2000901";
+//		String user = "xsf";
+//		String ac = "5d68371a";
+////		getDevice(user, snaddr);
+////		String content = client.subGet("http://yun.eefield.com/user/login.htm", "utf-8");
+////		System.out.println(content);
+////		addDevice(user, snaddr, ac);
+////		deleteDevice(user, snaddr);
+//		getArea();
+//	}
+//
+//	private static void getArea() {
+//		UserBean userBean = new UserBean();
+//		userBean.setUser("xsf");
+//		Map<String, String> headerMap = new HashMap<String, String>();
+//		headerMap.put("TYPE", "getAreaInfo");
+//		String body = JsonUtil.fields("user", userBean);
+//		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
 //		System.out.println(content);
-//		addDevice(user, snaddr, ac);
-//		deleteDevice(user, snaddr);
-		getArea();
-	}
-
-	private static void getArea() {
-		UserBean userBean = new UserBean();
-		userBean.setUser("xsf");
-		Map<String, String> headerMap = new HashMap<String, String>();
-		headerMap.put("TYPE", "getAreaInfo");
-		String body = JsonUtil.fields("user", userBean);
-		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-		System.out.println(content);
-	}
-
-	private static void getDevice(String user, String snaddr) {
-		DeviceBean deviceBean = new DeviceBean();
-		deviceBean.setUser(user);
-		deviceBean.setSnaddr(snaddr);
-		
-		Map<String, String> headerMap = new HashMap<String, String>();
-		headerMap.put("TYPE", "getDevInfo");
-		String body = JsonUtil.fields("snaddr", deviceBean);
-		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-		System.out.println("getDeviceResult=" + content);
-	}
-
-	private static void deleteDevice(String user, String snaddr) {
-		DeviceBean deviceBean = new DeviceBean();
-		deviceBean.setSnaddr(snaddr);
-		deviceBean.setUser(user);
-		Map<String, String> headerMap = new HashMap<String, String>();
-		headerMap.put("TYPE", "delDevice");
-		String body = JsonUtil.fields("snaddr,user", deviceBean);
-		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-		System.out.println(content);
-	}
-
-	private static void addDevice(String user, String snaddr, String ac) {
-		DeviceBean deviceBean = new DeviceBean();
-		deviceBean.setAc(ac);
-		deviceBean.setSnaddr(snaddr);
-		deviceBean.setDevName("niepengadd");
-		deviceBean.setUser(user);
-		Map<String, String> headerMap = new HashMap<String, String>();
-		headerMap.put("TYPE", "addDeviceBySN");
-		String body = JsonUtil.fields("snaddr,user,ac,devName", deviceBean);
-		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
-		System.out.println("addDevice: "+content);
-	}
-	
-	
-}
+//	}
+//
+//	private static void getDevice(String user, String snaddr) {
+//		DeviceBean deviceBean = new DeviceBean();
+//		deviceBean.setUser(user);
+//		deviceBean.setSnaddr(snaddr);
+//
+//		Map<String, String> headerMap = new HashMap<String, String>();
+//		headerMap.put("TYPE", "getDevInfo");
+//		String body = JsonUtil.fields("snaddr", deviceBean);
+//		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+//		System.out.println("getDeviceResult=" + content);
+//	}
+//
+//	private static void deleteDevice(String user, String snaddr) {
+//		DeviceBean deviceBean = new DeviceBean();
+//		deviceBean.setSnaddr(snaddr);
+//		deviceBean.setUser(user);
+//		Map<String, String> headerMap = new HashMap<String, String>();
+//		headerMap.put("TYPE", "delDevice");
+//		String body = JsonUtil.fields("snaddr,user", deviceBean);
+//		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+//		System.out.println(content);
+//	}
+//
+//	private static void addDevice(String user, String snaddr, String ac) {
+//		DeviceBean deviceBean = new DeviceBean();
+//		deviceBean.setAc(ac);
+//		deviceBean.setSnaddr(snaddr);
+//		deviceBean.setDevName("niepengadd");
+//		deviceBean.setUser(user);
+//		Map<String, String> headerMap = new HashMap<String, String>();
+//		headerMap.put("TYPE", "addDeviceBySN");
+//		String body = JsonUtil.fields("snaddr,user,ac,devName", deviceBean);
+//		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+//		System.out.println("addDevice: "+content);
+//	}
+//
+//
+//}

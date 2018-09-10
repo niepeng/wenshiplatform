@@ -138,7 +138,7 @@ public class User extends BaseAction {
 		if (!checkUserSessionNeedRedrect(flowData, context)) {
 			return;
 		}
-
+		flowData.setLayout("/empty");
 		DeviceDataBean deviceDataBean = new DeviceDataBean();
 		deviceDataBean.setSnaddr(flowData.getParameters().getString("snaddr"));
 		deviceDataBean.setStartTime(flowData.getParameters().getString("startTime"));
@@ -157,6 +157,15 @@ public class User extends BaseAction {
 		}
 		
 		Result result = userAO.historyCurve(flowData, deviceDataBean);
+		handleResult(result, flowData, context);
+	}
+
+	public void tmpCurve(FlowData flowData, Context context) {
+		if (!checkUserSessionNeedRedrect(flowData, context)) {
+			return;
+		}
+		flowData.setLayout("/empty");
+		Result result = new ResultSupport(true);
 		handleResult(result, flowData, context);
 	}
 	
