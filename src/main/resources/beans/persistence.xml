@@ -12,13 +12,13 @@
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 	
- 	<bean id="sqlMapClientScore" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
-		<property name="configLocation">
-			<value>classpath:sql-map.xml</value>
-		</property>
-		<property name="dataSource" ref="dataSourceScore"></property>
-	</bean>
-	
+ 	<!--<bean id="sqlMapClientScore" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">-->
+		<!--<property name="configLocation">-->
+			<!--<value>classpath:sql-map.xml</value>-->
+		<!--</property>-->
+		<!--<property name="dataSource" ref="dataSourceScore"></property>-->
+	<!--</bean>-->
+	<!---->
 
  	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
  	</bean>

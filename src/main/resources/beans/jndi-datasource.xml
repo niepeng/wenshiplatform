@@ -15,13 +15,13 @@
 		</property>
 	</bean>
 	
-	<bean id="dataSourceScore" class="org.springframework.jndi.JndiObjectFactoryBean" destroy-method="close">
-		<property name="jndiName">
-			<value>jdbc/ds2</value>
-		</property>
-		<property name="jndiTemplate">
-			<ref local="jndiTemplate"/>
-		</property>
-	</bean>
+	<!--<bean id="dataSourceScore" class="org.springframework.jndi.JndiObjectFactoryBean" destroy-method="close">-->
+		<!--<property name="jndiName">-->
+			<!--<value>jdbc/ds2</value>-->
+		<!--</property>-->
+		<!--<property name="jndiTemplate">-->
+			<!--<ref local="jndiTemplate"/>-->
+		<!--</property>-->
+	<!--</bean>-->
 
 </beans>
