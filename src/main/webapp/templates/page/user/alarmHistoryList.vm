@@ -55,20 +55,25 @@
 							<table class="table table-hover">
 								<thead class="navbar-inner">
 									<tr>
-										<th style="width:140px;">区域</th>
-										<th style="width:140px;">设备名</th>
+										<th style="width:140px;">报警ID</th>
+										<th style="width:140px;">设备名称</th>
 										<th style="width:120px;">报警原因</th>
-										<th style="width:70px;">时间</th>
+										<th style="width:200px;">报警时间</th>
+										<th style="width:70px;">备注账号</th>
+										<th style="width:140px;">备注</th>
 									</tr>
 								</thead>
 								<tbody>
-									#foreach($alarmData in $devcieBean.alarmBeanList)
-    									<tr>
-    										<td>#if("$!devcieBean.area" != "") $!devcieBean.area #else -- #end</td>	
-    										<td>$!devcieBean.devName</td>	
-    										<td>$!alarmData.msg</td>	
-											<td>$!alarmData.alarmTime</td>	
-    									</tr>
+									#foreach($alarmData in $alarmBeanList)
+                  <tr>
+                    <td>$!alarmData.alarmId</td>
+                    <td>$!alarmData.devName ($!alarmData.snaddr)</td>
+                    <td>$!alarmData.info</td>
+                    <td>开始报警:$!alarmData.startTime <br>
+                      结束报警: $!alarmData.endTime </td>
+                    <td>$!alarmData.handleUser</td>
+                    <td>$!alarmData.additionInfo</td>
+                  </tr>
 									#end
 								</tbody>
 							</table>

@@ -36,8 +36,11 @@ public interface UserAO {
 	public Result historyDataExport(FlowData flowData, DeviceDataBean deviceDataBean, String exportType);
 
 	public Result alarmList(FlowData flowData);
+	public Result alarmList2(FlowData flowData);
+	public Result writeAlarmNote(FlowData flowData);
 
 	public Result alarmHistoryList(FlowData flowData, AlarmQuery alarmQuery);
+	public Result alarmHistoryList2(FlowData flowData, AlarmQuery alarmQuery);
 
 	public Result deviceList(FlowData flowData, DeviceQuery deviceQuery);
 

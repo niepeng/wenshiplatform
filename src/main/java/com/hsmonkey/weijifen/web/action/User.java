@@ -202,10 +202,25 @@ public class User extends BaseAction {
 		if(!checkUserSessionNeedRedrect(flowData, context)) {
 			return;
 		}
-		Result result = userAO.alarmList(flowData);
+		String msg = urlDecode(flowData.getParameters().getString("msg"));
+		Result result = userAO.alarmList2(flowData);
 		handleResult(result, flowData, context);
+		context.put("msg", msg);
 	}
-	
+
+	public void writeAlarmNote(FlowData flowData, Context context) {
+		if (!checkUserSessionNeedRedrect(flowData, context)) {
+			return;
+		}
+		Result result = userAO.writeAlarmNote(flowData);
+		boolean isSuccess = result.isSuccess();
+		String msg = "操作失败,报警尚未结束!";
+		if (isSuccess) {
+			msg = "操作成功";
+		}
+		flowData.redirectTo("userModule", "alarmList").param("msg", urlEncode(msg));
+	}
+
 	public void alarmHistoryList(FlowData flowData, Context context) {
 		if (!checkUserSessionNeedRedrect(flowData, context)) {
 			return;
@@ -215,7 +230,8 @@ public class User extends BaseAction {
 		alarmQuery.setStartTime(flowData.getParameters().getString("startTime"));
 		alarmQuery.setEndTime(flowData.getParameters().getString("endTime"));
 		
-		Result result = userAO.alarmHistoryList(flowData, alarmQuery);
+//		Result result = userAO.alarmHistoryList(flowData, alarmQuery);
+		Result result = userAO.alarmHistoryList2(flowData, alarmQuery);
 		handleResult(result, flowData, context);
 	}
 	

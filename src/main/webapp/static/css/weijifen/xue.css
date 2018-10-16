@@ -11,7 +11,7 @@
         border-radius: 50%;
         width: 20px;
         height: 20px;
-		background-color:yellow;
+		background-color:#ffdb13;
     }
 	
 	.circle-other {
@@ -20,7 +20,14 @@
         height: 20px;
 		background-color:gray;
     }
-	
+
+	.circle-kaiguan {
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+		background-color:red;
+    }
+
 	
 	.circle-success {
         border-radius: 50%;

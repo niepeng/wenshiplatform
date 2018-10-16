@@ -14,53 +14,152 @@
 				</div>
 				
 				
-				<div id="main_score">
-					<div style="color:green;font-size:20px;">
-						仅展示最近24小时的所有报警
-                    </div>	
-					<!--
-					<div>
-						<a href="$promotionModule.setTarget('goodEvaluateExport').param('shopId',$shopDO.id).param('status','1')" onclick="return confirm('确认要导出已通过的数据？'); return false;">导出已通过的数据</a>  &nbsp;&nbsp; &nbsp;&nbsp;
-						<a href="$promotionModule.setTarget('goodEvaluatePayAll').param('shopId',$shopDO.id).param('status','1')" onclick="return confirm('此操作不可恢复，确认把已经通过的用户标记已支付？'); return false;" >把已通过的用户标记已支付</a> 
-					</div>	
-				-->
-					<div class="main scoreChange" id = "scoreChange_manager"  >
-						<div style="padding:15px;">
-							<table class="table table-hover">
-								<thead class="navbar-inner">
-									<tr>
-										<th style="width:140px;">区域</th>
-										<th style="width:140px;">设备名</th>
-										<th style="width:120px;">报警原因</th>
-										<th style="width:70px;">时间</th>
-									</tr>
-								</thead>
-								<tbody>
-									#foreach($bean in $beanList)
-										#foreach($alarmData in $bean.alarmBeanList)
-        									<tr>
-        										<td>#if("$!bean.area" != "") $!bean.area #else -- #end</td>	
-        										<td>$!bean.devName</td>	
-        										<td>$!alarmData.msg</td>	
-												<td>$!alarmData.alarmTime</td>	
-        									</tr>
-										#end
-									#end
-								</tbody>
-							</table>
-						</div>
-					</div>
+##				<div id="main_score">
+##					<div style="color:green;font-size:20px;">
+##						仅展示最近24小时的所有报警
+##                    </div>
+##
+##					<div class="main scoreChange" id = "scoreChange_manager"  >
+##						<div style="padding:15px;">
+##							<table class="table table-hover">
+##								<thead class="navbar-inner">
+##									<tr>
+##										<th style="width:140px;">区域</th>
+##										<th style="width:140px;">设备名</th>
+##										<th style="width:120px;">报警原因</th>
+##										<th style="width:70px;">时间</th>
+##									</tr>
+##								</thead>
+##								<tbody>
+##									#foreach($bean in $beanList)
+##										#foreach($alarmData in $bean.alarmBeanList)
+##        									<tr>
+##        										<td>#if("$!bean.area" != "") $!bean.area #else -- #end</td>
+##        										<td>$!bean.devName</td>
+##        										<td>$!alarmData.msg</td>
+##												<td>$!alarmData.alarmTime</td>
+##        									</tr>
+##										#end
+##									#end
+##								</tbody>
+##							</table>
+##						</div>
+##					</div>
+##
+##				</div>
 
-				</div>
+							<div id="main_score">
+##								<div style="color:green;font-size:20px;">
+##									仅展示最近24小时的所有报警
+##			                    </div>
+
+								<div class="main scoreChange" id = "scoreChange_manager"  >
+									<div style="padding:15px;">
+										<table class="table table-hover">
+											<thead class="navbar-inner">
+												<tr>
+													<th style="width:140px;">报警ID</th>
+													<th style="width:140px;">设备名称</th>
+													<th style="width:120px;">报警原因</th>
+													<th style="width:200px;">报警时间</th>
+													<th style="width:70px;">报警状态</th>
+													<th style="width:140px;">备注</th>
+													<th style="width:70px;">操作</th>
+												</tr>
+											</thead>
+											<tbody>
+
+												#foreach($alarmData in $alarmBeanList)
+			        							<tr>
+			        										<td>$!alarmData.alarmId</td>
+			        										<td>$!alarmData.devName ($!alarmData.snaddr)</td>
+			        										<td>$!alarmData.info</td>
+			        										<td>开始报警:$!alarmData.startTime <br>
+																		  结束报警:#if($!alarmData.isAlarmEnd()) $!alarmData.endTime #else --  #end</td>
+			        										<td>#if($!alarmData.isAlarmEnd()) <tt style="color: green;">报警结束</tt> #else <tt style="color: red;">正在报警</tt>  #end</td>
+			        										<td>$!alarmData.additionInfo</td>
+			        										<td><button class="btn btn-xs btn-primary" type="button" onclick="writeNote('$!alarmData.alarmId' , '$!alarmData.snaddr' , $!alarmData.alarmState)">编写备注</button></td>
+			        							</tr>
+												#end
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+							</div>
 
 				
 
 			</div>
 		</div>
 	</div>
-	
-	<script type="text/javascript">
-		
+
+
+
+  <div id="noteDiv" class="page-content" style="width:500px;background: white;position: absolute;top: 100px; z-index:999;border: 2px #ccc solid;left: 50%;transform: translate(-50%);display: none;">
+    <div class="page-header" style="padding-left: 20px;">
+      <h3>编写备注</h3>
+    </div>
+    <div style="position: absolute; right:20px; top:20px; witdh:20px; height:20px;line-height: 20px;text-align: center;cursor:pointer;" onclick="hiddenShowDiv()">X</div>
+    <form id="inputForm" action="$userModule.setTarget('writeAlarmNote')" method="post" class="form-horizontal" enctype="multipart/form-data">
+      <input type="hidden" name="alarmId" id="alarmId" value=""/>
+      <input type="hidden" name="snaddr" id="snaddr" value=""/>
+
+
+      <div class="row">
+        <div class="col-xs-12 col-md-8">
+          <div class="form-group">
+            <label class="col-md-4 col-sm-2 control-label">备注：</label>
+            <div class="col-md-8 col-sm-8">
+              <textarea name="userNote" id="userNote" rows="5" cols="40"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix form-actions">
+        <div class="row">
+          <div class="col-md-8" style="margin-top: 20px;margin-bottom: 20px;">
+            <div class="col-sm-offset-4 col-md-9">
+              <button id="sbt" class="btn btn-info" type="submit">
+                <i id="iok" class="icon-ok bigger-110">保存</i>
+              </button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <button class="btn" type="button" onclick="javascript:hiddenShowDiv();">
+                <i class="icon-arrow-left bigger-110"></i>返回
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+
+
+  <script type="text/javascript">
+    function writeNote(id, snaddr, alarmState) {
+			// 报警状态 正在报警:0, 已结束为 1
+			if(alarmState == 0) {
+				alert("报警未结束,无法编写备注");
+				return;
+			}
+      var obj = document.getElementById("noteDiv");
+      obj.style.display = "block";
+      document.getElementById("alarmId").value = id;
+      document.getElementById("snaddr").value = snaddr;
+    }
+
+
+    function hiddenShowDiv() {
+      var obj = document.getElementById("noteDiv");
+      obj.style.display = "none";
+    }
+
+		#if("$!msg" != "")
+			alert('$!msg');
+		#end
 	</script>
 	<div id="footerForFootId" class="container-fluid footerForFoot" role="footer">
 		$widget.setTemplate('foot')

@@ -39,6 +39,7 @@ public class DeviceDataBean {
 	 * 1 -- 备离线（优先级最高） 
 	 * 2 -- 传感器异常（优先级第二高，一旦传感器异常，无视下列所有异常，损坏） 
 	 * 3 -- 传感器未连接
+	 * 4 -- 四路开关量有一路或多路处于触发状态
 	 */
 	private String abnormal;
 	
@@ -55,6 +56,11 @@ public class DeviceDataBean {
 	public boolean isSuccess() {
 		return "0".equals(abnormal);
 	}
+
+	public boolean isKaiguan()  {
+		return "4".equals(abnormal);
+	}
+
 	
 	public boolean isNotConnection() {
 		return "3".equals(abnormal);

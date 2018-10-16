@@ -1,6 +1,7 @@
 package com.hsmonkey.weijifen.biz.ao.impl;
 
 import com.hsmonkey.weijifen.biz.bean.AdminBean;
+import com.hsmonkey.weijifen.biz.bean.AlarmNewBean;
 import com.hsmonkey.weijifen.biz.bean.MobileDeviceBean;
 import java.io.File;
 import java.util.ArrayList;
@@ -155,7 +156,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 			headerMap.put("TYPE", "modifyPass");
 			Map<String, Object> argsMap = new HashMap<String, Object>();
 			argsMap.put("user", fromSessionUser.getUser());
-			argsMap.put("oldPass", userBean.getPassword());
+			argsMap.put("oldPass", MD5.encrypt(userBean.getPassword()));
 			argsMap.put("newPass", MD5.encrypt(userBean.getNewPsw()));
 			String body = JsonUtil.mapToJson(argsMap);
 //			System.out.println(body);
@@ -228,7 +229,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 					}
 					
 					if(o1.getDataBean().getAbnormal() == null) {
-					    return -1;
+					    return 1;
 					}
 					
 					if(o2.getDataBean().getAbnormal() == null) {
@@ -259,12 +260,47 @@ public class UserAOImpl extends BaseAO implements UserAO {
 					}
 				}
 			}
-			
+
+			int successNum = 0;
+			int notConnectionNum = 0;
+			int kaiguanNum = 0;
+			int otherNum = 0;
+
+			if(beanList != null) {
+				DeviceDataBean deviceDataBean = null;
+				for(DeviceBean deviceBean : beanList) {
+					if ((deviceDataBean = deviceBean.getDataBean()) == null) {
+						continue;
+					}
+					if (deviceDataBean.isSuccess()) {
+						successNum++;
+						continue;
+					}
+					if (deviceDataBean.isNotConnection()) {
+						notConnectionNum++;
+						continue;
+					}
+					if (deviceDataBean.isKaiguan()) {
+						kaiguanNum++;
+						continue;
+					}
+					otherNum++;
+
+				}
+			}
+
 			result.getModels().put("beanList", beanList);
 			result.getModels().put("showMp3", showMp3);
 			result.getModels().put("userBean", userBean);
 			result.getModels().put("areaList", areaList);
 			result.getModels().put("area", area);
+
+			result.getModels().put("successNum", successNum);
+			result.getModels().put("notConnectionNum", notConnectionNum);
+			result.getModels().put("kaiguanNum", kaiguanNum);
+			result.getModels().put("otherNum", otherNum);
+
+
 
 			result.setSuccess(true);
 			
@@ -472,7 +508,72 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		}
 		return result;
 	}
-	
+
+	@Override
+	public Result alarmList2(FlowData flowData) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = getUserBean(flowData);
+			List<AlarmNewBean> alarmBeanList = CollectionUtils.newArrayList();
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "getUnresolvedError");
+			String body = JsonUtil.fields("user", userBean);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			if(isSuccess(content)) {
+				JSONObject mainJson = JsonUtil.getJsonObject(content);
+				JSONArray array = JsonUtil.getJsonArray(mainJson, "array");
+				JSONObject json = null;
+				AlarmNewBean alarmBean = null;
+
+				for (int i = 0, size = array.length(); i < size; i++) {
+						json = array.getJSONObject(i);
+						if (json == null) {
+							continue;
+						}
+						alarmBean = new AlarmNewBean();
+					  alarmBean.setAlarmId(JsonUtil.getString(json, "alarmId", null));
+					  alarmBean.setDevName(JsonUtil.getString(json, "devName", null));
+					  alarmBean.setSnaddr(JsonUtil.getString(json, "snaddr", null));
+					  alarmBean.setInfo(JsonUtil.getString(json, "info", null));
+					  alarmBean.setHandle(JsonUtil.getString(json, "handle", null));
+					  alarmBean.setStartTime(JsonUtil.getString(json, "startTime", null));
+					  alarmBean.setEndTime(JsonUtil.getString(json, "endTime", null));
+					  alarmBean.setAlarmState(JsonUtil.getString(json, "alarmState", null));
+					  alarmBean.setAdditionInfo(JsonUtil.getString(json, "additionInfo", null));
+					 alarmBeanList.add(alarmBean);
+				}
+			}
+			result.getModels().put("userBean", userBean);
+			result.getModels().put("alarmBeanList", alarmBeanList);
+			result.setSuccess(true);
+
+		} catch (Exception e) {
+			log.error("alarmList2Error", e);
+		}
+		return result;
+	}
+
+	@Override
+	public Result writeAlarmNote(FlowData flowData) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = getUserBean(flowData);
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "dealwithTheError");
+			Map<String, Object> argsMap = new HashMap<String, Object>();
+			argsMap.put("user", userBean.getUser());
+			argsMap.put("snaddr", flowData.getParameters().getString("snaddr"));
+			argsMap.put("alarmId", flowData.getParameters().getString("alarmId"));
+			argsMap.put("additionInfo", flowData.getParameters().getString("userNote"));
+			String body = JsonUtil.mapToJson(argsMap);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			result.setSuccess(isSuccess(content));
+		} catch (Exception e) {
+			log.error("alarmList2Error", e);
+		}
+		return result;
+	}
+
 	@Override
 	public Result alarmHistoryList(FlowData flowData, AlarmQuery alarmQuery) {
 		Result result = new ResultSupport(false);
@@ -527,7 +628,68 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		}
 		return result;
 	}
-	
+
+	@Override
+	public Result alarmHistoryList2(FlowData flowData, AlarmQuery alarmQuery) {
+		Result result = new ResultSupport(false);
+		try {
+			UserBean userBean = getUserBean(flowData);
+			List<DeviceBean> beanList = getAllDevice(userBean);
+			List<AlarmNewBean> alarmBeanList = CollectionUtils.newArrayList();
+			if (StringUtil.isBlank(alarmQuery.getSnaddr()) && !CollectionUtils.isEmpty(beanList)) {
+				alarmQuery.setSnaddr(beanList.get(0).getSnaddr());
+			}
+			if (StringUtil.isBlank(alarmQuery.getStartTime()) || StringUtil.isBlank(alarmQuery.getEndTime())) {
+				alarmQuery.setStartTime(DateUtil.format(DateUtil.changeMonth(new Date(), -1)));
+				alarmQuery.setEndTime(DateUtil.format(new Date()));
+			}
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "getHistoryAlarm");
+
+			String body = JsonUtil.fields("snaddr,startTime,endTime", alarmQuery);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			String devName = null;
+			if(isSuccess(content)) {
+				JSONObject mainJson = JsonUtil.getJsonObject(content);
+				devName = JsonUtil.getString(mainJson, "devName", null);
+				JSONArray array = JsonUtil.getJsonArray(mainJson, "detail");
+				JSONObject json = null;
+				AlarmNewBean alarmBean = null;
+
+				for (int i = 0, size = array.length(); i < size; i++) {
+					json = array.getJSONObject(i);
+					if (json == null) {
+						continue;
+					}
+					alarmBean = new AlarmNewBean();
+					alarmBean.setAlarmId(JsonUtil.getString(json, "alarmId", null));
+					alarmBean.setDevName(devName);
+					alarmBean.setSnaddr(alarmQuery.getSnaddr());
+					alarmBean.setInfo(JsonUtil.getString(json, "info", null));
+					alarmBean.setHandle(JsonUtil.getString(json, "handle", null));
+					alarmBean.setStartTime(JsonUtil.getString(json, "startTime", null));
+					alarmBean.setEndTime(JsonUtil.getString(json, "endTime", null));
+					alarmBean.setAlarmState(JsonUtil.getString(json, "alarmState", null));
+					alarmBean.setAdditionInfo(JsonUtil.getString(json, "additionInfo", null));
+					alarmBean.setHandleUser(JsonUtil.getString(json, "handleUser", null));
+					alarmBeanList.add(alarmBean);
+				}
+			}
+
+
+
+			result.getModels().put("userBean", userBean);
+			result.getModels().put("alarmBeanList", alarmBeanList);
+			result.getModels().put("beanList", beanList);
+			result.getModels().put("alarmQuery", alarmQuery);
+
+			result.setSuccess(true);
+
+		} catch (Exception e) {
+			log.error("alarmHistoryListError", e);
+		}
+		return result;
+	}
 
 	@Override
 	public Result deviceList(FlowData flowData, DeviceQuery deviceQuery) {
