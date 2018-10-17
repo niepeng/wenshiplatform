@@ -38,7 +38,7 @@
 												</div>
 												<div class="panel-body">
 														<div class="row">
-																<div class="col-lg-10 col-sm-10 col-xs-12" style="width: 60%">
+																<div class="col-lg-10 col-sm-10 col-xs-12" style="width: 70%">
 																		<select name="area" style="padding-right:10px;float:left;height:35px;margin-right:20px;">
 																			<option value="">全部</option>
 																			#foreach($tmpArea in $areaList)
@@ -48,11 +48,28 @@
 																		<input style="float:left;" class="btn btn-primary" value="筛选" type="submit">
 
 																</div>
-																<div class="col-lg-2 col-sm-2 col-xs-12" style="width: 40%">
-                                  <tt style="color: green;">在线</tt>:$!{successNum}个 &nbsp;
-                                  <tt style="color: #ffdb13;">传感器未连接</tt>:$!{notConnectionNum}个 &nbsp;
-                                  <tt style="color: gray;">离线</tt>:$!{otherNum}个 &nbsp;
-                                  <tt style="color: red;">开关量报警</tt>:$!{kaiguanNum}个
+																<div class="col-lg-2 col-sm-2 col-xs-12" style="width: 30%;">
+##                                  <tt style="color: green;">在线</tt>:$!{successNum}个 &nbsp;
+##                                  <tt style="color: #ffdb13;">传感器未连接</tt>:$!{notConnectionNum}个 &nbsp;
+##                                  <tt style="color: gray;">离线</tt>:$!{otherNum}个 &nbsp;
+##                                  <tt style="color: red;">开关量报警</tt>:$!{kaiguanNum}个
+##  																	<div class="circle-success" style="display:inline;"></div>:$!{successNum}
+##  																	<div class="circle-notconnection" style="display:inline;"></div>:$!{notConnectionNum}
+##  																	<div class="circle-other" style="display:inline;"></div>:$!{otherNum}
+##  																	<div class="circle-kaiguan" style="display:inline;"></div>:$!{kaiguanNum}
+
+																	<table>
+																		<tr>
+																			<td style="padding-left: 5px;" ><div class="circle-success"></div></td>
+																			<td>&nbsp;:$!{successNum}</div></td>
+																			<td style="padding-left: 5px;"><div class="circle-notconnection"></div></td>
+																			<td>&nbsp;:$!{notConnectionNum}</div></td>
+																			<td style="padding-left: 5px;"><div class="circle-other"></div></td>
+																			<td>&nbsp;:$!{otherNum}</div></td>
+																			<td style="padding-left: 5px;"><div class="circle-kaiguan"></div></td>
+																			<td>&nbsp;:$!{kaiguanNum}</div></td>
+																		</tr>
+																	</table>
 																</div>
 
 														</div>
