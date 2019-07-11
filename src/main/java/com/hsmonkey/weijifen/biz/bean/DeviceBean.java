@@ -2,6 +2,8 @@ package com.hsmonkey.weijifen.biz.bean;
 
 import java.util.List;
 
+import com.hsmonkey.weijifen.biz.dal.dataobject.enums.DeviceTypeEnum;
+import com.hsmonkey.weijifen.util.StringsUtil;
 import wint.lang.utils.StringUtil;
 
 /**
@@ -65,6 +67,40 @@ public class DeviceBean {
 	
 	public boolean hasAuth() {
 	    return authority == 1;
+	}
+
+	public boolean hasTemp() {
+		if(dataBean == null) {
+			return false;
+		}
+		String types = dataBean.getDeviceTypes();
+		if(types == null) {
+			return false;
+		}
+
+		for(String type : types.split(",")) {
+			if(StringsUtil.str2int(type) == DeviceTypeEnum.temp.getId()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean hasHumi() {
+		if(dataBean == null) {
+			return false;
+		}
+		String types = dataBean.getDeviceTypes();
+		if(types == null) {
+			return false;
+		}
+
+		for(String type : types.split(",")) {
+			if(StringsUtil.str2int(type) == DeviceTypeEnum.humi.getId()) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	// -------------- setter/getter -----------------------
@@ -190,4 +226,5 @@ public class DeviceBean {
 	public void setBeepStatus(String beepStatus) {
 		this.beepStatus = beepStatus;
 	}
+
 }

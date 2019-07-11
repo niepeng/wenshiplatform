@@ -25,6 +25,8 @@
 					<form method="post" id="form1" name="form1">
 						<input type="hidden" name="selectForm" id="selectForm" value="$userModule.setTarget('historyData')" />
 						<input type="hidden" name="exportForm" id="exportForm" value="$userModule.setTarget('historyDataExport')" />
+
+						<input type="hidden" name="deviceTypeValues" id="deviceTypeValues" />
 						<input type="hidden" name="exportType" id="exportType" />
                         	<div class="panel panel-default">
                                 <div class="panel-heading">
@@ -47,12 +49,21 @@
 												 <option value="25" #if($!deviceDataBean.rangeTime == 25) selected #end>25分钟</option>
 												 <option value="30" #if($!deviceDataBean.rangeTime == 30) selected #end>30分钟</option>
 												 <option value="60" #if($!deviceDataBean.rangeTime == 60) selected #end>60分钟</option>
+												 <option value="120" #if($!deviceDataBean.rangeTime == 120) selected #end>2小时</option>
+												 <option value="180" #if($!deviceDataBean.rangeTime == 180) selected #end>3小时</option>
+												 <option value="240" #if($!deviceDataBean.rangeTime == 240) selected #end>4小时</option>
+												 <option value="360" #if($!deviceDataBean.rangeTime == 360) selected #end>6小时</option>
+												 <option value="720" #if($!deviceDataBean.rangeTime == 720) selected #end>12小时</option>
+												 <option value="1440" #if($!deviceDataBean.rangeTime == 1440) selected #end>24小时</option>
+
+
 											</select>
         									<input style="width:160px;float:left;margin-right:20px;" class="form-control" placeholder="开始时间" id="startTime" name="startTime" value="$!deviceDataBean.startTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm',minDate:'2017-01-01 00:00:00',maxDate:''})" type="text">        
         									<input style="width:160px;float:left;margin-right:20px;" class="form-control" placeholder="结束时间" id="endTime" name="endTime" value="$!deviceDataBean.endTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm',minDate:'2017-01-01 00:00:00',maxDate:''})" type="text">        
-											<input style="float:left;margin-right:10px;" class="btn btn-primary" type="button" value="搜索" onclick="submitSelect()" >      
-											<input style="float:left;margin-right:10px;" class="btn btn-primary" type="button"  value="导出excel" onclick="submitExport('excel')" >       
-											<input style="float:left;" class="btn btn-primary" type="button"  value="导出pdf" onclick="submitExport('pdf')" >       
+											<input style="float:left;margin-right:10px;" class="btn btn-primary" type="button" value="搜索" onclick="submitSelect()" >
+											<input style="float:left;margin-right:10px;" class="btn btn-primary" type="button"  value="导出设置" onclick="exportConfig()" >
+										##											<input style="float:left;margin-right:10px;" class="btn btn-primary" type="button"  value="导出excel" onclick="submitExport('excel')" >
+##											<input style="float:left;" class="btn btn-primary" type="button"  value="导出pdf" onclick="submitExport('pdf')" >
 										</div>
                                         <!--
 										<div class="col-lg-2 col-sm-2 col-xs-12">
@@ -97,7 +108,120 @@
 			</div>
 		</div>
 	</div>
-	
+
+
+
+
+
+
+
+<div id="noteDiv" class="page-content" style="width:500px;background: white;position: absolute;top: 100px; z-index:999;border: 2px #ccc solid;left: 50%;transform: translate(-50%);display: none;">
+	<div class="page-header" style="padding-left: 20px;">
+		<h3>导出设置</h3>
+	</div>
+	<div style="position: absolute; right:20px; top:20px; witdh:20px; height:20px;line-height: 20px;text-align: center;cursor:pointer;" onclick="hiddenShowDiv()">X</div>
+	<form id="inputForm" action="$userModule.setTarget('writeAlarmNote')" method="post" class="form-horizontal" enctype="multipart/form-data">
+		<input type="hidden" name="alarmId" id="alarmId" value=""/>
+		<input type="hidden" name="snaddr" id="snaddr" value=""/>
+
+
+		<div class="row">
+			<div class="col-xs-12 col-md-8">
+				<div class="form-group">
+					<label class="col-md-4 col-sm-2 control-label">设备类型：</label>
+					<div class="col-md-8 col-sm-8">
+						<input type="checkbox" name="deviceTypes" value="1"> 温度 &nbsp;
+						<input type="checkbox" name="deviceTypes" value="2"> 湿度 &nbsp;
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 col-md-8">
+				<div class="form-group">
+					<label class="col-md-4 col-sm-2 control-label">导出格式：</label>
+					<div class="col-md-8 col-sm-8">
+						<input type="radio" name="exportType" value="excel"> excel &nbsp;
+						<input type="radio" name="exportType" value="pdf"> pdf &nbsp;
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="clearfix form-actions">
+			<div class="row">
+				<div class="col-md-8" style="margin-top: 20px;margin-bottom: 20px;">
+					<div class="col-sm-offset-4 col-md-9">
+						<button id="sbt" class="btn btn-info" type="button" onclick="exportSubmit()">
+							<i id="iok" class="icon-ok bigger-110">导出</i>
+						</button>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button class="btn" type="button" onclick="javascript:hiddenShowDiv();">
+							<i class="icon-arrow-left bigger-110"></i>返回
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+
+
+<script>
+	function hiddenShowDiv() {
+		var obj = document.getElementById("noteDiv");
+		obj.style.display = "none";
+	}
+
+	function exportConfig() {
+		var obj = document.getElementById("noteDiv");
+		obj.style.display = "block";
+	}
+
+
+	function exportSubmit() {
+		var allow = false;
+		var deviceTypesValue = document.getElementsByName("deviceTypes");
+		var check_val = [];
+		for(k in deviceTypesValue) {
+			if(deviceTypesValue[k].checked) {
+				check_val.push(deviceTypesValue[k].value);
+			}
+		}
+
+		if(check_val.length == 0) {
+			alert("请先选择设备类型");
+			return;
+		}
+
+		document.getElementById("deviceTypeValues").value = check_val;
+
+		// for (var i = 0; i < deviceTypesValue.length; i++) {
+		// 	if(deviceTypesValue[i].checked) {
+		// 		allow = true;
+		// 		break;
+		// 	}
+		// }
+		// if(!allow) {
+		// 	alert("请先选择设备类型");
+		// 	return;
+		// }
+
+
+		var exportTypeValue = $("input[name='exportType']:checked").val();
+		if(typeof(exportTypeValue) == "undefined") {
+			alert("请先选择导出格式");
+		}
+		submitExport(exportTypeValue);
+	}
+
+
+</script>
+
+
+
 	<script type="text/javascript">
 	
 		function submitSelect() {
@@ -110,6 +234,9 @@
 		}
 		
 		function submitExport(type) {
+			if(!checkForm()) {
+				return;
+			}
 			document.getElementById("exportType").value = type;
 			var actionUrl = document.getElementById("exportForm").value;
 			document.form1.action = actionUrl;

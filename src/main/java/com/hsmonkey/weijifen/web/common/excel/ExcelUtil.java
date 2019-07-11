@@ -91,12 +91,22 @@ public class ExcelUtil {
 		cell4 = row4.createCell((short) 1);
 		cell4.setCellValue("记录时间");
 		cell4.setCellStyle(style);
-		cell4 = row4.createCell((short) 2);
-		cell4.setCellValue("温度(℃)");
-		cell4.setCellStyle(style);
-		cell4 = row4.createCell((short) 3);
-		cell4.setCellValue("湿度(%RH)");
-		cell4.setCellStyle(style);
+
+		short rowCell = (short)1;
+		boolean hasTemp = deviceBean.hasTemp();
+		boolean hasHumi = deviceBean.hasHumi();
+
+		if(hasTemp) {
+			cell4 = row4.createCell((short) ++rowCell);
+			cell4.setCellValue("温度(℃)");
+			cell4.setCellStyle(style);
+		}
+
+		if(hasHumi) {
+			cell4 = row4.createCell((short) ++rowCell);
+			cell4.setCellValue("湿度(%RH)");
+			cell4.setCellStyle(style);
+		}
 
 		
 		int startCell = 0;
@@ -111,12 +121,17 @@ public class ExcelUtil {
 				tmpCell.setCellValue(bean.getTime());
 				tmpCell.setCellStyle(style);
 				startCell = 2;
-				tmpCell = tmpRow.createCell((short) startCell++);
-				tmpCell.setCellValue(bean.getTemp());
-				tmpCell.setCellStyle(style);
-				tmpCell = tmpRow.createCell((short) startCell++);
-				tmpCell.setCellValue(bean.getHumi());
-				tmpCell.setCellStyle(style);
+				if(hasTemp) {
+					tmpCell = tmpRow.createCell((short) startCell++);
+					tmpCell.setCellValue(bean.getTemp());
+					tmpCell.setCellStyle(style);
+				}
+
+				if(hasHumi) {
+					tmpCell = tmpRow.createCell((short) startCell++);
+					tmpCell.setCellValue(bean.getHumi());
+					tmpCell.setCellStyle(style);
+				}
 			}
 		}
 		return wb;

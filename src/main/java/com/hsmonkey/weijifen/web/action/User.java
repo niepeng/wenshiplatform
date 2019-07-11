@@ -176,10 +176,13 @@ public class User extends BaseAction {
 		}
 
 		DeviceDataBean deviceDataBean = new DeviceDataBean();
+
 		deviceDataBean.setSnaddr(flowData.getParameters().getString("snaddr"));
 		deviceDataBean.setStartTime(flowData.getParameters().getString("startTime"));
 		deviceDataBean.setEndTime(flowData.getParameters().getString("endTime"));
 		deviceDataBean.setRangeTime(flowData.getParameters().getString("rangeTime"));
+		deviceDataBean.setDeviceTypes(flowData.getParameters().getString("deviceTypeValues"));
+
 		// pdf or excel
 		String exportType = flowData.getParameters().getString("exportType");
 		Result result = userAO.historyDataExport(flowData, deviceDataBean, exportType);

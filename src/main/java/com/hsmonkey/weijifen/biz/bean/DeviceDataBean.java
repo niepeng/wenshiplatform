@@ -51,6 +51,8 @@ public class DeviceDataBean {
 	
 	private String rangeTime;
 
+	private String deviceTypes;
+
 	// -------------- normal method -----------------------
 	
 	public boolean isSuccess() {
@@ -170,5 +172,13 @@ public class DeviceDataBean {
 
 	public void setPressStatus(int pressStatus) {
 		this.pressStatus = pressStatus;
+	}
+
+	public String getDeviceTypes() {
+		return deviceTypes;
+	}
+
+	public void setDeviceTypes(String deviceTypes) {
+		this.deviceTypes = deviceTypes;
 	}
 }
