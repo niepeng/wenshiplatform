@@ -53,6 +53,17 @@ public class BaseAO extends BaseAction {
         String body = JsonUtil.mapToJson(map);
         return client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
     }
+
+    protected String getNodeIdInfo(String user, String snaddr) {
+		Map<String, String> headerMap = new HashMap<String, String>();
+		headerMap.put("TYPE", "getDeviceSet");
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("user", user);
+		map.put("snaddr", snaddr);
+		String body = JsonUtil.mapToJson(map);
+		return client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+	}
 	
 	protected String setDevName(String user, String snaddr, String devName) {
         Map<String, String> tmpMap = new HashMap<String, String>();

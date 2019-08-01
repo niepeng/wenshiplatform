@@ -485,6 +485,7 @@ public class User extends BaseAction {
 		deviceBean.setArea(flowData.getParameters().getString("area"));
 		deviceBean.setDevName(flowData.getParameters().getString("devName"));
 		deviceBean.setDevGap(flowData.getParameters().getString("devGap"));
+		deviceBean.setNodeId(flowData.getParameters().getString("nodeId"));
 		DeviceExtendBean deviceExtendBean = new DeviceExtendBean();
 		deviceExtendBean.setSnaddr(deviceBean.getSnaddr());
 		deviceExtendBean.setMaxTemp(flowData.getParameters().getString("maxTemp"));

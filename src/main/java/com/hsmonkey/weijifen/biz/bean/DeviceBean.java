@@ -38,7 +38,10 @@ public class DeviceBean {
 
 	// 0表示关闭实时开关蜂鸣器报警，1表示打开实时开关蜂鸣器报警
 	private String beepStatus;
-	
+
+	// lora节点信息
+	private String nodeId;
+
 	// -------------- extend attribute --------------------
 	
 	private DeviceExtendBean deviceExtendBean;
@@ -227,4 +230,11 @@ public class DeviceBean {
 		this.beepStatus = beepStatus;
 	}
 
+	public String getNodeId() {
+		return nodeId;
+	}
+
+	public void setNodeId(String nodeId) {
+		this.nodeId = nodeId;
+	}
 }
