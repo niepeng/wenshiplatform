@@ -931,14 +931,20 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				result.setResultCode(new StringResultCode("当前参数错误"));
 				return result;
 			}
-			JSONObject json = JsonUtil.getJsonObject(content);
 			DeviceBean deviceBean = JsonUtil.jsonToBean(content, DeviceBean.class);
 			deviceBean.setSnaddr(snaddr);
 
 			// 获取设备的详细信息
 			deviceBean.setDeviceExtendBean(getDeviceExtendInfo(deviceBean));
-						
-			
+
+            String nodeIdContent = getNodeIdInfo(userBean.getUser(), snaddr);
+            String nodeId = "";
+            if(isSuccess(nodeIdContent)) {
+				JSONObject jsonData = JsonUtil.getJSONObject(JsonUtil.getJsonObject(nodeIdContent), "array");
+				nodeId = JsonUtil.getString(jsonData, "nodeId", "");
+			}
+			deviceBean.setNodeId(nodeId);
+
 			result.getModels().put("userBean", userBean);
 			result.getModels().put("areaList", areaList);
 			result.getModels().put("deviceBean", deviceBean);
@@ -955,7 +961,13 @@ public class UserAOImpl extends BaseAO implements UserAO {
 	public Result doEditDevice(FlowData flowData, DeviceBean deviceBean) {
 		Result result = new ResultSupport(false);
 		try {
+			if(!StringUtil.isBlank(deviceBean.getNodeId()) && deviceBean.getNodeId().trim().length() != 8) {
+				result.setResultCode(new StringResultCode("输入 无线温湿度节点SN 有误，请重新编辑！"));
+				return result;
+			}
+
 		    UserBean userBean = getUserBean(flowData);
+			deviceBean.setUser(userBean.getUser());
 		    String content = getDevInfo(userBean.getUser(), deviceBean.getSnaddr());
 			if (!isSuccess(content)) {
 				result.setResultCode(new StringResultCode("当前参数错误"));
@@ -1011,7 +1023,19 @@ public class UserAOImpl extends BaseAO implements UserAO {
 					return result;
 				}
 			}
-			
+
+			// 5.设置nodeId
+			if(!StringUtil.isBlank(deviceBean.getNodeId())) {
+				Map<String, String> tmpMap = new HashMap<String, String>();
+				tmpMap.put("TYPE", "setNodeId");
+				String tmpBody = JsonUtil.fields("snaddr,user,nodeId", deviceBean);
+				String tmpContent = client.subPostForOnlyOneClient(API_URL, tmpBody, "utf-8", tmpMap);
+				if(!isSuccess(tmpContent)) {
+					result.setResultCode(new StringResultCode("输入SN有误，设置失败，请重新编辑！"));
+					return result;
+				}
+			}
+
 			result.setSuccess(true);
 
 		} catch (Exception e) {

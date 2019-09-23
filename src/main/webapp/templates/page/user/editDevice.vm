@@ -80,7 +80,7 @@
             										</tt>
             									</div>
             								</div>
-											
+
 											<div class="form-group">
             									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
         											<tt id="">
@@ -102,6 +102,17 @@
             										</tt>
             									</div>
             								</div>
+
+
+											<div class="form-group">
+												<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
+													<tt id="">
+														无线温湿度节点SN:<input type="text" style="width:250px;display:inline;height:30px;" id="nodeId" name="nodeId" value="$!deviceBean.nodeId" class="form-control"> (该功能仅限日期19.08.01之后的CQY112 ,CQY212及CQY412主机)
+
+														<br>
+													</tt>
+												</div>
+											</div>
 											
 											<div class="form-group">
             									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">

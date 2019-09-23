@@ -2,6 +2,8 @@ package com.hsmonkey.weijifen.biz.bean;
 
 import java.util.List;
 
+import com.hsmonkey.weijifen.biz.dal.dataobject.enums.DeviceTypeEnum;
+import com.hsmonkey.weijifen.util.StringsUtil;
 import wint.lang.utils.StringUtil;
 
 /**
@@ -36,7 +38,10 @@ public class DeviceBean {
 
 	// 0表示关闭实时开关蜂鸣器报警，1表示打开实时开关蜂鸣器报警
 	private String beepStatus;
-	
+
+	// lora节点信息
+	private String nodeId;
+
 	// -------------- extend attribute --------------------
 	
 	private DeviceExtendBean deviceExtendBean;
@@ -65,6 +70,40 @@ public class DeviceBean {
 	
 	public boolean hasAuth() {
 	    return authority == 1;
+	}
+
+	public boolean hasTemp() {
+		if(dataBean == null) {
+			return false;
+		}
+		String types = dataBean.getDeviceTypes();
+		if(types == null) {
+			return false;
+		}
+
+		for(String type : types.split(",")) {
+			if(StringsUtil.str2int(type) == DeviceTypeEnum.temp.getId()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean hasHumi() {
+		if(dataBean == null) {
+			return false;
+		}
+		String types = dataBean.getDeviceTypes();
+		if(types == null) {
+			return false;
+		}
+
+		for(String type : types.split(",")) {
+			if(StringsUtil.str2int(type) == DeviceTypeEnum.humi.getId()) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	// -------------- setter/getter -----------------------
@@ -189,5 +228,13 @@ public class DeviceBean {
 
 	public void setBeepStatus(String beepStatus) {
 		this.beepStatus = beepStatus;
+	}
+
+	public String getNodeId() {
+		return nodeId;
+	}
+
+	public void setNodeId(String nodeId) {
+		this.nodeId = nodeId;
 	}
 }

@@ -116,18 +116,43 @@ public class PDFGenUtil {
 			
 			table.addCell(createCell(deviceBean.getShowValue(), keyfont, Element.ALIGN_CENTER, 4, true));
 
+			int emptyCell = 0;
+			boolean hasTemp = deviceBean.hasTemp();
+			boolean hasHumi = deviceBean.hasHumi();
+
 			table.addCell(createCell("NO", keyfont, Element.ALIGN_CENTER));
 			table.addCell(createCell("时间", keyfont, Element.ALIGN_CENTER));
-			table.addCell(createCell("温度(℃)", keyfont, Element.ALIGN_CENTER));
-			table.addCell(createCell("湿度(%RH)", keyfont, Element.ALIGN_CENTER));
+			if(hasTemp) {
+				table.addCell(createCell("温度(℃)", keyfont, Element.ALIGN_CENTER));
+			} else {
+				emptyCell ++;
+			}
+
+			if(hasHumi) {
+				table.addCell(createCell("湿度(%RH)", keyfont, Element.ALIGN_CENTER));
+			} else {
+				emptyCell++;
+			}
+
+			for(int i = 0; i<emptyCell; i++) {
+				table.addCell(createCell("", keyfont, Element.ALIGN_CENTER));
+			}
+
 
 			List<DeviceDataBean> dataList = deviceBean.getDeviceDataBeanList();
 			if (dataList != null) {
 				for (int i = 0, size = dataList.size(); i < size; i++) {
 					table.addCell(createCell(String.valueOf(i + 1), textfont));
 					table.addCell(createCell(dataList.get(i).getTime(), textfont));
-					table.addCell(createCell(dataList.get(i).getTemp(), textfont));
-					table.addCell(createCell(dataList.get(i).getHumi(), textfont));
+					if(hasTemp) {
+						table.addCell(createCell(dataList.get(i).getTemp(), textfont));
+					}
+					if(hasHumi) {
+						table.addCell(createCell(dataList.get(i).getHumi(), textfont));
+					}
+					for(int e = 0; e < emptyCell; e++) {
+						table.addCell(createCell("", textfont));
+					}
 				}
 			}
 			
