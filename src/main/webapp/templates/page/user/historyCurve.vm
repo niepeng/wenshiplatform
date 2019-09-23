@@ -15,7 +15,7 @@
 
 <script type="text/javascript" src="$staticServer/js/weijifen/datepicker/WdatePicker.js"></script>
 
-<script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+<script src="https://cdn.hcharts.cn/highcharts/highcharts.js"></script>
 </head>
 <body>
 	$widget.setTemplate('top').addToContext('userBean',$userBean).addToContext('checkIndex','4').addToContext('message',$message)
