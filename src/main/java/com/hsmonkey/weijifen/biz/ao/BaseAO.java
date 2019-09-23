@@ -234,6 +234,12 @@ public class BaseAO extends BaseAction {
 		}
 		JSONObject json = JsonUtil.getJSONObject(jsonObject, "array");
 		DeviceDataBean dataBean = new DeviceDataBean();
+
+		dataBean.setDoor(JsonUtil.getString(json, "door", null));
+		dataBean.setSmoke(JsonUtil.getString(json, "smoke", null));
+		dataBean.setWater(JsonUtil.getString(json, "water", null));
+		dataBean.setPow(JsonUtil.getString(json, "pow", null));
+
 		dataBean.setAbnormal(JsonUtil.getString(json, "abnormal", null));
 		dataBean.setTime(JsonUtil.getString(json, "time", null));
 		JSONObject humiJson = JsonUtil.getJSONObject(json, "humi");

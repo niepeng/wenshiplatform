@@ -33,6 +33,17 @@ public class DeviceDataBean {
 	private String in1;
 	
 	private String time;
+
+
+	// 门磁：1报警，F未接入，0 正常
+	private String door;
+	// 停电：1报警，F未接入，0 正常
+	private String pow;
+	// 水浸：1报警，F未接入，0 正常
+	private String water;
+	// 烟雾：1报警，F未接入，0 正常
+	private String smoke;
+
 	
 	/*
 	 * 0 -- 无异常; 
@@ -180,5 +191,37 @@ public class DeviceDataBean {
 
 	public void setDeviceTypes(String deviceTypes) {
 		this.deviceTypes = deviceTypes;
+	}
+
+	public String getDoor() {
+		return door;
+	}
+
+	public void setDoor(String door) {
+		this.door = door;
+	}
+
+	public String getPow() {
+		return pow;
+	}
+
+	public void setPow(String pow) {
+		this.pow = pow;
+	}
+
+	public String getWater() {
+		return water;
+	}
+
+	public void setWater(String water) {
+		this.water = water;
+	}
+
+	public String getSmoke() {
+		return smoke;
+	}
+
+	public void setSmoke(String smoke) {
+		this.smoke = smoke;
 	}
 }

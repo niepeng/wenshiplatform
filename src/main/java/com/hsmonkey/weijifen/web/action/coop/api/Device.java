@@ -41,6 +41,17 @@ public class Device extends BaseAction {
 		handleApiResult(result, flowData, context);
 	}
 
+
+	// 实时数据包含开关量设备信息接口
+	public void intimeDataHasOpenClose(FlowData flowData, Context context) {
+		String accessToken = flowData.getParameters().getString("accessToken");
+		String snaddrs = flowData.getParameters().getString("snaddrs");
+		Result result = apiAO.intimeData(flowData, accessToken, snaddrs);
+		handleApiResult(result, flowData, context);
+	}
+
+
+
 	public void setApiAO(ApiAO apiAO) {
 		this.apiAO = apiAO;
 	}

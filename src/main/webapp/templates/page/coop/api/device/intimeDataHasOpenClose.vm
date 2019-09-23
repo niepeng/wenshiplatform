@@ -1,0 +1,8 @@
+{"code":0,
+"data":
+{
+#if($dataList.size() > 0)
+"dataList": $jsonUtil.mfields("snaddr,humi,temp,press,humiStatus,tempStatus,door,pow,water,smoke,time,abnormal",$dataList, 'yyyy-MM-dd HH:mm:ss')
+#end
+}
+}
