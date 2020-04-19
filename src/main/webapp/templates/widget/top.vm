@@ -20,8 +20,9 @@
 					  
 				<li #if($checkIndex == 2) class="active" #end><a href="$userModule.setTarget('deviceList')">管理中心</a>
 					<ul>    
-                        <li><a href="$userModule.setTarget('deviceList')">设备管理</a></li>    
-                        <li><a href="$userModule.setTarget('areaList')">区域管理</a></li>    
+##                        <li><a href="$userModule.setTarget('deviceList')">设备管理</a></li>
+                        <li><a href="$userModule.setTarget('addDevice')">设备管理</a></li>
+                        <li><a href="$userModule.setTarget('areaList')">区域管理</a></li>
                         <li><a href="$userModule.setTarget('alarmManage')">报警设置</a></li>
                     </ul>
 				</li>

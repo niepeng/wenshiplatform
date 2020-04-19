@@ -298,7 +298,8 @@ public class User extends BaseAction {
 
 		Result result = userAO.addDevice(flowData, deviceBean);
 		if (result.isSuccess()) {
-			flowData.redirectTo("userModule", "deviceList").param("msg", urlEncode("操作成功"));
+//			flowData.redirectTo("userModule", "deviceList").param("msg", urlEncode("操作成功"));
+			flowData.redirectTo("userModule", "addDevice").param("msg", urlEncode("操作成功"));
 			return;
 		}
 		String str = "操作失败";
@@ -498,7 +499,8 @@ public class User extends BaseAction {
 
 		Result result = userAO.doEditDevice(flowData, deviceBean);
 		if (result.isSuccess()) {
-			flowData.redirectTo("userModule", "deviceList").param("msg", urlEncode("操作成功"));
+//			flowData.redirectTo("userModule", "deviceList").param("msg", urlEncode("操作成功"));
+			flowData.redirectTo("userModule", "addDevice").param("msg", urlEncode("操作成功"));
 			return;
 		}
 		String str = "操作失败";
