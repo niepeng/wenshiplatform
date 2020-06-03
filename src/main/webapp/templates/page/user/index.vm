@@ -156,7 +156,7 @@
     					<div class="clearfix panel-body wenshifont">
     						<div>
 								#if($bean.dataBean.isSuccess())
-    								#if($bean.dataBean.tempStatus > 0 )
+    								#if($bean.dataBean.tempStatus > 0)
 										<tt style="color:red;">${bean.dataBean.temp}℃</tt>
     									<tt style="float:right;color:red;">↑</tt>
     								#elseif($bean.dataBean.tempStatus < 0)
@@ -168,7 +168,17 @@
 								 #elseif($bean.dataBean.isNotConnection())
 										<tt>传感器未连接</tt>
 								 #elseif($bean.dataBean.isKaiguan())
-										<tt>开关量报警</tt>
+										## <tt>开关量报警</tt>
+										##  这里有特殊需求，开关量报警的时候，还是显示温湿度的信息
+										#if($bean.dataBean.tempStatus > 0)
+											<tt style="color:red;">${bean.dataBean.temp}℃</tt>
+											<tt style="float:right;color:red;">↑</tt>
+										#elseif($bean.dataBean.tempStatus < 0)
+											<tt style="color:blue;">${bean.dataBean.temp}℃</tt>
+											<tt style="float:right;color:blue;">↓</tt>
+										#else
+											<tt>${bean.dataBean.temp}℃</tt>
+										#end
 									#else
 										<tt>设备离线</tt>
 								#end
@@ -185,11 +195,21 @@
 										<tt>${bean.dataBean.humi}%</tt>
 									#end
 								#elseif($bean.dataBean.isNotConnection())
-                  <tt>传感器未连接</tt>
+										<tt>传感器未连接</tt>
 								#elseif($bean.dataBean.isKaiguan())
-                  <tt>开关量报警</tt>
+                  					##	<tt>开关量报警</tt>
+								##  这里有特殊需求，开关量报警的时候，还是显示温湿度的信息
+									#if($bean.dataBean.humiStatus > 0 )
+										<tt style="color:red;">${bean.dataBean.humi}%</tt>
+										<tt style="float:right;color:red;">↑</tt>
+									#elseif($bean.dataBean.humiStatus < 0)
+										<tt style="color:blue;">${bean.dataBean.humi}%</tt>
+										<tt style="float:right;color:blue;">↓</tt>
+									#else
+										<tt>${bean.dataBean.humi}%</tt>
+									#end
 								#else
-                  <tt>设备离线</tt>
+                 						 <tt>设备离线</tt>
 								#end
     							
     						</div>	
