@@ -42,6 +42,7 @@
 											</select>
 											<select name="rangeTime" id="rangeTime" style="padding-right:10px;float:left;height:35px;margin-right:20px;">
 												 <option value="1"  #if($!deviceDataBean.rangeTime == 1) selected #end>1分钟</option>
+												 <option value="2"  #if($!deviceDataBean.rangeTime == 2) selected #end>2分钟</option>
 												 <option value="5" #if($!deviceDataBean.rangeTime == 5) selected #end>5分钟</option>
 												 <option value="10" #if($!deviceDataBean.rangeTime == 10) selected #end>10分钟</option>
 												 <option value="15" #if($!deviceDataBean.rangeTime == 15) selected #end>15分钟</option>
