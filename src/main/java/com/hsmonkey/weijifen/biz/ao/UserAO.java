@@ -73,6 +73,9 @@ public interface UserAO {
 
 	public Result bindMail(FlowData flowData, String mail);
 
+	public Result bindRemoveMail(FlowData flowData);
+
+
 	public Result doFindPsw(FlowData flowData, String user);
 
 	public Result version(FlowData flowData);

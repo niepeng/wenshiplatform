@@ -550,6 +550,21 @@ public class User extends BaseAction {
 		flowData.redirectTo("userModule", "bindMail").param("msg", urlEncode(msg));
 	}
 
+
+	public void doBindRemoveMail(FlowData flowData, Context context) {
+		if (!checkUserSessionNeedRedrect(flowData, context)) {
+			return;
+		}
+		Result result = userAO.bindRemoveMail(flowData);
+		String msg = null;
+		if (result.isSuccess()) {
+			msg = (String) result.getModels().get("msg");
+		} else {
+			msg = result.getResultCode().getMessage();
+		}
+		flowData.redirectTo("userModule", "bindMail").param("msg", urlEncode(msg));
+	}
+
 		
 		
 	

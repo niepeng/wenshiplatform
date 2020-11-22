@@ -1435,7 +1435,32 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		}
 		return result;
 	}
-	
+
+	@Override
+	public Result bindRemoveMail(FlowData flowData) {
+		Result result = new ResultSupport(false);
+		try {
+			String oldMail = flowData.getParameters().getString("bindMailValue");
+			UserBean userBean = getUserBean(flowData);
+			userBean.setMail(oldMail);
+			Map<String, String> headerMap = new HashMap<String, String>();
+			headerMap.put("TYPE", "delMailbox");
+			String body = JsonUtil.fields("user,mail", userBean);
+			String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+			if (!isSuccess(content)) {
+				result.setResultCode(new StringResultCode("解除绑定邮箱失败，请重试"));
+				return result;
+			}
+
+			result.getModels().put("msg", "解除绑定成功");
+
+			result.setSuccess(true);
+		} catch (Exception e) {
+			log.error("bindRemoveMailError", e);
+		}
+		return result;
+	}
+
 	@Override
 	public Result doFindPsw(FlowData flowData, String user) {
 		Result result = new ResultSupport(false);

@@ -38,10 +38,6 @@
 											<div class="form-group">
 												<div class="col-sm-6 col-md-8 col-xs-12">
 													
-													<!--
-													配置红包金额和概率<br>
-														登录有赞，<a href="https://login.youzan.com/sso/index?service=kdt" target="_blank">点击登录</a>， 登录后进入店铺，点击左边的 "营销" -> "有赞API", 开启，并复制应用ID 和 应用密钥,  还不明白?<a href="$staticServer/images/weijifen/youzan_config.jpg" target="_blank">点击这里</a>
-													-->
 													<span class="help-block"></span>
 												</div>
 											</div>
@@ -51,7 +47,7 @@
                 									<div id="" style="padding-left:50px;" class="col-xs-12 col-sm-9 col-md-10">
             											<tt id="">
                 											已绑定邮箱：$!userBean.mail
-    														<br>
+															<input name="button" style="float:right;margin-right: 60%;margin-left: 20px;" type="button" onclick="removeEmail();" value="解除绑定" class="btn btn-primary col-lg-1">
                 										</tt>
                 									</div>
                 								</div>
@@ -99,8 +95,25 @@
 			</div>
 		</div>
 	</div>
+
+	<div>
+
+		<form id="reply-form-remove" class="form-horizontal form ng-pristine ng-valid" action="$userModule.setTarget('doBindRemoveMail')" method="post">
+			<input type="hidden" name="bindMailValue" id="bindMailValue" value="$!userBean.mail" />
+
+		</form>
+	</div>
 	
 	<script type="text/javascript">
+		function removeEmail() {
+			if(!confirm('确定要解除 $!userBean.mail 绑定吗？')) {
+				return;
+			}
+			// alert("执行解除绑定");
+			var removeForm = document.getElementById("reply-form-remove");
+			removeForm.submit();
+
+		}
 	</script>
 	<div id="footerForFootId" class="container-fluid footerForFoot" role="footer">
 		$widget.setTemplate('foot')
