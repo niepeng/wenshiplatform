@@ -208,15 +208,18 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				}
 			}
 			
-			// 2.获取每一个设备的实时温湿度获取
-			DeviceDataBean dataBean = null;
-			for(DeviceBean bean : beanList) {
-				if(!StringUtil.isBlank(bean.getSnaddr())) {
-					dataBean = getDeviceDataBean(bean);
-					bean.setDataBean(dataBean);
-				}
-			}
-			
+			// 2.获取每一个设备的实时温湿度获取(单个设备的接口实现)
+//			DeviceDataBean dataBean = null;
+//			for(DeviceBean bean : beanList) {
+//				if(!StringUtil.isBlank(bean.getSnaddr())) {
+//					dataBean = getDeviceDataBean(bean);
+//					bean.setDataBean(dataBean);
+//				}
+//			}
+
+			// 2.获取每一个设备的实时温湿度获取(批量设备接口实现)
+			setBeanDatas(beanList, userBean);
+
 			Collections.sort(beanList, new Comparator<DeviceBean>() {
 				@Override
 				public int compare(DeviceBean o1, DeviceBean o2) {

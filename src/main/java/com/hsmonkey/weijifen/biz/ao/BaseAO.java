@@ -234,7 +234,56 @@ public class BaseAO extends BaseAction {
 		}
 		JSONObject json = JsonUtil.getJSONObject(jsonObject, "array");
 		DeviceDataBean dataBean = new DeviceDataBean();
+		setDeviceDataBean(dataBean, json);
+		return dataBean;
+	}
 
+	protected void	setBeanDatas(List<DeviceBean> beanList, UserBean userBean) {
+		if (CollectionUtils.isEmpty(beanList)) {
+			return;
+		}
+
+		Map<String, String> headerMap = new HashMap<String, String>();
+		headerMap.put("TYPE", "getUserRTData");
+		String body = JsonUtil.fields("user", userBean);
+		String content = client.subPostForOnlyOneClient(API_URL, body, "utf-8", headerMap);
+		JSONObject jsonObject = JsonUtil.getJsonObject(content);
+		if (!isSuccess(content)) {
+			return;
+		}
+
+		Map<String, DeviceBean> snaddrDataMap = new HashMap<String, DeviceBean>();
+		for (DeviceBean tmp : beanList) {
+			snaddrDataMap.put(tmp.getSnaddr(), tmp);
+		}
+
+		JSONArray jsonArray = JsonUtil.getJsonArray(jsonObject, "array");
+		JSONObject tmpJsonObject;
+		DeviceDataBean dataBean;
+		DeviceBean tmpDeviceBean;
+		try {
+			if (jsonArray != null && jsonArray.length() > 0) {
+				for (int i = 0, size = jsonArray.length(); i < size; i++) {
+					tmpJsonObject = jsonArray.getJSONObject(i);
+					dataBean = new DeviceDataBean();
+					dataBean.setSnaddr(JsonUtil.getString(tmpJsonObject, "snaddr", null));
+					if (StringUtil.isBlank(dataBean.getSnaddr())) {
+						continue;
+					}
+					tmpDeviceBean = snaddrDataMap.get(dataBean.getSnaddr());
+					if (tmpDeviceBean == null) {
+						continue;
+					}
+					tmpDeviceBean.setDataBean(dataBean);
+					setDeviceDataBean(dataBean, tmpJsonObject);
+				}
+			}
+		} catch (Exception e) {
+		}
+
+	}
+
+	private void setDeviceDataBean(DeviceDataBean dataBean, JSONObject json) {
 		dataBean.setDoor(JsonUtil.getString(json, "door", null));
 		dataBean.setSmoke(JsonUtil.getString(json, "smoke", null));
 		dataBean.setWater(JsonUtil.getString(json, "water", null));
@@ -245,7 +294,7 @@ public class BaseAO extends BaseAction {
 		JSONObject humiJson = JsonUtil.getJSONObject(json, "humi");
 		dataBean.setHumi(JsonUtil.getString(humiJson, "value", null));
 		dataBean.setHumiStatus(ChangeUtil.str2int(JsonUtil.getString(humiJson, "status", null)));
-		
+
 		JSONObject tempJson = JsonUtil.getJSONObject(json, "temp");
 		dataBean.setTemp(JsonUtil.getString(tempJson, "value", null));
 		dataBean.setTempStatus(ChangeUtil.str2int(JsonUtil.getString(tempJson, "status", null)));
@@ -253,9 +302,8 @@ public class BaseAO extends BaseAction {
 		JSONObject pressJson = JsonUtil.getJSONObject(json, "press");
 		dataBean.setPress(JsonUtil.getString(pressJson, "value", null));
 		dataBean.setPressStatus(ChangeUtil.str2int(JsonUtil.getString(pressJson, "status", null)));
-
-		return dataBean;
 	}
+
 
 	public void setKeyValueDAO(KeyValueDAO keyValueDAO) {
 		this.keyValueDAO = keyValueDAO;
