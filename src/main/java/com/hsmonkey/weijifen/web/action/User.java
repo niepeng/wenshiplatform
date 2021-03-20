@@ -247,8 +247,10 @@ public class User extends BaseAction {
 		DeviceQuery deviceQuery = new DeviceQuery();
 		deviceQuery.setArea(flowData.getParameters().getString("area"));
 		deviceQuery.setDeviceName(flowData.getParameters().getString("deviceName"));
+		deviceQuery.setPageIndex(flowData.getParameters().getInt("pageIndex", 1));
 		
 		Result result = userAO.deviceList(flowData, deviceQuery);
+		result.getModels().put("www", getWww(flowData));
 		context.put("msg", msg);
 		handleResult(result, flowData, context);
 	}

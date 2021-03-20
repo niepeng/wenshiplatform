@@ -243,6 +243,7 @@ public class BaseAO extends BaseAction {
 			return;
 		}
 
+		// 获取：所有设备的实时数据
 		Map<String, String> headerMap = new HashMap<String, String>();
 		headerMap.put("TYPE", "getUserRTData");
 		String body = JsonUtil.fields("user", userBean);

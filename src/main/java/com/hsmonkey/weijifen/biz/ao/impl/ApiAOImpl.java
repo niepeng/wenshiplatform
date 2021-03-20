@@ -1,5 +1,6 @@
 package com.hsmonkey.weijifen.biz.ao.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -137,6 +138,9 @@ public class ApiAOImpl extends BaseAO implements ApiAO {
 			if (!success) {
 				return result;
 			}
+
+			ApiAccessTokenDO accessTokenDO = (ApiAccessTokenDO)result.getModels().get("apiAccessTokenDO");
+			String user = accessTokenDO.getUser();
 			
 			if (!checkApiCallLimit(result, accessToken, ApiMethodEnum.inTimeData)) {
 				return result;
@@ -154,6 +158,7 @@ public class ApiAOImpl extends BaseAO implements ApiAO {
 			}
 
 			List<String> snaddrList = CollectionUtils.newArrayList(snaddrs.split(Constant.SPLIT));
+
 			String tmpSnaddr = null;
 			for (int i = 0, size = snaddrList.size(); i < size;) {
 				tmpSnaddr = snaddrList.get(i);
@@ -174,6 +179,35 @@ public class ApiAOImpl extends BaseAO implements ApiAO {
 			}
 
 			List<DeviceDataBean> dataList = CollectionUtils.newArrayList(snaddrList.size());
+			setDeviceDataBeans(dataList, snaddrList, deviceList.size(), user);
+
+			List<DeviceDataBean> resultDataList = new ArrayList<DeviceDataBean>();
+			for(DeviceDataBean tmp : dataList) {
+				if(tmp == null) {
+					continue;
+				}
+				resultDataList.add(tmp);
+			}
+			result.getModels().put("dataList", resultDataList);
+			result.setSuccess(true);
+		} catch (Exception e) {
+			log.error("intimeDataError", e);
+		}
+		return result;
+	}
+
+
+	/**
+	 *  根据snaddr的数量，实时获取数据方式调整
+	 * 	1.如果参数snaddr的数量少于10个，直接单个查询
+	 * 	2.如果参数snaddr的数量超过该账号的一半，走全量获取设备实时数据
+	 * @param dataList
+	 * @param snaddrList
+	 * @param totalSize
+	 * @param user
+	 */
+	private void setDeviceDataBeans(List<DeviceDataBean> dataList, List<String> snaddrList, int totalSize, String user) {
+		if (snaddrList.size() <= 10 && snaddrList.size() <= totalSize / 2) {
 			DeviceDataBean tmpDeviceDataBean = null;
 			for (String tmp : snaddrList) {
 				tmpDeviceDataBean = getDeviceDataBean(tmp);
@@ -183,13 +217,28 @@ public class ApiAOImpl extends BaseAO implements ApiAO {
 				tmpDeviceDataBean.setSnaddr(tmp);
 				dataList.add(tmpDeviceDataBean);
 			}
-
-			result.getModels().put("dataList", dataList);
-			result.setSuccess(true);
-		} catch (Exception e) {
-			log.error("intimeDataError", e);
+			return;
 		}
-		return result;
+
+		UserBean userBean = new UserBean();
+		userBean.setUser(user);
+		List<DeviceBean> deviceBeanList = CollectionUtils.newArrayList(snaddrList.size());
+		DeviceBean tmpBean;
+		for (String snaddr : snaddrList) {
+			tmpBean = new DeviceBean();
+			tmpBean.setSnaddr(snaddr);
+			deviceBeanList.add(tmpBean);
+		}
+
+		setBeanDatas(deviceBeanList, userBean);
+
+		for (DeviceBean tmp : deviceBeanList) {
+			if(tmp == null) {
+				continue;
+			}
+			dataList.add(tmp.getDataBean());
+		}
+
 	}
 
 

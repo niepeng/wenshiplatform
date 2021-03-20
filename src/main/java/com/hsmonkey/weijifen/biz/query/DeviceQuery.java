@@ -15,6 +15,8 @@ public class DeviceQuery extends BaseQuery  {
 	
 	private String deviceName;
 
+	private int pageIndex;
+
 	public String getArea() {
 		return area;
 	}
@@ -30,5 +32,12 @@ public class DeviceQuery extends BaseQuery  {
 	public void setDeviceName(String deviceName) {
 		this.deviceName = deviceName;
 	}
-	
+
+	public int getPageIndex() {
+		return pageIndex;
+	}
+
+	public void setPageIndex(int pageIndex) {
+		this.pageIndex = pageIndex;
+	}
 }

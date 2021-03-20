@@ -3,6 +3,8 @@ package com.hsmonkey.weijifen.biz.ao.impl;
 import com.hsmonkey.weijifen.biz.bean.AdminBean;
 import com.hsmonkey.weijifen.biz.bean.AlarmNewBean;
 import com.hsmonkey.weijifen.biz.bean.MobileDeviceBean;
+import com.hsmonkey.weijifen.biz.page.PageResult;
+import com.hsmonkey.weijifen.biz.page.PaginationQuery;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -699,40 +701,70 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		Result result = new ResultSupport(false);
 		try {
 			UserBean userBean = getUserBean(flowData);
-			List<DeviceBean> beanList = getAllDevice(userBean);
+			List<DeviceBean> allBeanList = getAllDevice(userBean);
 			List<String> areaList = getAllArea(userBean);
-			
+
+
+//================================
+//			List<DeviceBean> testBeanList = new ArrayList<DeviceBean>();
+//			for(int i=0;i < 35;i++) {
+//				testBeanList.add(new DeviceBean());
+//			}
+//			PaginationQuery query = new PaginationQuery();
+//			query.setPageIndex(deviceQuery.getPageIndex());
+//			query.setRowsPerPage(10);
+//			query.addQueryData("area", deviceQuery.getArea());
+//			query.addQueryData("deviceName", deviceQuery.getDeviceName());
+//			PageResult<DeviceBean> pageResult =  new PageResult<DeviceBean>(testBeanList, testBeanList.size(), query);
+//			result.getModels().put("pageResult", pageResult);
+//==================================
+
+
+
+
 			// 区域筛选
 			DeviceBean bean = null;
 			if (!StringUtil.isBlank(deviceQuery.getArea())) {
-				for (int i = 0; i < beanList.size();) {
-					bean = beanList.get(i);
+				for (int i = 0; i < allBeanList.size();) {
+					bean = allBeanList.get(i);
 					if (!deviceQuery.getArea().equals(bean.getArea())) {
-						beanList.remove(i);
+						allBeanList.remove(i);
 						continue;
 					}
 					i++;
 				}
 			}
-			
+
 			// 名称筛选
 			if (!StringUtil.isBlank(deviceQuery.getDeviceName())) {
 				String tmpName = deviceQuery.getDeviceName().trim();
-				for (int i = 0; i < beanList.size();) {
-					bean = beanList.get(i);
+				for (int i = 0; i < allBeanList.size();) {
+					bean = allBeanList.get(i);
 					if (!StringUtil.isBlank(bean.getDevName()) && bean.getDevName().indexOf(tmpName) >= 0) {
 						i++;
 						continue;
 					}
-					beanList.remove(i);
+					allBeanList.remove(i);
 				}
 			}
-			
+
+			PaginationQuery query = new PaginationQuery();
+			query.setPageIndex(deviceQuery.getPageIndex());
+			query.setRowsPerPage(10);
+			query.addQueryData("area", deviceQuery.getArea());
+			query.addQueryData("deviceName", deviceQuery.getDeviceName());
+
+
+			/**
+			 * 分页模式调整
+			 */
+			List<DeviceBean> beanList =  cutCurrentPageBeanList(allBeanList, query.getPageIndex(), query.getRowsPerPage());
+
 			// 循环：获取设备的详细信息
 			for(DeviceBean deviceBean : beanList) {
 				deviceBean.setDeviceExtendBean(getDeviceExtendInfo(deviceBean));
 			}
-			
+
 			// 获取设备上传时间间隔
 //			Map<String, String> headerMap = new HashMap<String, String>();
 //			headerMap.put("TYPE", "getDevInfo");
@@ -746,7 +778,11 @@ public class UserAOImpl extends BaseAO implements UserAO {
 				JSONObject json = JsonUtil.getJsonObject(content);
 				deviceBean.setDevGap(JsonUtil.getString(json, "devGap", null));
 			}
-			
+
+
+			PageResult<DeviceBean> pageResult =  new PageResult<DeviceBean>(beanList, allBeanList.size(), query);
+			result.getModels().put("pageResult", pageResult);
+
 			result.getModels().put("userBean", userBean);
 			result.getModels().put("areaList", areaList);
 			result.getModels().put("beanList", beanList);
@@ -759,7 +795,7 @@ public class UserAOImpl extends BaseAO implements UserAO {
 		}
 		return result;
 	}
-	
+
 	@Override
     public Result areaList(FlowData flowData) {
         Result result = new ResultSupport(false);
@@ -1623,5 +1659,26 @@ public class UserAOImpl extends BaseAO implements UserAO {
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
 	}
-	
+
+
+	private List<DeviceBean> cutCurrentPageBeanList(List<DeviceBean> allBeanList, int pageIndex, int rowsPerPage) {
+		List<DeviceBean> list = new ArrayList<DeviceBean>(rowsPerPage);
+		int total = allBeanList.size();
+
+		int cutStartIndex = (pageIndex - 1) * rowsPerPage;
+		if (pageIndex <= 1) {
+			cutStartIndex = 0;
+		}
+		int cutEndIndex = cutStartIndex + rowsPerPage;
+		if (cutEndIndex >= total) {
+			cutEndIndex = total;
+		}
+
+		if (cutStartIndex >= total) {
+			return list;
+		}
+		return allBeanList.subList(cutStartIndex, cutEndIndex);
+	}
+
+
 }

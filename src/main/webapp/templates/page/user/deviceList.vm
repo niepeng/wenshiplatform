@@ -99,6 +99,21 @@
 									#end
 								</tbody>
 							</table>
+
+							<!--  分页信息 -->
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="dataTables_paginate paging_bootstrap">
+										<ul class="pagination" style="margin-right:50px;float:right;">
+											#set($pageRequestURL="${www}/user/deviceList.htm?pageIndex=[PAGINATION_PAGE_INDEX]#if($!{pageResult.queryParameters})&$!{pageResult.queryParameters}#end")
+											#paginationHelper($pageResult $pageRequestURL)
+										</ul>
+									</div>
+								</div>
+							</div>
+
+
+
 						</div>
 					</div>
 

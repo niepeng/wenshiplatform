@@ -7,12 +7,15 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import wint.help.biz.result.Result;
 import wint.help.biz.result.ResultCode;
 import wint.help.biz.result.results.CommonResultCodes;
@@ -264,6 +267,22 @@ public class BaseAction {
 				// log.error("export excel close out error", e);
 			}
 		}
+	}
+
+	protected String getWww(FlowData flowData) {
+		ServletFlowData servletFlowData = (ServletFlowData) flowData;
+		HttpServletRequest request = servletFlowData.getRequest();
+		;
+		if (request.getServerName().contains("www")) {
+			return "https://" + request.getServerName() + request.getContextPath();
+		} else {
+			int port = request.getServerPort();
+			if ("https".equalsIgnoreCase(request.getScheme())) {
+				port = 443;
+			}
+			return request.getScheme() + "://" + request.getServerName() + ":" + port + request.getContextPath();
+		}
+
 	}
 	
 

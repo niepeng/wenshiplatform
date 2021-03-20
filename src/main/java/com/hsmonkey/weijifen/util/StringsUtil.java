@@ -521,4 +521,8 @@ public class StringsUtil extends StringUtil {
 		}
 		return r.trim();
 	}
+
+	public static String str(String str) {
+	  return str;
+  }
 }

@@ -13,6 +13,7 @@
 			<object name="arithUtil" class="com.hsmonkey.weijifen.util.ArithUtil"/>
 			<object name="dateUtil" class="com.hsmonkey.weijifen.util.DateUtil"/>
 			<object name="jsonUtil" class="com.hsmonkey.weijifen.util.JsonUtil"/>
+			<object name="stringUtil" class="com.hsmonkey.weijifen.util.StringsUtil"/>
 			<!--
 			
 			<object name="weightUtil" class="com.baibutao.apps.linkshop.uxiang.server.util.WeightUtil"/>
